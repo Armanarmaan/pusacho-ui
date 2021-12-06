@@ -1,0 +1,123 @@
+.container-login{
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  .form-section{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    .form-container{
+      display: block;
+      width: 545px;
+      .title{
+        font-size: 25px;
+        color: #7E8287;
+
+      }
+      .sub-title{
+        font-size: 32px;
+        color: #081A51;
+        margin-bottom: 32px;
+        font-weight: 600;
+      }
+      form{
+        width: 100%;
+        display: block;
+        .input-container{
+          position: relative;
+          background-color: #F5F5F5;
+          border-radius: 6px;
+          height: 52px;
+          margin-bottom: 24px;
+          padding-left: 16px;
+          padding-right: 16px;
+          .placeholder{
+            position: absolute;
+            top: 16px;
+            font-size: 14px;
+            color: #393939;
+            transition: 0.1s;
+          }
+          .placeholder.active{
+            font-size: 10px;
+            top: 6px;
+          }
+          input{
+            width: 100%;
+            height: 100%;
+            padding: 0px;
+            border: none;
+            background-color: transparent;
+            font-size: 14px;
+            color: black;
+            position: relative;
+            z-index: 10;
+          }
+          input:focus-visible{
+            outline: none;
+          }
+          .show{
+            text-decoration-line: underline;
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 11;
+          }
+        }
+        .btn-blue{
+          background-color: #017EFA;
+          width: 100%;
+          border: none;
+          height: 52px;
+          border-radius: 6px;
+          color: #FFFFFF;
+          font-size: 16px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container-login{
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100vh;
+    .img-section{
+      position: relative;
+      img{
+        width: 113%;
+        position: absolute;
+        top: -170px;
+        left: -41px;
+      }
+    }
+    .form-section{
+      width: 100%;
+      position: absolute;
+      top: 268px;
+      background-color: #FFFFFF;
+      padding-top: 32px;
+      border-radius: 20px 20px 0px 0px;
+      .form-container{
+        padding: 0 24px 0 24px;
+        .title{
+          font-size: 24px;
+        }
+        .sub-title{
+          font-size: 28px;
+          margin-bottom: 40px;
+        }
+        .btn-blue{
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
