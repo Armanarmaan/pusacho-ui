@@ -1,6 +1,7 @@
 import Login from './pages/Login';
 
-import Product from './pages/admin/Product';
+import Product from './pages/manajemen/Product';
+import Manajemen from './pages/manajemen/Dashboard';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -10,7 +11,8 @@ function App() {
         <div>
           <Routes>
             <Route path='/' element={<Login/>} />
-            <Route path='/admin/product' element={<Product/>} />
+            <Route path='/manajemen' element={<Manajemen/>} />
+            <Route path='/manajemen/produk' element={<Product/>} />
           </Routes>
         </div>
       </Router>

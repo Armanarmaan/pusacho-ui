@@ -1,0 +1,9 @@
+.container-manajemen{
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  .container-content-manajemen{
+    width: 100%;
+    overflow-y: scroll;
+  }
+}
