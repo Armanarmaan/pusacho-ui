@@ -6,6 +6,10 @@
   height: 60px;
   align-items: center;
   border-bottom: 1px solid #DADADA;
+  position: sticky;
+  top: 0;
+  background-color: #FFFFFF;
+  z-index: 9;
   .head-title{
     .title{
       font-size: 24px;
