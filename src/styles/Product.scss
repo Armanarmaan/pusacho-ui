@@ -153,8 +153,235 @@
       }
       .product-list-content {
         
-        .product-list-table {
-         
+        .product-list-table-wrapper {
+          .product-list-table {
+            width: 100%;
+            border-collapse: collapse;
+            thead.product-list-table-head {
+              th {
+                padding: 26px;
+                background: #FFF;
+                border-bottom: 1px solid #CCC;
+              }
+              th.checkbox {
+                width: 10%;
+              }
+              th.head-prod-name {
+                width: 35%;
+                text-align: left;
+              }
+              th.head-prod-size {
+                width: 20%;
+              }
+              th.head-prod-amount {
+                width: 20%;
+              }
+              th.head-prod-margin {
+                width: 7.5%;
+              }
+              th.head-prod-dots {
+                width: 7.5%;
+              }
+            }
+            tbody.product-description {
+              tr.product-description-highlights {
+                background: #FFF;
+                td.product-description-item {
+                  text-align: center;
+                  padding: 26px;
+                }
+                .item-details {
+                  text-align:left!important;
+                  .img-and-name-wrapper {
+                    display: flex;
+                    align-items: center;
+                    .img-wrapper {
+                      height: 70px;
+                      width: 70px;
+                      border-radius: 8px;
+                      background: #C4C4C4;
+                      margin-right: 24px;
+                    }
+                    .name-wrapper {
+                      .name-title {
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: #31353B;
+                        margin-bottom: 10px;
+                      }
+                      .name-subtitle {
+                        display: flex;
+                        align-items: center;
+                        font-size: 16px;
+                        font-weight: 400;
+                        color: #7E8287;
+                        .blue-dot {
+                          margin: 0px 10px;
+                          height: 5px;
+                          width: 5px;
+                          border-radius: 50%;
+                          background: #017EFA;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              tr.product-description-pricing-detail {
+                table.product-pricing-table {
+                  width: 100%;
+                  border-collapse: collapse;
+                  thead.product-pricing-header {
+                    th.head-item {
+                      padding: 15px 0px;
+                      background: #FFF;
+                      border-top: 1px solid #CCC;
+                      border-bottom: 1px solid #CCC;
+                      text-align: center;
+                    }
+                    th:nth-child(1) {
+                      width: 16%;
+                    }
+                    th:nth-child(2) {
+                      width: 16%;
+                    }
+                    th:nth-child(3) {
+                        width: 20%;
+                    }
+                    th:nth-child(4) {
+                      width: 16%;
+                    }
+                    th:nth-child(5) {
+                      width: 16%;
+                    }
+                    th:nth-child(6) {
+                      width: 16%;
+                    }
+                  }
+                  tbody.product-pricing-body {
+                    tr.product-pricing-row {
+                      td {
+                        text-align: center;
+                        padding: 20px 0px;
+                        border-bottom: 1px solid #CCC;
+                      }
+                      td.product-supplier {
+                        input {
+                          height: 52px;
+                          border: 1px solid #DADADA;
+                          border-radius: 8px;
+                          padding: 14px 19px;
+                          margin-bottom: 16px;
+                        }
+                      }
+                      td.product-modal-nett {
+                        .product-modal-nett-inner {
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          margin-bottom: 16px;
+                          .input-precentage {
+                            display: flex;
+                            align-items: center;
+                            height: 52px;
+                            width: 50%;
+                            background: #FFF;
+                            border: 1px solid #DADADA;
+                            border-radius: 8px;
+                            margin: 0px 26px 0px;
+                            input {
+                              height: 100%;
+                              width: 100%;
+                              border: none;
+                              background: none;
+                              padding: 14px 18px;
+                            }
+                            .input-append {
+                              height: 100%;
+                              padding: 13px 12px;
+                              background: #F3F4F5;
+                              .append-text {
+                                font-size: 18px;
+                                font-weight: 700;
+                                color: #31353B;
+                              }
+                            }
+                          }
+                          .price {
+                            font-size: 16px;
+                            font-weight: 400;
+                            color: #31353B;
+                          }
+                        }
+                      }
+                      td.product-modal, td.product-logistic, td.product-jual {
+                        .input-pricing {
+                          display: flex;
+                          align-items: center;
+                          height: 52px;
+                          background: #FFF;
+                          border: 1px solid #DADADA;
+                          border-radius: 8px;
+                          margin: 0px 32px 16px;
+                          .input-prepend {
+                            height: 100%;
+                            padding: 13px 17px;
+                            background: #F3F4F5;
+                            .prepend-text {
+                              font-size: 18px;
+                              font-weight: 700;
+                              color: #31353B;
+                            }
+                          }
+                          input {
+                            height: 100%;
+                            width: 100%;
+                            border: none;
+                            background: none;
+                            padding: 14px 18px;
+                          }
+                        }
+                      }
+                      td.product-margin {
+                        .margin-wrapper {
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          height: 52px;
+                          margin-bottom: 16px;
+                          .margin-text {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: #31353B;
+                            margin-bottom: 16x;
+                          }
+                        }
+                      }
+
+                    }
+                  }
+                }
+              }
+            }
+            tbody.product-see-more {
+              tr.product-see-more-row {
+                background: #F4F7FC;
+                td.see-more-wrapper {
+                  text-align: right;
+                  padding: 20px 12px;
+                  .see-all {
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #017EFA;
+                    text-decoration: underline;
+                    .lb-arrow {
+                      margin-left: 6px;
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

@@ -53,29 +53,6 @@ export default function Product() {
     return `Rp ${Number(num).toLocaleString("ID")}`;
   };
 
-  // Renders
-  const PriceInput = (customClass, customFunction) => {
-    return (
-      <div className={`input-group ${customClass}`}>
-        <div className="input-group-prepend">
-          <span>Rp</span>
-        </div>
-        <input className="input-text" type="text" inputMode="numeric" />
-      </div>
-    )
-  };
-
-  const PrecentageInput = (customClass, customFunction) => {
-    return (
-      <div className={`input-group ${customClass}`}>
-      <input className="input-text" type="text" inputMode="numeric" />
-      <div className="input-group-append">
-        <span>%</span>
-      </div>
-    </div>
-    )
-  };
-
   // Modals
   const [scanStep, setScanStep] = useState(1);
   const [showScan, setShowScan] = useState(false);
@@ -515,7 +492,203 @@ export default function Product() {
           </div>
 
           <div className="product-list-content">
-            <div className="product-list-table">
+            <div className="product-list-table-wrapper">
+
+              <table className="product-list-table">
+                <thead className="product-list-table-head">
+                  <th className="head-checkbox"><input type="checkbox" /></th>
+                  <th className="head-prod-name"><p className="table-title">Nama Produk</p></th>
+                  <th className="head-prod-size"><p className="table-title">Ukuran</p></th>
+                  <th className="head-prod-amount"><p className="table-title">Jumlah</p></th>
+                  <th className="head-prod-margin"></th>
+                  <th className="head-prod-dots"></th>
+                </thead>
+
+                <tbody className="product-description">
+                  <tr className="product-description-highlights">
+                    <td className="product-description-item">
+                      <input type="checkbox" />
+                    </td>
+                    <td className="product-description-item item-details">
+                      <div className="img-and-name-wrapper">
+                        <div className="img-wrapper"></div>
+                        <div className="name-wrapper">
+                          <p className="name-title">Manik-manik Hitam</p>
+                          <p className="name-subtitle">
+                            ID: 5684236583
+                            <div className="blue-dot"></div>
+                            Manik manik
+                          </p>
+                        </div>
+
+                      </div>
+                    </td>
+                    <td className="product-description-item">
+                      <p className="table-title">10 x 10 mm</p>
+                    </td>
+                    <td className="product-description-item">
+                      <p className="table-title">20</p>
+                    </td>
+                    <td className="product-description-item" colSpan={2}>
+                      <img src={dotsIcon} alt="maginifier-icon" />
+                    </td>
+                  </tr>
+                  <tr className="product-description-pricing-detail">
+                    <td className="product-description-outer-table" colSpan={6}>
+
+                      <table className="product-pricing-table">
+                        <thead className="product-pricing-header">
+                          <th className="head-item">
+                            <p className="table-title">Supplier</p>
+                          </th>
+                          <th className="head-item">
+                            <p className="table-title">Harga Modal</p>
+                          </th>
+                          <th className="head-item">
+                            <p className="table-title">Harga Modal Nett</p>
+                          </th>
+                          <th className="head-item">
+                            <p className="table-title">Biaya Logistik</p>
+                          </th>
+                          <th className="head-item">
+                            <p className="table-title">Harga Jual</p>
+                          </th>
+                          <th className="head-item">
+                            <p className="table-title">Margin</p>
+                          </th>
+                        </thead>
+                        <tbody className="product-pricing-body">
+                          <tr className="product-pricing-row">
+                            <td className="product-supplier">
+                              <input type="text" />
+                              <input type="text" />
+                              <input type="text" />
+                            </td>
+                            <td className="product-modal">
+                              <div className="input-pricing">
+                                <div className="input-prepend">
+                                  <p className="prepend-text">Rp</p>
+                                </div>
+                                <input type="text" />
+                              </div>
+                              <div className="input-pricing">
+                                <div className="input-prepend">
+                                  <p className="prepend-text">Rp</p>
+                                </div>
+                                <input type="text" />
+                              </div>
+                              <div className="input-pricing">
+                                <div className="input-prepend">
+                                  <p className="prepend-text">Rp</p>
+                                </div>
+                                <input type="text" />
+                              </div>
+                            </td>
+                            <td className="product-modal-nett">
+                              <div className="product-modal-nett-inner">
+                                <div className="input-precentage">
+                                  <input type="text" />
+                                  <div className="input-append">
+                                    <p className="append-text">%</p>
+                                  </div>
+                                </div>
+                                <p className="price">{formatToCurrency(450000)}</p>
+                              </div>
+                              <div className="product-modal-nett-inner">
+                                <div className="input-precentage">
+                                  <input type="text" />
+                                  <div className="input-append">
+                                    <p className="append-text">%</p>
+                                  </div>
+                                </div>
+                                <p className="price">{formatToCurrency(450000)}</p>
+                              </div>
+                              <div className="product-modal-nett-inner">
+                                <div className="input-precentage">
+                                  <input type="text" />
+                                  <div className="input-append">
+                                    <p className="append-text">%</p>
+                                  </div>
+                                </div>
+                                <p className="price">{formatToCurrency(450000)}</p>
+                              </div>
+                            </td>
+                            <td className="product-logistic">
+                              <div className="input-pricing">
+                                <div className="input-prepend">
+                                  <p className="prepend-text">Rp</p>
+                                </div>
+                                <input type="text" />
+                              </div>
+                              <div className="input-pricing">
+                                <div className="input-prepend">
+                                  <p className="prepend-text">Rp</p>
+                                </div>
+                                <input type="text" />
+                              </div>
+                              <div className="input-pricing">
+                                <div className="input-prepend">
+                                  <p className="prepend-text">Rp</p>
+                                </div>
+                                <input type="text" />
+                              </div>
+                            </td>
+                            <td className="product-jual">
+                              <div className="input-pricing">
+                                <div className="input-prepend">
+                                  <p className="prepend-text">Rp</p>
+                                </div>
+                                <input type="text" />
+                              </div>
+                              <div className="input-pricing">
+                                <div className="input-prepend">
+                                  <p className="prepend-text">Rp</p>
+                                </div>
+                                <input type="text" />
+                              </div>
+                              <div className="input-pricing">
+                                <div className="input-prepend">
+                                  <p className="prepend-text">Rp</p>
+                                </div>
+                                <input type="text" />
+                              </div>
+                            </td>
+                            <td className="product-margin">
+                              <div className="margin-wrapper">
+                                <p className="margin-text">35%</p>
+                              </div>
+                              <div className="margin-wrapper">
+                                <p className="margin-text">35%</p>
+                              </div>
+                              <div className="margin-wrapper">
+                                <p className="margin-text">35%</p>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    </td>
+                  </tr>
+                </tbody>
+
+                <tbody className="product-see-more">
+                  <tr className="product-see-more-row">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td className="see-more-wrapper" colSpan={2}>
+                      <p className="see-all">
+                        lihat selengkapnya
+                        <img className="lb-arrow" src={lbArrow} alt="blue arrow" />
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+
+
+              </table>
 
              
 
