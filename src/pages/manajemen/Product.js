@@ -423,7 +423,7 @@ export default function Product() {
     <div className="container-manajemen-produk">
       <Navbar />
       <div className="container-manajemen-produk-content">
-        <Header />
+        <Header pageName="Daftar Produk"/>
 
         <div className="product-list-outer-wrapper">
 
