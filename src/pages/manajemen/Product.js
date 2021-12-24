@@ -421,7 +421,7 @@ export default function Product() {
 
   return (
     <div className="container-manajemen-produk">
-      <Navbar />
+      <Navbar pageName="Daftar Produk"/>
       <div className="container-manajemen-produk-content">
         <Header pageName="Daftar Produk"/>
 

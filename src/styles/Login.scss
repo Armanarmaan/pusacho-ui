@@ -69,6 +69,7 @@
           }
         }
         .btn-blue{
+          cursor: pointer;
           background-color: #017EFA;
           width: 100%;
           border: none;
@@ -77,6 +78,11 @@
           color: #FFFFFF;
           font-size: 16px;
           font-weight: 600;
+        }
+        #alert-login{
+          color: red;
+          font-size: 14px;
+          margin-top: 10px;
         }
       }
     }
@@ -101,7 +107,7 @@
     .form-section{
       width: 100%;
       position: absolute;
-      top: 268px;
+      top: 24vh;
       background-color: #FFFFFF;
       padding-top: 32px;
       border-radius: 20px 20px 0px 0px;

@@ -1,8 +1,9 @@
 import '../../styles/manajemen/Navbar.scss';
 import $ from "jquery";
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-function Navbar() {
+function Navbar({pageName}) {
   const icon_warehouse = require('../../assets/icons/warehouse_logo.svg').default;
   const icon_dashboard = require('../../assets/icons/dashboard_logo.svg').default;
   const icon_products = require('../../assets/icons/products_logo.svg').default;
@@ -37,14 +38,18 @@ function Navbar() {
       </div>
       <div className="nav-items">
         <p className="sub-title">Menu</p>
-        <div className="nav-item active">
-          <img src={icon_dashboard} alt="dashboard" className="icon" />
-          <p className="nav-label">Dashboard</p>
-        </div>
-        <div className="nav-item">
-          <img src={icon_products} alt="produk" className="icon" />
-          <p className="nav-label">Produk</p>
-        </div>
+        <Link to="/manajemen">
+          <div className={`nav-item ${pageName === "Dashboard" ? "active" : ""}`}>
+            <img src={icon_dashboard} alt="dashboard" className="icon" />
+            <p className="nav-label">Dashboard</p>
+          </div>
+        </Link>
+        <Link to="/manajemen/produk">
+          <div className={`nav-item ${pageName === "Daftar Produk" ? "active" : ""}`}>
+            <img src={icon_products} alt="produk" className="icon" />
+            <p className="nav-label">Produk</p>
+          </div>
+        </Link>
         <p className="sub-title">General</p>
         <div className="nav-item">
           <img src={icon_settings} alt="pengaturan" className="icon" />
