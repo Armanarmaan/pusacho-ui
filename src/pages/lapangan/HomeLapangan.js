@@ -3,6 +3,7 @@ import $ from "jquery";
 import React, { useState } from 'react';
 import Navbar from '../../components/lapangan/Navbar';
 import Modal from 'react-bootstrap/Modal';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function HomeLapangan() {
   const ButtonMeatballs = require('../../assets/icons/ButtonMeatballs.svg').default;
