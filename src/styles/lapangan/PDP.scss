@@ -1,0 +1,270 @@
+.container-pdp{
+    width: 100%;
+    height: 100vh;
+    p{
+        margin-bottom: 0;
+    }
+    .section-1{
+        padding-left: 18px;
+        padding-right: 14px;
+        height: 231px;
+        background-color: #081A51;
+        display: block;
+        justify-content: space-between;
+        
+        .headerdetailproduk{
+            display: flex;
+            padding-left: 7px;
+            padding-right: 2px;
+            margin-bottom: 30px;
+            padding-top: 60px;
+            .backbutton{
+                padding-top: 5px;
+                cursor: pointer;
+            }
+            .text{
+                margin-left: 16px;
+                .header{
+                    color: #FFFFFF;
+                    font-size: 24px;
+                    font-family: DM Sans;
+                    font-weight: 700;
+                }
+            }
+        }
+        
+        .detailproduk{
+            width: 100%;
+            background-color: white;
+            border-radius: 10px ;
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.16);
+            .container-produk{
+                padding-left: 16px;
+                padding-top: 16px;
+                padding-bottom: 16px;
+                padding-right: 16px;
+                .imgproduk{
+                    display: flex;
+                    justify-content: center;
+                }
+                .produk{
+                    display: flex;
+                    justify-content: space-between;
+                    padding-bottom: 24px;
+                    .namaproduk{
+                        color: #31353B;
+                        font-size: 18px;
+                        font-family: DM Sans;
+                        font-weight: 700;
+                    }
+                    .updateproduk{
+                        color: #31353B;
+                        font-size: 16px;
+                        font-family: Roboto;
+                    }
+                }
+                .infostock{
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 16px;
+                    margin-bottom: 16px;
+                    padding-right: 5px;
+                    .totalstock{
+                        font-family: Roboto;
+                        font-size: 14px;
+                        color: #31353B;
+                    }
+                    .stock{
+                        font-family: DM Sans;
+                        font-size: 14px;
+                        color: #31353B;
+                        font-weight: 700;
+                    }    
+                }
+                .infoharga{
+                    display: flex;
+                    justify-content: space-between;
+                    padding-right: 5px;
+                    .textharga{
+                        font-family: Roboto;
+                        font-size: 14px;
+                        color: #31353B;
+                    }
+                    .harga{
+                        font-family: DM Sans;
+                        font-size: 14px;
+                        color: #31353B;
+                        font-weight: 700;
+                    }
+                }
+            }             
+        }
+    }
+
+    .section-2{
+        display: flex;
+        justify-content: center;
+        .containerbtn{
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            padding-bottom: 24px;
+            padding-left: 24px;
+            padding-right: 24px;
+            .btnkurangistock{
+                width: 100%;
+                height: 41.5px;
+                display: flex;
+                background-color: #017EFA;
+                justify-content: center;
+                border-radius: 6px;
+                align-items: center;
+                p{
+                    color: #FFFFFF;
+                    font-size: 14px;
+                    font-family: DM Sans;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}
+
+#KurangiStock{
+    width: 100%;
+    margin: unset;
+    position: absolute;
+    bottom: 0;
+    p{
+        margin-bottom: 0;
+    }
+    .modal-content{
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        .modal-body{
+            width: 100%;
+            height: 444px;  
+            padding-top: 8px;
+            border-radius: 30px 30px 0px 0px;
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.16);
+            background-color: white;
+            padding: unset;
+                .garis{
+                    text-align: center;
+                }
+                .container-up{
+                    padding-top: 24px;
+                    padding-left: 20px;
+                    padding-bottom: 18px;
+                    .textup{
+                        font-family: DM Sans;
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: #1E3032;
+                    }
+                    .infostock{
+                        display: flex;
+                        justify-content: space-between;
+                        padding-right: 23px;
+                        padding-top: 16px;
+                        .totalstock{
+                            font-family: Roboto;
+                            font-size: 14px;
+                            color: #31353B;
+                        }
+                        .stock{
+                            font-family: DM Sans;
+                            font-size: 14px;
+                            color: #31353B;
+                            font-weight: 700;
+                        }    
+                    }
+                }
+                .grayline{
+                    width: 100%;
+                    height: 8px;
+                    background-color:#F3F4F6;
+                    padding-left: unset;
+                }
+                .container-bottom{
+                    padding-left: 20px;
+                    padding-right: 20px;
+                    padding-top: 16px;
+                    .textjumlah{
+                        font-family: Roboto;
+                        font-size: 14px;
+                        padding-bottom: 16px;
+                        color: #31353B;
+                    }
+                    .containerbtn{
+                        padding-left: 4px;
+                        padding-right: 4px;
+                    }
+                    .inputjumlah{
+                        position: relative;
+                        background-color: #F5F5F5;
+                        border-radius: 6px;
+                        height: 52px;
+                        margin-bottom: 145px;
+                        padding-left: 16px;
+                        padding-right: 16px;
+                        .placeholder{
+                          position: absolute;
+                          top: 16px;
+                          font-family: DM Sans;
+                          font-size: 14px;
+                          color: #393939;
+                        }
+                        input{
+                          width: 100%;
+                          height: 100%;
+                          padding: 0px;
+                          border: none;
+                          background-color: transparent;
+                          font-size: 14px;
+                          color: black;
+                          position: relative;
+                          z-index: 10;
+                        }
+                        input:focus-visible{
+                          outline: none;
+                        }
+                    }
+                    .btnkurangistock{
+                        width: 100%;
+                        height: 41.5px;
+                        display: flex;
+                        background-color: #BD1E1E;
+                        justify-content: center;
+                        border-radius: 6px;
+                        align-items: center;
+                        p{
+                            font-family: DM Sans;
+                            color: #FFFFFF;
+                            font-size: 14px;
+                            font-weight: 700;
+                        }
+                    }
+                }      
+        }          
+    }  
+}
+
+.slide-up{
+    animation-name: slide-up;
+    animation-duration: 0.8s;
+}
+.slide-up.slide-down{
+    animation-name: slide-down;
+    animation-duration: 0.8s;
+}
+@keyframes slide-up {
+    0%   {bottom: -100vh;}
+    100% {bottom: 0;}
+  }
+  @keyframes slide-down {
+    0%   {bottom: 0;}
+    100% {bottom: -100vh;}
+  }
+
