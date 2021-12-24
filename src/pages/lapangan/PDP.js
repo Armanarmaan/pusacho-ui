@@ -2,6 +2,7 @@ import '../../styles/lapangan/PDP.scss';
 import $ from "jquery";
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function PDP() {
     const BackArrow = require('../../assets/icons/BackArrow.svg').default;
