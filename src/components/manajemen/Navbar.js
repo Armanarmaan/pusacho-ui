@@ -9,6 +9,7 @@ function Navbar({pageName}) {
   const icon_products = require('../../assets/icons/products_logo.svg').default;
   const icon_settings = require('../../assets/icons/settings_logo.svg').default;
   const icon_arrow = require('../../assets/icons/arrow-blue.svg').default;
+  const user_role = localStorage.getItem("role");
 
   const [collapsed, setCollapsed] = useState(false);
   
@@ -39,7 +40,7 @@ function Navbar({pageName}) {
       <div className="nav-items">
         <p className="sub-title">Menu</p>
         <Link to="/manajemen">
-          <div className={`nav-item ${pageName === "Dashboard" ? "active" : ""}`}>
+          <div className={`nav-item ${pageName === "Dashboard" ? "active" : ""} ${user_role === '2' ? "d-none" : ""}`}>
             <img src={icon_dashboard} alt="dashboard" className="icon" />
             <p className="nav-label">Dashboard</p>
           </div>
@@ -50,8 +51,8 @@ function Navbar({pageName}) {
             <p className="nav-label">Produk</p>
           </div>
         </Link>
-        <p className="sub-title">General</p>
-        <div className="nav-item">
+        <p className={`sub-title ${user_role === '2' ? "d-none" : ""}`}>General</p>
+        <div className={`nav-item ${user_role === '2' ? "d-none" : ""}`}>
           <img src={icon_settings} alt="pengaturan" className="icon" />
           <p className="nav-label">Pengaturan</p>
         </div>

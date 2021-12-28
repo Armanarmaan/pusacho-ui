@@ -8,7 +8,8 @@ function Login() {
 
   // Check if user is logged in or not
   if(localStorage.getItem("auth_token")){
-    localStorage.getItem("role") === 0 ? window.location.href = "/manajemen" : window.location.href = "/manajemen";
+    localStorage.getItem("role") === '0' ? window.location.href = "/manajemen" : 
+    localStorage.getItem("role") === '2' ? window.location.href = "/manajemen/produk" : window.location.href = "/manajemen";
   }
 
   const [showPass, setShowPass] = useState(false);
@@ -88,7 +89,7 @@ function Login() {
           window.location.href = "/manajemen";
         }
         else if(respon.role === 2){
-          window.location.href = "/manajemen";
+          window.location.href = "/manajemen/produk";
         }
       }
       else{

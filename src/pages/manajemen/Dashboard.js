@@ -1,9 +1,11 @@
 import '../../styles/manajemen/Dashboard.scss';
-// import $ from "jquery";
+import $ from "jquery";
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/manajemen/Navbar';
 import Header from '../../components/manajemen/Header';
 import moment from 'moment';
+import Select from 'react-select';
+import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
 
 function Dashboard() {
   const env_api = process.env.REACT_APP_API_ENDPOINT;
@@ -16,50 +18,117 @@ function Dashboard() {
   const icon_filters = require('../../assets/icons/icon-filters.svg').default;
   const icon_seemore = require('../../assets/icons/icon-see-more.svg').default;
   const sample_manik = require('../../assets/sample-manik.png').default;
-
-  // const [paramsDashB, setParamsDashB] = useState({
-  //   username: '',
-  //   password: ''
-  // });
-
+  
   // 0 is Dashboard Barang, 1 is Aktivitas
   const [activeTab, setActiveTab] = useState(0);
   const [dashboardDatas, setDashboardDatas] = useState([]);
   const [activityDatas, setActivityDatas] = useState([]);
+  const [statistics, setStatistics] = useState({
+    masuk: 0,
+    keluar: 0
+  })
+  const [categoryOptions, setCategories] = useState([]);
+  const [keyword, setKeyword] = useState(null);
+  const [paramsDashB, setParamsDashB] = useState({
+    keyword: null,
+    categories: [],
+    dateStart: moment().startOf('month').format('YYYY-MM-DD HH:mm:ss'),
+    dateEnd: moment().format('YYYY-MM-DD HH:mm:ss')
+  });
 
   // Check if admin is logged in or not && check token if valid based on token & required role for this page
-  const verifyToken = async () => {
-    const token = localStorage.getItem('auth_token');
-    const required_role = '0,';
+  // const verifyToken = async () => {
+  //   const token = localStorage.getItem('auth_token');
+  //   const required_role = '0,';
 
-    const respon = await fetch(`${env_api}/auth/user/verify`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth_token': token,
-        'required_role': required_role
-      }
-    })
-    if(respon.status !== 200){
-      localStorage.clear();
-      window.location.href = "/";
-    }
-  }
+  //   const respon = await fetch(`${env_api}/auth/user/verify`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'auth_token': token,
+  //       'required_role': required_role
+  //     }
+  //   })
+  //   if(respon.status !== 200){
+  //     localStorage.clear();
+  //     window.location.href = "/";
+  //   }
+  // }
 
   // Fetch data for this page
   const fetchItems = async () => {
     const token = localStorage.getItem('auth_token');
     const required_role = '0,';
-    const params = `activeTab=${activeTab}`
-    const datas = await fetch(`${env_api}/manajemen/dashboard/activity?${params}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth_token': token,
-        'required_role': required_role
+    const params = 
+    `activeTab=${activeTab}&keyword=${paramsDashB.keyword}&categories=${paramsDashB.categories}&datestart=${paramsDashB.dateStart}&dateend=${paramsDashB.dateEnd}`;
+    try {
+      const datas = await fetch(`${env_api}/manajemen/dashboard/activity?${params}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth_token': token,
+          'required_role': required_role
+        }
+      }).then(response => response.json())
+      
+      if(datas.data !== []){
+        if(activeTab === 0){
+          setDashboardDatas(datas.data.datas);
+          setCategories(datas.data.categories);
+        }
+        else{
+          setActivityDatas(datas.data.datas);
+          setCategories(datas.data.categories);
+        }
       }
-    }).then(response => response.json())
-    activeTab === 0 ? setDashboardDatas(datas.data) : setActivityDatas(datas.data);
+      else{
+        if(activeTab === 0){
+          setDashboardDatas([]);
+          setCategories([]);
+        }
+        else{
+          setActivityDatas([]);
+          setCategories([]);
+        }
+      }
+      
+    } catch (error) {
+      if(activeTab === 0){
+        setDashboardDatas([]);
+        setCategories([]);
+      }
+      else{
+        setActivityDatas([]);
+        setCategories([]);
+      }
+    }
+    
+  }
+
+  const fetchStatistics = async () => {
+    const token = localStorage.getItem('auth_token');
+    const required_role = '0,';
+    try {
+      const datas = await fetch(`${env_api}/manajemen/dashboard/statistics`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth_token': token,
+          'required_role': required_role
+        }
+      }).then(response => response.json())
+      setStatistics({
+        masuk: datas.data.totalMasuk,
+        keluar: datas.data.totalKeluar
+      })
+    } catch (error) {
+      if(activeTab === 0){
+        setStatistics({
+          masuk: 0,
+          keluar: 0
+        })
+      }
+    }
   }
 
   // ROUTER 
@@ -69,11 +138,12 @@ function Dashboard() {
       window.location.href = "/";
     }
     else{
-      verifyToken();
+      // verifyToken();
+      fetchStatistics();
       fetchItems();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab]);
+  }, [activeTab, paramsDashB]);
 
   const currencyFormat = (nominal) => {
     const number = Number(nominal);
@@ -83,12 +153,11 @@ function Dashboard() {
     }).format(number);
   }
   
-  const numbers2 = [1, 2];
   const tableContents = dashboardDatas.map((item) =>
     <tr key={item.id}>
       <td>{item.name}</td>
       <td>{item.product_id}</td>
-      <td>{item.final_value}</td>
+      <td>{item.difference}</td>
       <td>{moment(item.created_at).format('DD MMMM YYYY, HH:mm')}</td>
       {/* <td>12 September 2021, 18:00</td> */}
       <td>{currencyFormat(item.price)}</td>
@@ -126,6 +195,80 @@ function Dashboard() {
   const tabChange = (tab) => {
     setActiveTab(tab);
   }
+  const changeKeyword = (event) => {
+    setKeyword(event.target.value);
+  }
+  const handleSearch = (event) => {
+    event.preventDefault();
+    if(keyword !== null && keyword !== ''){
+      setParamsDashB({
+        ...paramsDashB,
+        keyword: keyword
+      })
+    }
+  }
+  const handleCategoryChange = (event) => {
+    let arrCategories = [];
+    event.forEach((item) => {
+      arrCategories.push(item.value);
+    })
+    setParamsDashB({
+      ...paramsDashB,
+      categories: arrCategories
+    })
+  }
+  const setDateRangeFilter = (event) => {
+    if(event.startDate && event.endDate){
+      $('.label-chosen-date-filter').text(`${moment(event.startDate).format('YYYY-MM-D')} - ${moment(event.endDate).format('YYYY-MM-D')}`);
+      setParamsDashB({
+        ...paramsDashB,
+        dateStart: moment(event.startDate).format('YYYY-MM-DD HH:mm:ss'),
+        dateEnd: moment(event.endDate).format('YYYY-MM-DD HH:mm:ss'),
+      })
+    }
+  }
+  
+  const showDateFilter = () => {
+    let daterangeObj = document.getElementById("daterangepicker-filter").ej2_instances[0]; 
+    daterangeObj.show();
+  }
+
+  const handleCategoryChangeTwo = (event) => {
+    let arrCategories = [];
+    event.forEach((item) => {
+      arrCategories.push(item.value);
+    })
+    setParamsDashB({
+      ...paramsDashB,
+      categories: arrCategories
+    })
+  }
+  const setDateRangeFilterTwo = (event) => {
+    if(event.startDate && event.endDate){
+      $('.label-chosen-date-filter').text(`${moment(event.startDate).format('YYYY-MM-D')} - ${moment(event.endDate).format('YYYY-MM-D')}`);
+      setParamsDashB({
+        ...paramsDashB,
+        dateStart: moment(event.startDate).format('YYYY-MM-DD HH:mm:ss'),
+        dateEnd: moment(event.endDate).format('YYYY-MM-DD HH:mm:ss'),
+      })
+    }
+  }
+  
+  const showDateFilterTwo = () => {
+    let daterangeObj = document.getElementById("daterangepicker-filter-two").ej2_instances[0]; 
+    daterangeObj.show();
+  }
+
+  const showDateLaporanOne = () => {
+    let daterangeObj = document.getElementById("daterangepicker-laporan-one").ej2_instances[0]; 
+    daterangeObj.show();
+  }
+
+  const showDateLaporanTwo = () => {
+    let daterangeObj = document.getElementById("daterangepicker-laporan-two").ej2_instances[0]; 
+    daterangeObj.show();
+  }
+
 
   return (
     <div className="container-manajemen">
@@ -151,44 +294,50 @@ function Dashboard() {
                         <div className="img-wrapper"><img src={icon_stockin} alt="stkin"/></div>
                         <div className="desc-wrapper">
                           <p className="title">Barang Masuk</p>
-                          <div className="val"><p>115</p> <p className="label">Produk</p></div>
+                          <div className="val"><p>{statistics.masuk}</p> <p className="label">Produk</p></div>
                         </div>
                       </div>
                       <div className="in-out">
                         <div className="img-wrapper blue"><img src={icon_stockout} alt="stkout"/></div>
                         <div className="desc-wrapper">
                           <p className="title">Barang Keluar</p>
-                          <div className="val"><p>260</p> <p className="label">Produk</p></div>
+                          <div className="val"><p>{statistics.keluar}</p> <p className="label">Produk</p></div>
                         </div>
                       </div>
                     </div>
                     <div className="btn-download">
-                      <div className="wrapper">
+                      <div className="wrapper" onClick={showDateLaporanOne}>
                         <img src={icon_arrow_download} alt="dwnld"/>
                         <p>Download Laporan</p>
                       </div>
+                      <DateRangePickerComponent id="daterangepicker-laporan-one" 
+                      // change={setDateRangeLaporanOne}
+                      cssClass="laporan-one"
+                      />
                     </div>
                   </div>
                   <div className="row">
-                    <div className="search">
-                      <input type="text" placeholder="Cari produk"/>
-                      <img src={icon_search} alt="srch"/>
-                    </div>
+                    <form onSubmit={handleSearch}>
+                      <div className="search">
+                        <input type="text" placeholder="Cari produk" onChange={changeKeyword}/>
+                        <button type="submit"><img src={icon_search} alt="srch"/></button>
+                      </div>
+                    </form>
                     <div className="dropdowns">
-                      <div className="filter">
+                      <Select placeholder="Kategori" options={categoryOptions} classNamePrefix="product-select" isMulti={true} onChange={handleCategoryChange}/>
+                      <button className="filter" onClick={showDateFilter}>
                         <div>
-                          <img src={icon_filters} alt="fltr" />
-                          <p>Filter</p>
-                        </div>
-                        <img src={icon_expand} alt="expnd" />
-                      </div>
-                      <div className="filter">
-                        <div>
+                          {/* <input type="text" className="d-none" id="daterangepicker-filter" onChange={() => {alert(this.event.target.value)}}/> */}
                           <img src={icon_calendar} alt="clndr" />
-                          <p>Pilih Tanggal</p>
+                          <p className="label-chosen-date-filter">Pilih Tanggal</p>
                         </div>
                         <img src={icon_expand} alt="expnd" />
-                      </div>
+                      </button>
+                      <DateRangePickerComponent id="daterangepicker-filter" 
+                      change={setDateRangeFilter}
+                      startDate={paramsDashB.startDate}
+                      endDate={paramsDashB.endDate}
+                      />
                     </div>
                   </div>
                 </div>
@@ -216,26 +365,30 @@ function Dashboard() {
                 <div className="head-content activity">
                   <div className="row">
                     <div className="dropdowns">
-                      <div className="filter">
+                      <Select placeholder="Kategori" options={categoryOptions} classNamePrefix="product-select" isMulti={true} onChange={handleCategoryChangeTwo}/>
+                      <button className="filter" onClick={showDateFilterTwo}>
                         <div>
-                          <img src={icon_filters} alt="fltr" />
-                          <p>Filter</p>
-                        </div>
-                        <img src={icon_expand} alt="expnd" />
-                      </div>
-                      <div className="filter">
-                        <div>
+                          {/* <input type="text" className="d-none" id="daterangepicker-filter" onChange={() => {alert(this.event.target.value)}}/> */}
                           <img src={icon_calendar} alt="clndr" />
-                          <p>Pilih Tanggal</p>
+                          <p className="label-chosen-date-filter">Pilih Tanggal</p>
                         </div>
                         <img src={icon_expand} alt="expnd" />
-                      </div>
+                      </button>
+                      <DateRangePickerComponent id="daterangepicker-filter-two" 
+                      change={setDateRangeFilterTwo}
+                      startDate={paramsDashB.startDate}
+                      endDate={paramsDashB.endDate}
+                      cssClass="daterangepickerTwo"
+                      />
                     </div>
                     <div className="btn-download">
-                      <div className="wrapper">
-                        <img src={icon_arrow_download} alt="dwnld2"/>
+                      <div className="wrapper" onClick={showDateLaporanTwo}>
+                        <img src={icon_arrow_download} alt="dwnld"/>
                         <p>Download Laporan</p>
                       </div>
+                      <DateRangePickerComponent id="daterangepicker-laporan-two" 
+                      // change={setDateRangeLaporanOne}
+                      />
                     </div>
                   </div>
                 </div>
