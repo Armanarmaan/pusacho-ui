@@ -16,10 +16,7 @@ export default class Product extends React.Component {
     super(props);
     this.state = {
       products: [],
-      categories: [
-        { value: 1, label: "Manik-manik" },
-        { value: 2, label: "Yuhu" },
-      ],
+      categories: [],
       sortOptions: [
         { value: "", label: "Urutkan" },
         { value: "modalasc", label: "Modal Termurah" },
@@ -30,30 +27,28 @@ export default class Product extends React.Component {
         { value: "selldesc", label: "Harga Jual Termahal" }
       ],
       appliedQuery: "",
-      appliedFilter: [
-        { value: 1, label: "Manik-manik" },
-        { value: 2, label: "Yuhu" }
-      ],
+      appliedFilter: [],
       appliedSort: "",
       showScan: false,
       showAdd: false,
+      emptyCategory: "",
     };
   } 
 
   async componentDidMount() {
     const env_api = process.env.REACT_APP_API_ENDPOINT;
     
-    // // Fetch Product
-    // const product = await fetch(`${env_api}/manajemen/products`)
-    //                             .then(response => response.json())
-    //                             .catch(error => console.log(error));
-    // this.setState({ ...this.state, products: product.data });
+    // Fetch Product
+    const product = await fetch(`${env_api}/manajemen/products`)
+                                .then(response => response.json())
+                                .catch(error => console.log(error));
+    this.setState({ ...this.state, products: product.data });
 
-    // // Fetch Categories
-    // const categories = await fetch(`${env_api}/manajemen/categories`)
-    //                               .then(response => response.json())
-    //                               .catch(error => console.log(error));
-    // this.setState({ ...this.state, categories: categories.data });
+    // Fetch Categories
+    const categories = await fetch(`${env_api}/manajemen/categories`)
+                                  .then(response => response.json())
+                                  .catch(error => console.log(error));
+    this.setState({ ...this.state, categories: categories.data });
   }
 
   render() {
@@ -86,40 +81,72 @@ export default class Product extends React.Component {
     };
 
     // Apply Filters
-    const searchProduct = async () => {
-      // const env_api = process.env.REACT_APP_API_ENDPOINT;
-      // const queryProduct = query ? `?query=${query}` : "";
-      // const filterQuery = queryProduct ? 
-      //                       this.state.appliedFilter ? `&filter=${this.state.appliedFilter}` : ""
-      //                     : this.state.appliedFilter ? `?filter=${this.state.appliedFilter}` : "";
-      // const sortQuery = queryProduct ?
+    const searchProduct = async (string) => {
+      const env_api = process.env.REACT_APP_API_ENDPOINT;
+
+      const filterQuery = this.state.appliedFilter ? this.state.appliedFilter.map(item => item.value).join(",") : "";
+      const query = `?query=${string}&filter=${filterQuery}&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}`;
+      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+                                      .then(response => response.json())
+                                      .catch(error => console.log(error));
+        
+        this.setState({ ...this.state, appliedQuery: string , products: filteredProduct.data });
                             
     };
 
     const applySort = async (sort) => {
-      // const env_api = process.env.REACT_APP_API_ENDPOINT;
+      const env_api = process.env.REACT_APP_API_ENDPOINT;
+      
+      const filterQuery = this.state.appliedFilter ? this.state.appliedFilter.map(item => item.value).join(",") : "";
+      const query = `?query=${this.state.appliedQuery}&filter=${filterQuery}&sort=${sort.value}`;
+      const sortedProduct = await fetch(`${env_api}/manajemen/products${query}`)
+                                      .then(response => response.json())
+                                      .catch(error => console.log(error));
 
-      // const filterQuery = this.state.appliedFilter ? `?filter=${this.state.appliedFilter}` : "";
-      // const sortQuery = filterQuery ? `&sort=${sort}` : `?sort=${sort.value}`;
-      // const sortedProduct = await fetch(`${env_api}/manajemen/products${filterQuery}${sortQuery}`)
-      //                                 .then(response => response.json())
-      //                                 .catch(error => console.log(error));
-      // this.setState({ ...this.state, appliedSort: sort, products: sortedProduct.data });
+      this.setState({ ...this.state, appliedSort: sort, products: sortedProduct.data });
     };
 
-    const applyFilter = (filter) => {
-      console.log(filter);
-      // const filterQuery = appliedFilter ? `?filter=${appliedFilter}` : "";
-      // const sortQuery = filterQuery ? `&sort=${sort}` : `?sort=${sort}`;
-      // const sortedProduct = await fetch(`${env_api}/manajemen/products${filterQuery}${sortQuery}`)
-      //                                 .then(response => response.json())
-      //                                 .catch(error => console.log(error));
-      // this.setState({ ...this.state, appliedSort: sort, products: sortedProduct.data });
+    const applyFilter = async (filter) => {
+      const env_api = process.env.REACT_APP_API_ENDPOINT;
+
+      if (!this.state.appliedFilter.includes(filter)) {
+        const newAppliedFilter = [...this.state.appliedFilter, filter];
+        const filterQuery = newAppliedFilter ? newAppliedFilter.map(item => item.value).join(",") : "";
+        const query = `?query=${this.state.appliedQuery}&filter=${filterQuery}&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}`;
+        const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+                                        .then(response => response.json())
+                                        .catch(error => console.log(error));
+        
+        this.setState({ ...this.state, emptyCategory: "", appliedFilter: newAppliedFilter, products: filteredProduct.data });
+      } 
+     
     };
 
-    const resetFilter = () => {
-      this.setState({ ...this.state, appliedFilter: [] });
-    }
+    const removeAppliedFilter = async (filter) => {
+      const env_api = process.env.REACT_APP_API_ENDPOINT;
+
+      const newAppliedFilter = this.state.appliedFilter.filter(item => { return item !== filter });
+
+      const filterQuery = newAppliedFilter ? newAppliedFilter.map(item => item.value).join(",") : "";
+      const query = `?query=${this.state.appliedQuery}&filter=${filterQuery}&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}`;
+      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+                                      .then(response => response.json())
+                                      .catch(error => console.log(error));
+        
+        this.setState({ ...this.state, appliedFilter: newAppliedFilter, products: filteredProduct.data });
+    };
+
+    const resetFilter = async () => {
+      const env_api = process.env.REACT_APP_API_ENDPOINT;
+
+      const newAppliedFilter = [];
+      const query = `?query=${this.state.appliedQuery}&filter=&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}`;
+      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+                                      .then(response => response.json())
+                                      .catch(error => console.log(error));
+        
+      this.setState({ ...this.state, appliedFilter: newAppliedFilter, products: filteredProduct.data });
+    };
 
     // Modals
     const handleOpenScan = () => {
@@ -142,14 +169,14 @@ export default class Product extends React.Component {
             <div className="product-list-header">
               <div className="product-filters-wrapper">
                 <div className="search-product-wrapper">
-                  <input className="form-control input-search" name="search" type="search" placeholder="Cari Produk" onInput={() => searchProduct()}/>
+                  <input className="form-control input-search" name="search" type="search" placeholder="Cari Produk" onInput={(val) => searchProduct(val.target.value)}/>
                   <div className="input-group-append">
                     <img src={magnifierIcon} alt="maginifier-icon" />
                   </div>
                 </div>
                 <div className="filter-and-buttons-wrapper">
                   <div className="filter-wrapper">
-                    <Select placeholder="Kategori" options={this.state.categories} classNamePrefix="product-select" onChange={(filter) => applyFilter(filter)} />
+                    <Select placeholder="Kategori" options={this.state.categories} classNamePrefix="product-select" value={this.state.emptyCategory} onChange={(filter) => applyFilter(filter)} />
                     <Select placeholder="Urutkan" options={this.state.sortOptions} classNamePrefix="product-select-lc" onChange={(sort) => applySort(sort)} />
                   </div>
 
@@ -185,7 +212,7 @@ export default class Product extends React.Component {
                     this.state.appliedFilter.map((filterItem, index) => (
                       <li className="applied-filter-item" key={index}>
                         <p className="filter-title">{filterItem.label}</p>
-                        <img src={blueCIcon} alt="close icon" />
+                        <img className="filter-remove" src={blueCIcon} alt="close icon" onClick={() => removeAppliedFilter(filterItem)}/>
                       </li>
                     ))
                   : "" }
@@ -373,6 +400,3 @@ export default class Product extends React.Component {
     )
   }
 }
-// Todos:
-// Add state for value select, set to null everytime filter is applied, so dropdown is alwAYS empty
-// Change from class component to functional component!!!
