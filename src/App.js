@@ -12,7 +12,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Login/>} />
             <Route path='/manajemen' element={<Manajemen/>} />
-            <Route path='/manajemen/produk' element={<Product/>} />
+            <Route path='/manajemen/produk' element={<Product/>} component={App}/>
           </Routes>
         </div>
       </Router>

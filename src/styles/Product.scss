@@ -76,6 +76,7 @@
                 border: none;
                 border-radius: 6px;
                 background: #017EFA;
+                cursor: pointer;
                 .button-icon {
                   margin-right: 6px;
                 }
@@ -362,20 +363,27 @@
                   }
                 }
               }
-            }
-            tbody.product-see-more {
               tr.product-see-more-row {
                 background: #F4F7FC;
                 td.see-more-wrapper {
                   text-align: right;
                   padding: 20px 12px;
-                  .see-all {
-                    font-size: 14px;
-                    font-weight: 700;
-                    color: #017EFA;
-                    text-decoration: underline;
+                  .see-all-wrapper {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    cursor: pointer;
+                    .see-all {
+                      font-size: 14px;
+                      font-weight: 700;
+                      color: #017EFA;
+                      text-decoration: underline;
+                    }
                     .lb-arrow {
                       margin-left: 6px;
+                    }
+                    .lb-arrow.rotated {
+                      transform: rotate(180deg);
                     }
                   }
                 }
