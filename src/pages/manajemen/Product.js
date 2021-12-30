@@ -16,7 +16,10 @@ export default class Product extends React.Component {
     super(props);
     this.state = {
       products: [],
-      categories: [],
+      categories: [
+        { value: 1, label: "Manik-manik" },
+        { value: 2, label: "Yuhu" },
+      ],
       sortOptions: [
         { value: "", label: "Urutkan" },
         { value: "modalasc", label: "Modal Termurah" },
@@ -27,7 +30,10 @@ export default class Product extends React.Component {
         { value: "selldesc", label: "Harga Jual Termahal" }
       ],
       appliedQuery: "",
-      appliedFilter: "",
+      appliedFilter: [
+        { value: 1, label: "Manik-manik" },
+        { value: 2, label: "Yuhu" }
+      ],
       appliedSort: "",
       showScan: false,
       showAdd: false,
@@ -37,17 +43,17 @@ export default class Product extends React.Component {
   async componentDidMount() {
     const env_api = process.env.REACT_APP_API_ENDPOINT;
     
-    // Fetch Product
-    const product = await fetch(`${env_api}/manajemen/products`)
-                                .then(response => response.json())
-                                .catch(error => console.log(error));
-    this.setState({ ...this.state, products: product.data });
+    // // Fetch Product
+    // const product = await fetch(`${env_api}/manajemen/products`)
+    //                             .then(response => response.json())
+    //                             .catch(error => console.log(error));
+    // this.setState({ ...this.state, products: product.data });
 
-    // Fetch Categories
-    const categories = await fetch(`${env_api}/manajemen/categories`)
-                                  .then(response => response.json())
-                                  .catch(error => console.log(error));
-    this.setState({ ...this.state, categories: categories.data });
+    // // Fetch Categories
+    // const categories = await fetch(`${env_api}/manajemen/categories`)
+    //                               .then(response => response.json())
+    //                               .catch(error => console.log(error));
+    // this.setState({ ...this.state, categories: categories.data });
   }
 
   render() {
@@ -57,6 +63,7 @@ export default class Product extends React.Component {
     const addIcon = require('../../assets/icons/add-icon.svg').default;
     const dotsIcon = require('../../assets/icons/three-blue-dots.svg').default;
     const lbArrow = require('../../assets/icons/light-blue-arrow.svg').default;
+    const blueCIcon = require('../../assets/icons/close-blue-icon.svg').default;
 
     // Functions
     const formatToCurrency = (num) => {
@@ -108,6 +115,10 @@ export default class Product extends React.Component {
       //                                 .then(response => response.json())
       //                                 .catch(error => console.log(error));
       // this.setState({ ...this.state, appliedSort: sort, products: sortedProduct.data });
+    };
+
+    const resetFilter = () => {
+      this.setState({ ...this.state, appliedFilter: [] });
     }
 
     // Modals
@@ -170,8 +181,18 @@ export default class Product extends React.Component {
               </div>
               <div className="product-applied-filters">
                 <ul className="applied-filter-list">
-                  
+                  { this.state.appliedFilter && this.state.appliedFilter.length > 0 ? 
+                    this.state.appliedFilter.map((filterItem, index) => (
+                      <li className="applied-filter-item" key={index}>
+                        <p className="filter-title">{filterItem.label}</p>
+                        <img src={blueCIcon} alt="close icon" />
+                      </li>
+                    ))
+                  : "" }
                 </ul>
+                { this.state.appliedFilter && this.state.appliedFilter.length > 0 ? 
+                  <p className="reset-filter-title" onClick={() => resetFilter()}>Reset Kategori</p>
+                  : ""}
               </div>
             </div>
 
@@ -352,3 +373,6 @@ export default class Product extends React.Component {
     )
   }
 }
+// Todos:
+// Add state for value select, set to null everytime filter is applied, so dropdown is alwAYS empty
+// Change from class component to functional component!!!

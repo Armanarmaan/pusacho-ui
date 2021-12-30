@@ -123,30 +123,37 @@
           }
         }
 
-        .product-applied-filter-wrapper {
+        .product-applied-filters {
           margin-top: 25px;
           display: flex;
           align-items: center;
-          .filter-item {
+          .applied-filter-list {
             display: flex;
-            align-items: center;
-            margin-right: 16px;
-            padding: 12px 8px 12px 14px;
-            background: #F4F7FC;
-            border-radius: 15px;
-            border: 1px solid #017EFA;
-            .filter-title {
-              font-size: 14px;
-              font-weight: 400;
-              color: #017EFA;
-              margin-right: 10px;
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+            .applied-filter-item {
+              display: flex;
+              align-items: center;
+              margin-right: 16px;
+              padding: 12px 8px 12px 14px;
+              background: #F4F7FC;
+              border-radius: 15px;
+              border: 1px solid #017EFA;
+              .filter-title {
+                font-size: 14px;
+                font-weight: 400;
+                color: #017EFA;
+                margin-right: 10px;
+              }
             }
           }
-          .reset-filter {
+          .reset-filter-title {
             font-size: 14px;
             font-weight: 700;
             color: #017EFA;
             text-decoration: underline;
+            cursor: pointer;
           }
         }
     
