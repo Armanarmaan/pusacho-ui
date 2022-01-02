@@ -1,18 +1,54 @@
 import '../../styles/lapangan/HomeLapangan.scss';
 import $ from "jquery";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/lapangan/Navbar';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.css';
+import { useNavigate } from 'react-router-dom';
 
 function HomeLapangan() {
+  const env_api = process.env.REACT_APP_API_ENDPOINT;
   const ButtonMeatballs = require('../../assets/icons/ButtonMeatballs.svg').default;
   const Scanner = require('../../assets/icons/Scanner.svg').default;
   const ScanBarang = require('../../assets/icons/ScanBarang.svg').default;
   const LogoutBtn = require('../../assets/icons/LogoutBtn.svg').default;
   const Garis = require('../../assets/icons/Garis.svg').default;
 
+  const [keyword, setKeyword] = useState(null);
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    // const token = localStorage.getItem('auth_token');
+    // const required_role = '0,';
+    // const params = `activeTab=${activeTab}`
+    try {
+      const datas = await fetch(`${env_api}/lapangan/produk?id=${keyword}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'auth_token': token,
+          // 'required_role': required_role
+        }
+      }).then(response => response.json())
+      console.log(datas);
+      if(datas.data.length > 0 ){
+        navigate(`/pdp?id=${keyword}`);;
+      }else{
+        console.log("data tidak ditemukan")
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(keyword)
+  }
 
   const handleClose = () => {
     $('.slide-up').addClass('slide-down');
@@ -25,6 +61,9 @@ function HomeLapangan() {
     setShow(true);
   }
 
+  const changeKeyword = (event) => {
+    setKeyword(event.target.value);
+  }
 
   return (
     <div className="container-homelapangan">
@@ -58,8 +97,10 @@ function HomeLapangan() {
               <p className="lihatubahkode">Lihat atau ubah detail barang</p>
             </div>
             <div className="inputkode">
-              <p className="placeholder" id="kodeproduk"></p>
-              <input type="text" placeholder="Input kode pada barang" />
+              <form onSubmit={handleSearch}>
+                <p className="placeholder" id="kodeproduk"></p>
+                <input type="text" placeholder="Input kode pada barang" onChange={changeKeyword} />
+              </form>
             </div>
           </div>
         </div>
