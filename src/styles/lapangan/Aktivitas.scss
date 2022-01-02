@@ -36,6 +36,7 @@
                 padding-bottom: 12px;
                 padding-left: 12px;
                 padding-right: 14px;
+                margin-bottom: 16px;
                 .date{
                     font-family: 'DM Sans';
                     font-weight: 700;
@@ -49,9 +50,18 @@
                         padding-right: 12px;
                         padding-bottom: 6px;
                     }
+                    .desc{
+                        display: flex;
+                        flex-wrap: wrap;
+                        .anda, .wording, .name, .sebanyak, .piece{
+                            margin-right: 5px;
+                        }
+                    }
                     p{
                         font-family: 'DM Sans';
                         font-size: 14px;
+                        margin-right: 5px;
+                        margin-bottom: 0;
                     }
                 }
                 .time{

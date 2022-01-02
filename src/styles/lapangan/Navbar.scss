@@ -1,6 +1,7 @@
 .container-navbar{
     width: 100%;
-    position: absolute;
+    position: sticky;
+    background-color: white;
     bottom: 0;
     height: 85px;
     display: flex;
