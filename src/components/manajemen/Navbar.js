@@ -9,8 +9,12 @@ function Navbar({pageName}) {
   const icon_products = require('../../assets/icons/products_logo.svg').default;
   const icon_settings = require('../../assets/icons/settings_logo.svg').default;
   const icon_arrow = require('../../assets/icons/arrow-blue.svg').default;
+  const icon_dashboard_mobile = require('../../assets/icons/log_icon_mobile.svg').default;
+  const icon_dashboard_mobile_active = require('../../assets/icons/log_icon_mobile_active.svg').default;
+  const icon_products_mobile = require('../../assets/icons/produk_icon_mobile.svg').default;
+  const icon_products_mobile_active = require('../../assets/icons/produk_icon_mobile_active.svg').default;
   const user_role = localStorage.getItem("role");
-
+  
   const [collapsed, setCollapsed] = useState(false);
   
   const collapseNavbar = () => {
@@ -25,36 +29,67 @@ function Navbar({pageName}) {
   }
   return (
     <div className="container-navbar-manajemen">
-      <div className="btn-collapse" onClick={collapseNavbar}>
-        <img src={icon_arrow} alt="arrow" />
-      </div>
-      <div className="nav-head">
-        <div className="logo-wrapper">
-          <img src={icon_warehouse} alt="warehouse" />
+      <div className="desktop-view">
+        <div className="btn-collapse" onClick={collapseNavbar}>
+          <img src={icon_arrow} alt="arrow" />
         </div>
-        <div className="title-wrapper">
-          <p className="title">Warehouse</p>
-          <p className="desc">Manajemen</p>
+        <div className="nav-head">
+          <div className="logo-wrapper">
+            <img src={icon_warehouse} alt="warehouse" />
+          </div>
+          <div className="title-wrapper">
+            <p className="title">Warehouse</p>
+            <p className="desc">Manajemen</p>
+          </div>
+        </div>
+        <div className="nav-items">
+          <p className="sub-title">Menu</p>
+          <Link to="/manajemen">
+            <div className={`nav-item ${pageName === "Dashboard" ? "active" : ""} ${user_role === '2' ? "d-none" : ""}`}>
+              <img src={icon_dashboard} alt="dashboard" className="icon" />
+              <p className="nav-label">Dashboard</p>
+            </div>
+          </Link>
+          <Link to="/manajemen/produk">
+            <div className={`nav-item ${pageName === "Daftar Produk" ? "active" : ""}`}>
+              <img src={icon_products} alt="produk" className="icon" />
+              <p className="nav-label">Produk</p>
+            </div>
+          </Link>
+          <p className={`sub-title ${user_role === '2' ? "d-none" : ""}`}>General</p>
+          <div className={`nav-item ${user_role === '2' ? "d-none" : ""}`}>
+            <img src={icon_settings} alt="pengaturan" className="icon" />
+            <p className="nav-label">Pengaturan</p>
+          </div>
         </div>
       </div>
-      <div className="nav-items">
-        <p className="sub-title">Menu</p>
-        <Link to="/manajemen">
-          <div className={`nav-item ${pageName === "Dashboard" ? "active" : ""} ${user_role === '2' ? "d-none" : ""}`}>
-            <img src={icon_dashboard} alt="dashboard" className="icon" />
-            <p className="nav-label">Dashboard</p>
-          </div>
-        </Link>
-        <Link to="/manajemen/produk">
-          <div className={`nav-item ${pageName === "Daftar Produk" ? "active" : ""}`}>
-            <img src={icon_products} alt="produk" className="icon" />
-            <p className="nav-label">Produk</p>
-          </div>
-        </Link>
-        <p className={`sub-title ${user_role === '2' ? "d-none" : ""}`}>General</p>
-        <div className={`nav-item ${user_role === '2' ? "d-none" : ""}`}>
-          <img src={icon_settings} alt="pengaturan" className="icon" />
-          <p className="nav-label">Pengaturan</p>
+      <div className="mobile-view">
+        <div className="nav-items-mobile">
+          <Link to="/manajemen">
+            <div className={`nav-item-mobile ${pageName === "Dashboard" ? "active" : ""} ${user_role === '2' ? "d-none" : ""}`}>
+              {pageName === "Dashboard" ? 
+              <img src={icon_dashboard_mobile_active} alt="dashboard" className="icon" />
+              :
+              <img src={icon_dashboard_mobile} alt="dashboard" className="icon" />
+              }
+              <p className="nav-label">Dashboard</p>
+            </div>
+          </Link>
+          <Link to="/manajemen/produk">
+            <div className={`nav-item-mobile ${pageName === "Daftar Produk" ? "active" : ""}`}>
+              {pageName === "Daftar Produk" ? 
+              <img src={icon_products_mobile_active} alt="produk" className="icon" />
+              :
+              <img src={icon_products_mobile} alt="produk" className="icon" />
+              }
+              <p className="nav-label">Produk</p>
+            </div>
+          </Link>
+          {/* <p className={`sub-title ${user_role === '2' ? "d-none" : ""}`}>General</p>
+          <div className={`nav-item ${user_role === '2' ? "d-none" : ""}`}>
+            <img src={icon_settings} alt="pengaturan" className="icon" />
+            <p className="nav-label">Pengaturan</p>
+          </div> */}
         </div>
       </div>
     </div>

@@ -58,3 +58,9 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .container-header-manajemen{
+    display: none;
+  }
+}
