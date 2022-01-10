@@ -209,6 +209,7 @@
                         margin-bottom: 145px;
                         padding-left: 16px;
                         padding-right: 16px;
+                        padding-top: 14px;
                         .placeholder{
                           position: absolute;
                           top: 16px;
@@ -268,3 +269,35 @@
     100% {bottom: -100vh;}
   }
 
+
+  #sbSuccess{
+        width: 343px;
+        height: 50px;
+        left: 16px;
+        right: 16px;
+        bottom: 85px;   
+    .css-1eqdgzv-MuiPaper-root-MuiSnackbarContent-root{
+        background-color: #373B41;
+        border-radius: 16px;
+    }
+    .css-kmxb0e-MuiButtonBase-root-MuiButton-root{
+        color: #FFFFFF;
+        padding-left: 30px;
+    }
+  }
+
+  #sbFail{
+    width: 343px;
+    height: 50px;
+    left: 16px;
+    right: 16px;
+    bottom: 85px;   
+.css-1eqdgzv-MuiPaper-root-MuiSnackbarContent-root{
+    background-color: #BD1E1E;
+    border-radius: 16px;
+}
+.css-kmxb0e-MuiButtonBase-root-MuiButton-root{
+    color: #FFFFFF;
+    padding-left: 30px;
+}
+}

@@ -16,9 +16,9 @@ function App() {
             <Route path='/' element={<Login/>} />
             <Route path='/manajemen' element={<Manajemen/>} />
             <Route path='/manajemen/produk' element={<Product/>} />
-            <Route path='/home-lapangan' element={<HomeLapangan/>} />
-            <Route path='/pdp' element={<PDP/>} />
-            <Route path='/aktivitas' element={<Aktivitas/>} />
+            <Route path='/lapangan' element={<HomeLapangan/>} />
+            <Route path='/lapangan/pdp' element={<PDP/>} />
+            <Route path='/lapangan/aktivitas' element={<Aktivitas/>} />
           </Routes>
         </div>
       </Router>
