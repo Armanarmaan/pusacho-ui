@@ -1234,6 +1234,30 @@
             width: 100%;
             outline: none;
           }
+          .category-select-add__control, .category-select-add-lc__control {
+            width: 100%;
+            background: none;
+            border: none;
+
+            .category-select-add__value-container {
+              padding-left: 0;
+
+              .category-select-add__single-value {
+                font-size: 14px;
+                font-weight: 400;
+                color: #393939;
+              }
+            }
+      
+            .category-select-add__indicators, .category-select-add-lc__indicators {
+              .category-select-add__indicator-separator, .category-select-add-lc__indicator-separator {
+                display: none;
+              }
+            }
+          }
+          .product-select-lc__control {
+            margin-right: 0px;
+          }
         }
         .no-margin {
           margin-bottom: 0px;
@@ -1341,11 +1365,8 @@
               width: 100%;
               display: flex;
               align-items: flex-start;
-              .input-wrapper.color {
-                width: 70%;
-                margin-right: 16px;
-              }
               .input-wrapper {
+                width: 100%;
                 .input-title {
                   font-size: 14px;
                   font-weight: 400;
@@ -1375,6 +1396,10 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            .input-checkbox {
+              margin-top: 27px;
+              margin-right: 16px;
+            }
             .input-wrapper {
               margin-right: 16px;
               .input-title {
@@ -1418,10 +1443,32 @@
           .add-supplier-wrapper {
             display: flex;
             justify-content: flex-end;
-            font-size: 14px;
-            font-weight: 700;
-            color: #017EFA;
-            text-decoration: underline; 
+            .add-supplier-text {
+              font-size: 14px;
+              font-weight: 700;
+              color: #017EFA;
+              text-decoration: underline; 
+            }
+            .delete-text-wrapper {
+              display: none;
+            }
+          }
+          .add-supplier-wrapper.delete-supplier-wrapper {
+            display: flex;
+            justify-content: space-between;
+            .delete-text-wrapper {
+              display: flex;
+              align-items: center;
+              .delete-icon {
+                margin-right: 5.5px;
+              }
+              .delete-supplier-text {
+                font-size: 14px;
+                font-weight: 700;
+                color: rgba(189, 30, 30, 0.6);
+                text-decoration: underline; 
+              }
+            }
           }
         }
       }
