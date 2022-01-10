@@ -55,6 +55,7 @@ export default function ScanDialog({ showScan, closeScan }) {
     let fetchedProduct = await fetch(`${env_api}/manajemen/products/${barcode}`)
                     .then(response => response.json())
                     .catch(error => console.log(error));
+                    console.log("masuk sini tot?")
     if (fetchedProduct.code === 200) { 
       setProduct(fetchedProduct.data);
       setProductStock(fetchedProduct.data.stock);
@@ -68,7 +69,13 @@ export default function ScanDialog({ showScan, closeScan }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: product.id, amount: productStock })
     })
-    .then(response => response.json())
+    .then(() => { 
+      closeScan();
+      setScanStep(1);
+      setProduct();
+      setProductStock(0);
+      window.location.reload();
+    })
     .catch(error => console.log(error));
   }
   const backScanStep = () => {
@@ -86,7 +93,8 @@ export default function ScanDialog({ showScan, closeScan }) {
   const handleBarcode = (code) => setBarcode(code);
 
   // Close Modal
-  const handleCloseScan = () => {
+  const handleCloseScan = (event) => {
+    event.preventDefault();
     setProduct();
     setProductStock(0);
     setScanStep(1);

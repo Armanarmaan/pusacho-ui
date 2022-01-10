@@ -10,6 +10,8 @@ import '../../styles/Product.scss';
 import Navbar from '../../components/manajemen/Navbar';
 import Header from '../../components/manajemen/Header';
 import ScanDialog from '../../components/manajemen/ScanDialog';
+import AddCategoryDialog from '../../components/manajemen/AddCategoryDialog';
+import AddProductDialog from '../../components/manajemen/AddProductDialog';
 
 export default class Product extends React.Component {
   constructor(props){
@@ -29,8 +31,11 @@ export default class Product extends React.Component {
       appliedQuery: "",
       appliedFilter: [],
       appliedSort: "",
+      checkedProducts: [],
       showScan: false,
-      showAdd: false,
+      showAddCategory: false,
+      showAddProduct: false,
+      showEditProduct: false,
       emptyCategory: "",
     };
   } 
@@ -59,6 +64,7 @@ export default class Product extends React.Component {
     const dotsIcon = require('../../assets/icons/three-blue-dots.svg').default;
     const lbArrow = require('../../assets/icons/light-blue-arrow.svg').default;
     const blueCIcon = require('../../assets/icons/close-blue-icon.svg').default;
+    const rTrashCan = require('../../assets/icons/red-trashcan.svg').default;
 
     // Functions
     const formatToCurrency = (num) => {
@@ -78,6 +84,38 @@ export default class Product extends React.Component {
         $(".see-all").html(`lihat selengkapnya`);
         $(".lb-arrow").removeClass(`rotated`);
       }
+    };
+    const markAllProduct = () => {
+      const isChecked = $(".checkbox-head").is(":checked");
+
+      if (isChecked) {
+        const checkedProducts = [];
+        if (this.state.products.length > 0) {
+          $(".checkbox-item").prop("checked", true); 
+          this.state.products.forEach(item => { checkedProducts.push(item.id) });
+          this.setState({ ...this.state, checkedProducts: checkedProducts });
+        };
+      } else {
+        $(".checkbox-item").prop("checked", false);
+        this.setState({ ...this.state, checkedProducts: [] });
+      }
+
+    };
+    const markProduct = (id) => {
+      let checkedProducts = this.state.checkedProducts;
+
+      if (checkedProducts.includes(id)) checkedProducts = checkedProducts.filter(item => item == id);
+      else checkedProducts.push(id);
+
+      this.setState({ ...this.state, checkedProducts: checkedProducts });
+    };
+    const showAddOptions = () => {
+      $(".add-button-options").removeClass("d-none");
+    };
+    const choseAddOptions = (opt) => {
+      if (opt === "addCategory") this.setState({ ...this.state, showAddCategory: true });
+      if (opt === "addProduct") this.setState({ ...this.state, showAddProduct: true });
+      $(".add-button-options").addClass("d-none");
     };
 
     // Apply Filters
@@ -156,6 +194,14 @@ export default class Product extends React.Component {
       this.setState({ ...this.state, showScan: false })
     };
 
+    const handleCloseAddCategory = () => {
+      this.setState({ ...this.state, showAddCategory: false });
+    };
+
+    const handleCloseAddProduct = () => {
+      this.setState({ ...this.state, showAddProduct: false });
+    };
+
     // Renders
     return (
       <div className="container-manajemen-produk">
@@ -186,19 +232,19 @@ export default class Product extends React.Component {
                       <p className="button-text">Scan Produk</p>
                     </button>
                     <div className="add-button-wrapper">
-                      <button className="button-primary button-add">
+                      <button className="button-primary button-add" onClick={() => showAddOptions()}>
                         <img className="button-icon" src={addIcon} alt="Add Icon" />
                         <p className="button-text">Tambah</p>
                       </button>
                       <ul className="add-button-options d-none">
-                        <li className="button-options">
+                        <li className="button-options" onClick={() => choseAddOptions("addCategory")}>
                           <p className="option-text">Tambah Kategori</p>
                         </li>
-                        <li className="button-options">
+                        <li className="button-options" onClick={() => choseAddOptions("addProduct")}>
                           <p className="option-text">Tambah Produk</p>
                         </li>
                         <li className="button-options">
-                          <p className="option-text">Tambah Sekaligus</p>
+                          <p className="option-text" onClick={() => choseAddOptions("addBoth")}>Tambah Sekaligus</p>
                         </li>
                       </ul>
                     </div>
@@ -228,14 +274,30 @@ export default class Product extends React.Component {
 
               <table className="product-list-table">
                 <thead className="product-list-table-head">
+                { this.state.checkedProducts && this.state.checkedProducts.length > 0 ? 
                   <tr>
-                    <th className="head-checkbox"><input type="checkbox" /></th>
+                    <th className="head-checkbox"><input type="checkbox" className="checkbox-head" onClick={() => markAllProduct()}/></th>
+                    <th className="head-custom-checkbox" colSpan="5">
+                      <div className="button-inner-wrappers">
+                        <p className="amount-indicators">{this.state.checkedProducts.length} Produk dipilih</p>
+                        <button className="btn btn-outer-primary">Cetak Barcode Sekaligus</button>
+                        <button className="btn btn-outer-secondary"> 
+                          <img src={rTrashCan} className="trash-icon" alt="Red Trashcan" /> 
+                          Hapus
+                        </button>
+                      </div>
+                    </th>
+                  </tr>
+                  : 
+                  <tr>
+                    <th className="head-checkbox"><input type="checkbox" className="checkbox-head" onClick={() => markAllProduct()}/></th>
                     <th className="head-prod-name"><p className="table-title">Nama Produk</p></th>
                     <th className="head-prod-size"><p className="table-title">Ukuran</p></th>
                     <th className="head-prod-amount"><p className="table-title">Jumlah</p></th>
                     <th className="head-prod-margin"></th>
                     <th className="head-prod-dots"></th>
                   </tr>
+                }
                 </thead>
 
                 {this.state.products && this.state.products.length > 0 ? 
@@ -243,7 +305,7 @@ export default class Product extends React.Component {
                     <tbody className={`product-description product-description-${index}`} key={index}>
                       <tr className="product-description-highlights">
                         <td className="product-description-item">
-                          <input type="checkbox" />
+                          <input type="checkbox" className={`checkbox-item checkbox-${item.id}`} onClick={() => markProduct(item.id)}/>
                         </td>
                         <td className="product-description-item item-details">
                           <div className="img-and-name-wrapper">
@@ -299,7 +361,7 @@ export default class Product extends React.Component {
                               <tr className="product-pricing-row">
                                 <td className="product-supplier">
                                   {item.suppliers.map(item => (
-                                    <input type="text" value={item}/>
+                                    <input type="text" value={item} readOnly/>
                                   ))}
                                 </td>
                                 <td className="product-modal">
@@ -308,7 +370,7 @@ export default class Product extends React.Component {
                                       <div className="input-prepend">
                                         <p className="prepend-text">Rp</p>
                                       </div>
-                                      <input type="text" value={item}/>
+                                      <input type="text" value={item} readOnly/>
                                     </div>
                                   ))}
                                 </td>
@@ -331,7 +393,7 @@ export default class Product extends React.Component {
                                       <div className="input-prepend">
                                         <p className="prepend-text">Rp</p>
                                       </div>
-                                      <input type="text" value={item}/>
+                                      <input type="text" value={item} readOnly/>
                                     </div>
                                   ))}
                                 </td>
@@ -340,19 +402,19 @@ export default class Product extends React.Component {
                                     <div className="input-prepend">
                                       <p className="prepend-text">Rp</p>
                                     </div>
-                                    <input type="text" value={item.price}/>
+                                    <input type="text" value={item.price} readOnly/>
                                   </div>
                                   <div className="input-pricing">
                                     <div className="input-prepend">
                                       <p className="prepend-text">Rp</p>
                                     </div>
-                                    <input type="text" value={item.price}/>
+                                    <input type="text" value={item.price} readOnly/>
                                   </div>
                                   <div className="input-pricing">
                                     <div className="input-prepend">
                                       <p className="prepend-text">Rp</p>
                                     </div>
-                                    <input type="text" value={item.price}/>
+                                    <input type="text" value={item.price} readOnly/>
                                   </div>
                                 </td>
                                 <td className="product-margin">
@@ -395,6 +457,8 @@ export default class Product extends React.Component {
         </div>
 
         <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan}/>
+        <AddCategoryDialog showModal={this.state.showAddCategory} closeModal={handleCloseAddCategory}/>
+        <AddProductDialog showModal={this.state.showAddProduct} closeModal={handleCloseAddProduct}/>
 
       </div>
     )
