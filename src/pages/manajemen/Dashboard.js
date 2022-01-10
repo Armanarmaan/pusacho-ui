@@ -6,6 +6,8 @@ import Header from '../../components/manajemen/Header';
 import moment from 'moment';
 import Select from 'react-select';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
+import DialogLogBarang from '../../components/manajemen/mobile/DialogLogBarang';
+import DialogActivity from '../../components/manajemen/mobile/DialogActivity';
 
 function Dashboard() {
   const env_api = process.env.REACT_APP_API_ENDPOINT;
@@ -15,9 +17,10 @@ function Dashboard() {
   const icon_expand = require('../../assets/icons/icon-expand.svg').default;
   const icon_calendar = require('../../assets/icons/icon-calendar.svg').default;
   const icon_search = require('../../assets/icons/icon-search.svg').default;
-  const icon_filters = require('../../assets/icons/icon-filters.svg').default;
   const icon_seemore = require('../../assets/icons/icon-see-more.svg').default;
   const sample_manik = require('../../assets/sample-manik.png').default;
+  const icon_three_dot_white = require('../../assets/icons/three_dot_icon_white.svg').default;
+  const icon_arrow_blue_mobile = require('../../assets/icons/arrow_blue_mobile.svg').default;
   
   // 0 is Dashboard Barang, 1 is Aktivitas
   const [activeTab, setActiveTab] = useState(0);
@@ -35,6 +38,11 @@ function Dashboard() {
     dateStart: moment().startOf('month').format('YYYY-MM-DD HH:mm:ss'),
     dateEnd: moment().format('YYYY-MM-DD HH:mm:ss')
   });
+
+
+  const [showLog, setShowLog] = useState(false);
+  const [showActivity, setShowActivity] = useState(false);
+  const [selectedDateMobile, setSelectedDateMobile] = useState('');
 
   // Check if admin is logged in or not && check token if valid based on token & required role for this page
   // const verifyToken = async () => {
@@ -158,8 +166,7 @@ function Dashboard() {
       <td>{item.name}</td>
       <td>{item.product_id}</td>
       <td>{item.difference}</td>
-      <td>{moment(item.created_at).format('DD MMMM YYYY, HH:mm')}</td>
-      {/* <td>12 September 2021, 18:00</td> */}
+      <td>{moment(item.created_at).format('D MMMM YYYY, HH:mm')}</td>
       <td>{currencyFormat(item.price)}</td>
       <td><div className={`status-wrapper ${item.activity_id === 1 ? 'masuk' : 'keluar'}`}>{item.activity_id === 1 ? 'MASUK' : 'KELUAR'}</div></td>
       <td><div className="action-wrapper"><img src={icon_seemore} alt="sm" /></div></td>
@@ -169,7 +176,7 @@ function Dashboard() {
   const ActivityContents = () => {
     return activityDatas.map((item, index) =>
       <div className="activity-item" key={index}>
-        <div className="date">{moment(item[0].created_at).format("MMMM DD, YYYY")}</div>
+        <div className="date">{moment(item[0].created_at).format("MMMM D, YYYY")}</div>
         {item.map((item2) => 
           <div className="item-row" key={item2.id}>
             <div className="item-details">
@@ -191,7 +198,7 @@ function Dashboard() {
         )}
       </div>
     );
-    }
+  }
   const tabChange = (tab) => {
     setActiveTab(tab);
   }
@@ -220,6 +227,7 @@ function Dashboard() {
   const setDateRangeFilter = (event) => {
     if(event.startDate && event.endDate){
       $('.label-chosen-date-filter').text(`${moment(event.startDate).format('YYYY-MM-D')} - ${moment(event.endDate).format('YYYY-MM-D')}`);
+      setSelectedDateMobile(`${moment(event.startDate).format('YYYY-MM-D')} - ${moment(event.endDate).format('YYYY-MM-D')}`);
       setParamsDashB({
         ...paramsDashB,
         dateStart: moment(event.startDate).format('YYYY-MM-DD HH:mm:ss'),
@@ -269,13 +277,38 @@ function Dashboard() {
     daterangeObj.show();
   }
 
+  const openModalMobile = (tab) => {
+    if(tab === 0){
+      setActiveTab(0);
+      setTimeout(
+        function(){ 
+          setShowLog(true);
+        }, 
+      300);
+    }
+    else{
+      setActiveTab(1);
+      setTimeout(
+        function(){ 
+          setShowActivity(true);
+        }, 
+      300);
+    }
+  }
+
+  const handleCloseLogMobile = () => {
+    setShowLog(false);
+  }
+  const handleCloseActivityMobile = () => {
+    setShowActivity(false);
+  }
 
   return (
     <div className="container-manajemen">
       <Navbar pageName="Dashboard"/>
       <div className="container-content-manajemen">
         <Header pageName="Dashboard"/>
-        <div className="container-manajemen-dashboard">
+        <div className="container-manajemen-dashboard desktop-view">
           <div className="manajemen-dashboard">
 
             <div className="tabs">
@@ -401,7 +434,60 @@ function Dashboard() {
             </div>
           </div>
         </div>
+        <div className="container-manajemen-dashboard mobile-view">
+          <div className="dashboard-mobile-header">
+            <div className="container-content-header-mobile">
+              <p>Dashboard</p>
+              <img src={icon_three_dot_white} alt="dots" />
+            </div>
+          </div>
+          <div className="dashboard-mobile-contents">
+            <div className="item">
+              <div className="content-statistics">
+                <div className="statistic-item">
+                  <img src={icon_stockin} alt="stckin" />
+                  <div className="descriptions">
+                    <p className="label-title">Barang Masuk</p>
+                    <div className="values"><p>{statistics.masuk}</p> <p className="label">Produk</p></div>
+                  </div>
+                </div>
+                <div className="statistic-item">
+                  <img src={icon_stockout} alt="stckout" />
+                  <div className="descriptions">
+                    <p className="label-title">Barang Keluar</p>
+                    <div className="values"><p>{statistics.keluar}</p> <p className="label">Produk</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="item" onClick={() => openModalMobile(0)}>
+              <div className="tabs-item">
+                <div className="item-label">
+                  <p className="item-label-title">Log Barang</p>
+                  <p className="item-label-subtitle">Lihat semua log masuk dan keluar stok barang</p>
+                </div>
+                <img src={icon_arrow_blue_mobile} alt="arrbl" />
+              </div>
+            </div>
+            <div className="item" onClick={() => openModalMobile(1)}>
+              <div className="tabs-item">
+                <div className="item-label">
+                  <p className="item-label-title">Aktivitas</p>
+                  <p className="item-label-subtitle">Lihat semua aktivitas</p>
+                </div>
+                <img src={icon_arrow_blue_mobile} alt="arrbl" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <DialogLogBarang showDialog={showLog} handleCloseDialog={handleCloseLogMobile} 
+        changeKeyword={changeKeyword} datas={dashboardDatas} currencyFormat={currencyFormat} handleSearch={handleSearch}
+        categoryOptions={categoryOptions} handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter}
+        selectedDateMobile={selectedDateMobile}/>
+      <DialogActivity showDialog={showActivity} handleCloseDialog={handleCloseActivityMobile} datas={activityDatas}
+        categoryOptions={categoryOptions} handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter}
+        selectedDateMobile={selectedDateMobile}/>
     </div>
   );
 }
