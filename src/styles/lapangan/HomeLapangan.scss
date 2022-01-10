@@ -125,6 +125,7 @@
                           color: black;
                           position: relative;
                           z-index: 10;
+                          padding-top: 14px;
                         }
                         input:focus-visible{
                           outline: none;
@@ -132,6 +133,10 @@
                     }
                 }               
             }
+        }
+
+        .container-navbar{
+            position: absolute;
         }
 }
 

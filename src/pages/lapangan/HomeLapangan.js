@@ -39,7 +39,7 @@ function HomeLapangan() {
       }).then(response => response.json())
       console.log(datas);
       if(datas.data.length > 0 ){
-        navigate(`/pdp?id=${keyword}`);;
+        navigate(`/lapangan/pdp?id=${keyword}`);;
       }else{
         console.log("data tidak ditemukan")
       }
@@ -105,7 +105,7 @@ function HomeLapangan() {
           </div>
         </div>
       </div>
-      <Navbar />
+      <Navbar pageName="Lapangan"/>
       <Modal id="ModalLogout" show={show} onHide={handleClose} animation={false} dialogClassName="slide-up">
         <Modal.Body>
           <div className="garis">

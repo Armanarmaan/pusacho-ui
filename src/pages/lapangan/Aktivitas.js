@@ -1,13 +1,16 @@
 import '../../styles/lapangan/Aktivitas.scss';
 import $ from "jquery";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Navbar from '../../components/lapangan/Navbar';
 import moment from 'moment';
+import LazyLoad from 'react-lazyload';
 
 function Aktivitas() {
     const env_api = process.env.REACT_APP_API_ENDPOINT;
     const Rectangle = require('../../assets/icons/Rectangle.svg').default;
     const [aktivitas, setAktivitas] = useState([]);
+
+    // const lazyNotif = lazy(() => import({ActivityContents}));
 
     useEffect(() => {
         fetchAktivitas();
@@ -37,6 +40,7 @@ function Aktivitas() {
     const ActivityContents = () => {
         return aktivitas.map((item, index) =>
             <div className="box">
+                <LazyLoad height={200} offset={100}>
                 <div className="date">{moment(item[0].created_at).format("MMMM DD, YYYY")}</div>
                 {item.map((itemz, index) =>
                     <div>
@@ -55,8 +59,10 @@ function Aktivitas() {
                         <div className="time">
                             <p>{moment(itemz.created_at).format("HH:mm")}</p>
                         </div>
+                        <div className="grayline"></div>
                     </div>
                 )}
+                </LazyLoad>
             </div>
         );
     }
@@ -72,10 +78,12 @@ function Aktivitas() {
             </div>
             <div className="section-2">
                 <div className="container-box">
-                    <ActivityContents />
+                    {/* <LazyLoad height={2000}> */}
+                        <ActivityContents />
+                    {/* </LazyLoad> */}
                 </div>
             </div>
-            <Navbar />
+            <Navbar pageName="Aktivitas" />
         </div>
     );
 }

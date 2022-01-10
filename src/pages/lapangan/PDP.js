@@ -3,7 +3,11 @@ import $ from "jquery";
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.css';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+
 
 function PDP() {
     const env_api = process.env.REACT_APP_API_ENDPOINT;
@@ -12,6 +16,8 @@ function PDP() {
     const Garis = require('../../assets/icons/Garis.svg').default;
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const [open, setOpen] = React.useState(false);
+    const [open1, setOpen1] = React.useState(false);
     const navigate = useNavigate();
     const [keyword, setKeyword] = useState(null);
     const [show, setShow] = useState(false);
@@ -20,10 +26,10 @@ function PDP() {
         stock: "",
         price: ""
     });
-    const [pengurangan, setPengurangan] = useState({
-        jumlah: "",
-        actorID: ""
-    });
+    // const [pengurangan, setPengurangan] = useState({
+    //     jumlah: "",
+    //     actorID: ""
+    // });
 
     const currencyFormat = (nominal) => {
         const number = Number(nominal);
@@ -65,7 +71,7 @@ function PDP() {
         const id = searchParams.get("id")
         console.log(produk.stock - keyword >= 0);
         console.log(keyword);
-        if(produk.stock - keyword >= 0){
+        if (produk.stock - keyword >= 0) {
             try {
                 const datas = await fetch(`${env_api}/lapangan/pengurangan?id=${id}&jumlah=${keyword}&actorID=4`, {
                     method: 'POST',
@@ -78,11 +84,15 @@ function PDP() {
                 console.log(datas);
                 handleClose();
                 fetchItems();
+                handleClick();
             } catch (error) {
                 console.log(error);
             }
-        }else{
+        } else {
             console.log("Stock 0")
+            handleClose();
+            fetchItems();
+            handleClick1();
         }
     }
 
@@ -91,6 +101,7 @@ function PDP() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    //modal bootstrap
     const handleClose = () => {
         $('.slide-up').addClass('slide-down');
         setTimeout(function () {
@@ -102,6 +113,63 @@ function PDP() {
         setShow(true);
     }
 
+    //snackbar success
+    const handleClick = () => {
+        setOpen(true);
+    };
+
+    const handleCloseSB = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const action = (
+        <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleCloseSB}>
+                OK
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleCloseSB}
+            >
+            </IconButton>
+        </React.Fragment>
+    );
+
+    //snackbar fail
+    const handleClick1 = () => {
+        setOpen1(true);
+    };
+
+    const handleCloseSBF = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+
+    const action1 = (
+        <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleCloseSBF}>
+
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleCloseSBF}
+            >
+            </IconButton>
+        </React.Fragment>
+    );
+
+    //inputan pengurangan
     const changeKeyword = (event) => {
         setKeyword(event.target.value);
         // console.log(keyword);
@@ -111,9 +179,11 @@ function PDP() {
         <div className="container-pdp">
             <div className="section-1">
                 <div className="headerdetailproduk">
-                    <div className="backbutton">
-                        <img src={BackArrow} alt="backarrow" className="img" />
-                    </div>
+                    <Link to="/lapangan">
+                        <div className="backbutton">
+                            <img src={BackArrow} alt="backarrow" className="img" />
+                        </div>
+                    </Link>
                     <div className="text">
                         <p className="header">Detail Produk</p>
                     </div>
@@ -182,7 +252,7 @@ function PDP() {
                             <div className="inputjumlah">
                                 <form >
                                     <p className="placeholder" id="jumlah"></p>
-                                    <input type="text" placeholder="Masukkan jumlah" onChange={changeKeyword} />
+                                    <input type="number" placeholder="Masukkan jumlah" onChange={changeKeyword} />
                                 </form>
                             </div>
                         </div>
@@ -194,6 +264,23 @@ function PDP() {
                     </div>
                 </Modal.Body>
             </Modal>
+            <Snackbar
+                id="sbSuccess"
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleCloseSB}
+                message="Stock produk berhasil diupdate"
+                action={action}
+            />
+
+            <Snackbar
+                id="sbFail"
+                open={open1}
+                autoHideDuration={3000}
+                onClose={handleCloseSBF}
+                message="Terjadi kesalahan pada proses pengurangan"
+                action={action1}
+            />
         </div>
     );
 }

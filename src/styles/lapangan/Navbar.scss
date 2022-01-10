@@ -13,13 +13,41 @@
         font-size: 12px;
         margin-bottom: 0;
         font-family: 'DM Sans';
+        padding-top: 10px;
     }
-    .homebtn{
+
+    // #homebtn{
+    //     padding-top: 18px;
+    //     cursor: pointer;
+    // }
+    
+    // .active{
+    //     .text{
+    //         color: #017EFA;
+    //     }
+    // }
+
+    // #aktivitasbtn{
+    //     padding-top: 18px;
+    //     cursor: pointer;
+    // }
+
+    // .active{
+    //     .text{
+    //         color: #017EFA;
+    //     }
+    // }
+
+    .nav-btn{
         padding-top: 18px;
         cursor: pointer;
     }
-    .aktivitasbtn{
+
+    .nav-btn.active{
         padding-top: 18px;
         cursor: pointer;
+        .text{
+            color: #017EFA;
+        }
     }
 }
