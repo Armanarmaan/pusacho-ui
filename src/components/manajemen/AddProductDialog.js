@@ -33,26 +33,27 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
   useEffect( () => {
     fetchCategory();
-  }, []);
+  }, [showModal]);
 
   // Functions filling values of add product
   const [addProduct, setAddProduct] = useState({
     id: "",
-    category: "",
+    category_id: "",
+    category_name: "",
     name: "",
     size: "",
-    price: [],
+    price: [""],
     stock: 0,
-    suppliers: [],
-    modals: [],
-    modal_nett: [],
-    modal_nett_per: [],
-    logistic_costs: [],
-    margins: []
+    suppliers: [""],
+    modals: [""],
+    modal_nett: [""],
+    modal_nett_per: [""],
+    logistic_costs: [""],
+    margins: [""]
   });
 
    const handleCategoryInput = (val) => {
-     setAddProduct({ ...addProduct, category: val });
+     setAddProduct({ ...addProduct, category_id: val.value, category_name: val.label });
    };
 
    const handleNameInput = (val) => {
@@ -96,9 +97,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
   };
 
   const handlePriceValue = (val, index) => {
-    let newPrice = addProduct.price;
-    newPrice[index] = val;
-    setAddProduct({...addProduct, price: newPrice});
+    setAddProduct({...addProduct, price: val});
   };
 
   const handleMarginValue = (val, index) => {
@@ -120,7 +119,6 @@ export default function AddProductDialog({ showModal, closeModal }) {
     setSupplierCount(amount + 1);
     setAddProduct({
       ...addProduct,
-      price: [...addProduct.price, ""],
       suppliers: [...addProduct.suppliers, ""],
       modals: [...addProduct.modals, ""],
       modal_nett: [...addProduct.modal_nett, ""],
@@ -140,8 +138,24 @@ export default function AddProductDialog({ showModal, closeModal }) {
     setChosenSupplier(chosenArray);
   };
 
-  const deleteChosenSupplier = (val) => {
-    // On Progress    
+  const deleteChosenSupplier = () => {
+    const deleteList = chosenSupplier;
+    let suppCount = supplierCount;
+    let newProduct = addProduct;
+
+    // Delete Item
+    deleteList.forEach(item => {
+      $(`.supplier-wrapper-${item}`).remove();
+      newProduct.suppliers = newProduct.suppliers.splice(item, 1)
+      newProduct.modals = newProduct.modals.splice(item, 1)
+      newProduct.modal_nett = newProduct.modal_nett.splice(item, 1)
+      newProduct.modal_nett_per = newProduct.modal_nett_per.splice(item, 1)
+      newProduct.logistic_costs = newProduct.logistic_costs.splice(item, 1)
+      newProduct.margins = newProduct.margins.splice(item, 1)
+    });
+
+    setAddProduct(newProduct);
+    setChosenSupplier(0);
   };
   
   // Steps
@@ -157,7 +171,8 @@ export default function AddProductDialog({ showModal, closeModal }) {
       return !(addProduct.suppliers.length > 0) ||
             !(addProduct.modals.length > 0) ||
             !(addProduct.modal_nett.length > 0) ||
-            !(addProduct.price.length > 0)
+            !(addProduct.price > 0) ||
+            !(addProduct.margins.length > 0)
     }
   }
 
@@ -167,10 +182,10 @@ export default function AddProductDialog({ showModal, closeModal }) {
     } else {
       const submitProductData = {
         id: addProduct.id,
-        category: addProduct.category,
+        category: addProduct.category_id,
         name: addProduct.name,
         size: addProduct.size,
-        price: addProduct.price[0],
+        price: addProduct.price,
         stock: addProduct.stock,
         suppliers: addProduct.suppliers.join("|"),
         modals: addProduct.modals.join("|"),
@@ -203,7 +218,6 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
    // Close Modal
    const handleCloseModal = (event) => {
-
     closeModal();
   };
 
@@ -230,7 +244,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
               <div className="input-wrapper no-margin">
                 <p className="input-title">Kategori</p>
-                <Select placeholder="" options={categories} classNamePrefix="category-select-add" onChange={(val) => handleCategoryInput(val.value)}/>
+                <Select placeholder="" options={categories} classNamePrefix="category-select-add" value={{ value: addProduct.category_id, label: addProduct.category_name }} onChange={(val) => handleCategoryInput(val)}/>
               </div>
               <p className="dialog-second-subtitle">
                 Pilih kategori sesuai dengan produk yang ingin ditambahkan
@@ -238,17 +252,17 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
               <div className="input-wrapper">
                 <p className="input-title">Nama Produk</p>
-                <input className="input-field" type="text" onInput={(val) => handleNameInput(val.target.value)}/>
+                <input className="input-field" type="text" value={addProduct.name} onInput={(val) => handleNameInput(val.target.value)}/>
               </div>
 
               <div className="input-wrapper">
                 <p className="input-title">Masukkan Ukuran</p>
-                <input className="input-field" type="text" onInput={(val) => handleSizeInput(val.target.value)}/>
+                <input className="input-field" type="text" value={addProduct.size} onInput={(val) => handleSizeInput(val.target.value)}/>
               </div>
 
               <div className="input-wrapper no-margin">
                 <p className="input-title">ID Produk</p>
-                <input className="input-field" type="text" onInput={(val) => handleIdInput(val.target.value)}/>
+                <input className="input-field" type="text" value={addProduct.id} onInput={(val) => handleIdInput(val.target.value)}/>
               </div>
             </div>
 
@@ -298,8 +312,8 @@ export default function AddProductDialog({ showModal, closeModal }) {
                 </div>
                 {supplierCount && supplierCount > 0 ?
                   [...Array(supplierCount)].map((item, index) =>
-                    <div className="supplier-wrapper" key={index}>
-                      { supplierCount > 1 ? <input type="checkbox" className="input-checkbox" onChange={() => handleChosenSupplier(index)}/> : "" }
+                    <div className={`supplier-wrapper supplier-wrapper-${index}`} key={index}>
+                      { supplierCount > 1 && index !== 0 ? <input type="checkbox" className="input-checkbox" onChange={() => handleChosenSupplier(index)}/> : "" }
                       <div className="input-wrapper">
                         <p className="input-title">Supplier</p>
                         <input className="input-field" type="text" onInput={(val) => handleSupplierName(val.target.value, index)}/>
@@ -341,7 +355,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
                           <div className="input-prefield-wrapper">
                             <p className="input-prefield-text">Rp</p>
                           </div>
-                          <input className="input-field" type="text" onInput={(val) => handlePriceValue(val.target.value, index)}/>
+                          <input className="input-field" type="text" value={addProduct.price} onInput={(val) => handlePriceValue(val.target.value)}/>
                         </div>
                       </div>
                       <div className="input-wrapper">
@@ -354,9 +368,9 @@ export default function AddProductDialog({ showModal, closeModal }) {
                 }
 
                 <div className={`add-supplier-wrapper ${chosenSupplier.length > 0 ? "delete-supplier-wrapper" : ""}`}>
-                  <div className="delete-text-wrapper">
+                  <div className="delete-text-wrapper" onClick={() => deleteChosenSupplier()}>
                     <img src={rTrashCan} className="delete-icon" alt="RedTrashCan" />
-                    <p className="delete-supplier-text" onClick={() => deleteChosenSupplier()}>Hapus Supplier</p>
+                    <p className="delete-supplier-text">Hapus Supplier</p>
                   </div>
                   <p className="add-supplier-text" onClick={() => addSupplierAmount()}>
                     + Tambah Supplier
