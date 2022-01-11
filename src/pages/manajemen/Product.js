@@ -12,6 +12,7 @@ import Header from '../../components/manajemen/Header';
 import ScanDialog from '../../components/manajemen/ScanDialog';
 import AddCategoryDialog from '../../components/manajemen/AddCategoryDialog';
 import AddProductDialog from '../../components/manajemen/AddProductDialog';
+import EditProductDialog from '../../components/manajemen/EditProductDialog';
 
 export default class Product extends React.Component {
   constructor(props){
@@ -37,6 +38,7 @@ export default class Product extends React.Component {
       showAddProduct: false,
       showEditProduct: false,
       emptyCategory: "",
+      editProductId: "",
     };
   } 
 
@@ -65,6 +67,8 @@ export default class Product extends React.Component {
     const lbArrow = require('../../assets/icons/light-blue-arrow.svg').default;
     const blueCIcon = require('../../assets/icons/close-blue-icon.svg').default;
     const rTrashCan = require('../../assets/icons/red-trashcan.svg').default;
+    const gEdit = require('../../assets/icons/gray-edit-icon.svg').default;
+    const gScan = require('../../assets/icons/gray-scan-icon.svg').default;    
 
     // Functions
     const formatToCurrency = (num) => {
@@ -116,6 +120,20 @@ export default class Product extends React.Component {
       if (opt === "addCategory") this.setState({ ...this.state, showAddCategory: true });
       if (opt === "addProduct") this.setState({ ...this.state, showAddProduct: true });
       $(".add-button-options").addClass("d-none");
+    };
+    const showSubMenu = (index) => {
+      $(".product-three-dots-options").addClass("d-none");
+      $(`.product-three-dots-${index}`).removeClass("d-none");
+    };
+    const editProduct = (id) => {
+      if (typeof window !== undefined) localStorage.setItem("editId", id);
+      this.setState({ ...this.state, showEditProduct: true });
+    };
+    const printBarcode = (id) => {
+
+    };
+    const deleteProduct = (id) => {
+
     };
 
     // Apply Filters
@@ -200,6 +218,11 @@ export default class Product extends React.Component {
 
     const handleCloseAddProduct = () => {
       this.setState({ ...this.state, showAddProduct: false });
+    };
+
+    const handleCloseEditProduct = () => {
+      if (typeof window !== "undefined") localStorage.removeItem("editId");
+      this.setState({ ...this.state, showEditProduct: false });
     };
 
     // Renders
@@ -326,8 +349,24 @@ export default class Product extends React.Component {
                         <td className="product-description-item">
                           <p className="table-title">{item.stock}</p>
                         </td>
-                        <td className="product-description-item" colSpan={2}>
-                          <img src={dotsIcon} alt="maginifier-icon" />
+                        <td className="product-description-item" colSpan={2}  onClick={() => showSubMenu(index)}>
+                          <img src={dotsIcon} alt="maginifier-icon"/>
+                          <div className={`product-three-dots-options product-three-dots-${index} d-none`}>
+                            <ul className="action-item-wrapper">
+                              <li className="action-item" onClick={() => editProduct(item.id)}>
+                                <img src={gEdit} alt="Edit Pencil" />
+                                Ubah Detil Produk
+                              </li>
+                              <li className="action-item" onClick={() => printBarcode(item.id)}>
+                                <img src={gScan} alt="Scan Barcode" />
+                                Cetak Barcode
+                              </li>
+                              <li className="action-item red-highlight" onClick={() => deleteProduct(item.id)}>
+                                <img src={rTrashCan} alt="Delete Product" />
+                                Hapus Produk
+                              </li>
+                            </ul>
+                          </div>
                         </td>
                       </tr>
                       <tr className="product-description-pricing-detail d-none">
@@ -359,13 +398,13 @@ export default class Product extends React.Component {
                             <tbody className="product-pricing-body">
                               <tr className="product-pricing-row">
                                 <td className="product-supplier">
-                                  {item.suppliers.map(item => (
-                                    <input type="text" value={item} readOnly/>
+                                  {item.suppliers.map((item, index) => (
+                                    <input key={index} type="text" value={item} readOnly/>
                                   ))}
                                 </td>
                                 <td className="product-modal">
-                                  {item.modals.map(item => (
-                                    <div className="input-pricing">
+                                  {item.modals.map((item, index) => (
+                                    <div className="input-pricing" key={index}>
                                       <div className="input-prepend">
                                         <p className="prepend-text">Rp</p>
                                       </div>
@@ -374,8 +413,8 @@ export default class Product extends React.Component {
                                   ))}
                                 </td>
                                 <td className="product-modal-nett">
-                                  {item.modal_nett.map(item => (
-                                    <div className="product-modal-nett-inner">
+                                  {item.modal_nett.map((item, index) => (
+                                    <div className="product-modal-nett-inner" key={index}>
                                       <div className="input-precentage">
                                         <input type="text" />
                                         <div className="input-append">
@@ -387,8 +426,8 @@ export default class Product extends React.Component {
                                   ))}
                                 </td>
                                 <td className="product-logistic">
-                                  {item.logistic_costs.map(item => (
-                                    <div className="input-pricing">
+                                  {item.logistic_costs.map((item, index) => (
+                                    <div className="input-pricing" key={index}>
                                       <div className="input-prepend">
                                         <p className="prepend-text">Rp</p>
                                       </div>
@@ -397,35 +436,21 @@ export default class Product extends React.Component {
                                   ))}
                                 </td>
                                 <td className="product-jual">
-                                  <div className="input-pricing">
-                                    <div className="input-prepend">
-                                      <p className="prepend-text">Rp</p>
+                                  {item.suppliers.map((innerItem, index) => (
+                                    <div className="input-pricing" key={index}>
+                                      <div className="input-prepend">
+                                        <p className="prepend-text">Rp</p>
+                                      </div>
+                                      <input type="text" value={item.price} readOnly />
                                     </div>
-                                    <input type="text" value={item.price} readOnly/>
-                                  </div>
-                                  <div className="input-pricing">
-                                    <div className="input-prepend">
-                                      <p className="prepend-text">Rp</p>
-                                    </div>
-                                    <input type="text" value={item.price} readOnly/>
-                                  </div>
-                                  <div className="input-pricing">
-                                    <div className="input-prepend">
-                                      <p className="prepend-text">Rp</p>
-                                    </div>
-                                    <input type="text" value={item.price} readOnly/>
-                                  </div>
+                                  ))}
                                 </td>
                                 <td className="product-margin">
-                                  <div className="margin-wrapper">
-                                    <p className="margin-text">35%</p>
-                                  </div>
-                                  <div className="margin-wrapper">
-                                    <p className="margin-text">35%</p>
-                                  </div>
-                                  <div className="margin-wrapper">
-                                    <p className="margin-text">35%</p>
-                                  </div>
+                                  {item.margins.map((item, index) => (
+                                    <div className="margin-wrapper" key={index}>
+                                      <p className="margin-text">{item}%</p>
+                                    </div>
+                                  ))}
                                 </td>
                               </tr>
                             </tbody>
@@ -458,7 +483,7 @@ export default class Product extends React.Component {
         <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan}/>
         <AddCategoryDialog showModal={this.state.showAddCategory} closeModal={handleCloseAddCategory}/>
         <AddProductDialog showModal={this.state.showAddProduct} closeModal={handleCloseAddProduct}/>
-
+        <EditProductDialog showModal={this.state.showEditProduct} closeModal={handleCloseEditProduct} />
       </div>
     )
   }
