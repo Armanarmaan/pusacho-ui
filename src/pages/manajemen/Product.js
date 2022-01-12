@@ -49,13 +49,13 @@ export default class Product extends React.Component {
     const product = await fetch(`${env_api}/manajemen/products`)
                                 .then(response => response.json())
                                 .catch(error => console.log(error));
-    this.setState({ ...this.state, products: product.data });
+    this.setState({ ...this.state, products: product ? product.data : [] });
 
     // Fetch Categories
     const categories = await fetch(`${env_api}/manajemen/categories`)
                                   .then(response => response.json())
                                   .catch(error => console.log(error));
-    this.setState({ ...this.state, categories: categories.data });
+    this.setState({ ...this.state, categories: categories ? categories.data : [] });
   }
 
   render() {
