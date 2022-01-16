@@ -13,6 +13,9 @@ export default function ScanDialog({ showScan, closeScan }) {
   const editIcon = require('../../assets/icons/blue-pencil-icon.svg').default;
   const scanBarcode = require('../../assets/scan-barcode.png').default;
   const manikExample = require('../../assets/contoh-manik.png').default;
+  
+  // Asset Imports mobile
+  const bWhite = require('../../assets/icons/back-white-icon.svg').default;
 
   // Constant data
   const env_api = process.env.REACT_APP_API_ENDPOINT;
@@ -38,18 +41,40 @@ export default function ScanDialog({ showScan, closeScan }) {
     }
   };
 
+  const changeActiveTabMobile = (type) => {
+    if (type == "product") {
+      $(".body-suppliers-detail").addClass("d-none");
+      $(".body-product-detail").removeClass("d-none");
+      $(".type-active-indicator").removeClass("supplier").addClass("detail");
+    } else {
+      $(".body-product-detail").addClass("d-none");
+      $(".body-suppliers-detail").removeClass("d-none");
+      $(".type-active-indicator").addClass("supplier").removeClass("detail");
+    }
+  };
+
   // Product
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState({
+    id: "PSCH001",
+    name: "Manik-manik Hitam",
+    size: "10 x 10 mm",
+    category_name: "Manik-manik",
+    suppliers: ["A", "B", "C"],
+    modals: [10, 10, 10],
+    modal_nett: [9, 9, 9],
+    price: 25,
+
+  });
 
   // Product Amount
-  const [productStock, setProductStock] = useState(0);
+  const [productStock, setProductStock] = useState(200);
   const handleProductStock = (type) => {
     if (type === "-") setProductStock(productStock - 1);
     if (type === "+") setProductStock(productStock + 1);
   }
 
   // Steps
-  const [scanStep, setScanStep] = useState(1);
+  const [scanStep, setScanStep] = useState(2);
   const nextScanStep = async (event) => {
     event.preventDefault();
     let fetchedProduct = await fetch(`${env_api}/manajemen/products/${barcode}`)
@@ -105,7 +130,7 @@ export default function ScanDialog({ showScan, closeScan }) {
     <Dialog
       open={showScan}
       fullWidth={true}
-      classes={{ container: classes.root, paper: classes.paper }}
+      classes={{ container: classes.root, paper:  scanStep === 1? classes.paper : classes.paper2 }}
     >
       <div className="dialog-scan-wrapper">
         {scanStep === 1 ?
@@ -140,6 +165,11 @@ export default function ScanDialog({ showScan, closeScan }) {
               <button className="btn btn-close" onClick={handleCloseScan}>
                 <img src={gClose} alt="Close Icon" />
               </button>
+            </div>
+
+            <div className="dialog-header-mobile">
+              <img className="dialog-icon" src={bWhite} alt="Back White" />
+              <p className="dialog-title">Produk</p>
             </div>
 
             <div className="dialog-body">
@@ -231,6 +261,164 @@ export default function ScanDialog({ showScan, closeScan }) {
 
             </div>
 
+            <div className="dialog-body-mobile">
+              
+              <div className="body-type-wrapper">
+                <ul className="body-type">
+                  <li className="type-item detail" onClick={() => changeActiveTabMobile("product")}>
+                    <p className="type-title">Detail Produk</p>
+                  </li>
+                  <li className="type-item supplier" onClick={() => changeActiveTabMobile("supplier")}>
+                    <p className="type-title">Data Supplier</p>
+                  </li>
+                  <li className="type-active-indicator detail"></li>
+                </ul>
+              </div>
+              
+              <div className="body-product-detail">
+                <div className="body-card">
+                  <p className="card-title">Manik-manik Hitam - 10 x 10 mm</p>
+                  <p className="card-subtitle">Silahkan update stok barang ini, atau ubah detail produk</p>
+
+                  <div className="card-img-wrapper">
+                    <img src={manikExample} alt="Manik Example" />
+                  </div>
+
+                  <ul className="card-details">
+                    <li className="detail-items">
+                      <p className="detail-title">Total Stok Saat Ini</p>
+                      <p className="detail-value">350 pcs</p>
+                    </li>
+                    <li className="detail-items">
+                      <p className="detail-title">Harga</p>
+                      <p className="detail-value">{formatToCurrency(350000)}</p>
+                    </li>
+                    <li className="detail-items">
+                      <p className="detail-title">Nama Produk</p>
+                      <p className="detail-value">Manik-manik Hitam</p>
+                    </li>
+                    <li className="detail-items">
+                      <p className="detail-title">Ukuran</p>
+                      <p className="detail-value">10 x 10 mm</p>
+                    </li>
+                    <li className="detail-items">
+                      <p className="detail-title">ID Produk</p>
+                      <p className="detail-value">PSCH00001</p>
+                    </li>
+                  </ul>
+
+                </div>
+
+                <div className="body-edit-wrapper">
+                  <img className="edit-icon" src={editIcon} alt="Edit Pencil" />
+                  <p className="edit-text">Ubah detil produk</p>
+                </div>
+
+                <div className="dialog-button-mobile-wrapper">
+                  <p className="button-title">Update stok produk?</p>
+                  <div className="button-stock-update-wrapper">
+                    <button className="add-dec-button">+</button>
+                    <div className="value-input-wrapper">
+                      <p className="value-input-title">Stok di gudang</p>
+                      <input className="value-input" type="text" value={productStock} onInput={(val) => setProductStock(val.target.value)} />
+                    </div>
+                    <button className="add-dec-button">-</button>
+                  </div>
+                  <button className="button-submit">Simpan</button>
+                </div>
+              </div>
+
+              <div className="body-suppliers-detail d-none">
+                <div className="supplier-card-wrapper d-none">
+                  <div className="supplier-card">
+                    <ul className="supplier-card-item">
+                      <li className="supplier-item">
+                        <p className="item-title">Supplier</p>
+                        <p className="item-value">Jaya Mustika A</p>
+                      </li>
+                      <li className="supplier-item">
+                        <p className="item-title">Harga Modal</p>
+                        <p className="item-value">{formatToCurrency(550000)}</p>
+                      </li>
+                      <li className="supplier-item">
+                        <p className="item-title">Harga Modal Nett</p>
+                        <p className="item-value">5% <span className="blue-dot"></span> {formatToCurrency(450000)}</p>
+                      </li>
+                      <li className="supplier-item">
+                        <p className="item-title">Biaya Logistik</p>
+                        <p className="item-value">{formatToCurrency(550000)}</p>
+                      </li>
+                      <li className="supplier-item">
+                        <p className="item-title">Harga Jual</p>
+                        <p className="item-value">{formatToCurrency(550000)}</p>
+                      </li>
+                      <li className="supplier-item">
+                        <p className="item-title">Margin</p>
+                        <p className="item-value">5%</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="supplier-edit-wrapper">
+                  <div className="supplier-edit-item-wrapper">
+                    <div className="edit-forms">
+                      <div className="input-wrapper">
+                        <label className="input-label" htmlFor="input-supplier">Supplier</label>
+                        <input className="input-field" type="text" />
+                      </div>
+                      <div className="input-wrapper">
+                        <label className="input-label" htmlFor="input-modal">Harga Modal</label>
+                        <div className="input-field-group">
+                          <div className="input-prefield-wrapper">
+                            <p className="input-prefield-text">Rp</p>
+                          </div>
+                          <input className="input-field" type="text" />
+                        </div>
+                      </div>
+                      <div className="input-precentage-wrapper">
+                        <div className="input-wrapper">
+                          <label className="input-label" htmlFor="input-modal">Harga Modal Nett Per</label>
+                          <div className="input-field-group">
+                            <input className="input-field" type="text" />
+                            <div className="input-postfield-wrapper">
+                              <p className="input-postfield-text">%</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="input-wrapper">
+                        <label className="input-label" htmlFor="input-modal">Biaya Logistik</label>
+                        <div className="input-field-group">
+                          <div className="input-prefield-wrapper">
+                            <p className="input-prefield-text">Rp</p>
+                          </div>
+                          <input className="input-field" type="text" />
+                        </div>
+                      </div>
+                      <div className="input-wrapper">
+                        <label className="input-label" htmlFor="input-modal">Harga Jual</label>
+                        <div className="input-field-group">
+                          <div className="input-prefield-wrapper">
+                            <p className="input-prefield-text">Rp</p>
+                          </div>
+                          <input className="input-field" type="text" />
+                        </div>
+                      </div>
+                      <p className="margin-value">Margin: 35%</p>
+                    </div>
+                    <div className="supplier-edit-separator"></div>
+                  </div>
+                </div>
+
+                <div className="edit-supplier-button-wrapper">
+                  <img className="edit-icon" src={editIcon} alt="Edit Pencil" />
+                  <p className="edit-text">Ubah Data Supplier</p>
+                </div>
+              </div>
+
+            </div>
+
             <div className="dialog-button-wrapper">
               <p className="change-detail">
                 <img className="change-icon" src={editIcon} alt="" />
@@ -239,6 +427,9 @@ export default function ScanDialog({ showScan, closeScan }) {
               <button className="btn btn-secondary" onClick={() => backScanStep()}>Batal</button>
               <button className="btn btn-primary" onClick={() => submitProduct()} disabled={isScanButtonDisabled()}>Selanjutnya</button>
             </div>
+
+            
+
           </div>
         }
       </div>
@@ -253,11 +444,25 @@ const useStyles = makeStyles(() => ({
     }
   },
   paper: { 
-    minWidth:"694px",
+    width:"694px",
     "@media (max-width: 771px)": {
       width: "100%",
       margin: 0,
       maxWidth: "unset",
+      borderTopLeftRadius: "20px",
+      borderTopRightRadius: "20px",
     }
  },
+ paper2: {
+  width:"694px",
+  "@media (max-width: 771px)": {
+    height: "100%",
+    width: "100%",
+    margin: 0,
+    maxHeight: "unset",
+    maxWidth: "unset",
+    borderTopLeftRadius: "0px",
+    borderTopRightRadius: "0px",
+  }
+ }
 }));
