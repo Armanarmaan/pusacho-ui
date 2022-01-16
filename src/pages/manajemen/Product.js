@@ -121,9 +121,15 @@ export default class Product extends React.Component {
       if (opt === "addProduct") this.setState({ ...this.state, showAddProduct: true });
       $(".add-button-options").addClass("d-none");
     };
+    const hideAddOptions = () => {
+      $(".add-button-options").addClass("d-none");
+    };
     const showSubMenu = (index) => {
       $(".product-three-dots-options").addClass("d-none");
       $(`.product-three-dots-${index}`).removeClass("d-none");
+    };
+    const hideSubMenu = () => {
+      $(".product-three-dots-options").addClass("d-none");
     };
     const editProduct = (id) => {
       if (typeof window !== undefined) localStorage.setItem("editId", id);
@@ -259,7 +265,7 @@ export default class Product extends React.Component {
                         <img className="button-icon" src={addIcon} alt="Add Icon" />
                         <p className="button-text">Tambah</p>
                       </button>
-                      <ul className="add-button-options d-none">
+                      <ul className="add-button-options d-none" onMouseLeave={() => hideAddOptions()}>
                         <li className="button-options" onClick={() => choseAddOptions("addCategory")}>
                           <p className="option-text">Tambah Kategori</p>
                         </li>
@@ -350,8 +356,8 @@ export default class Product extends React.Component {
                           <p className="table-title">{item.stock}</p>
                         </td>
                         <td className="product-description-item" colSpan={2}  onClick={() => showSubMenu(index)}>
-                          <img src={dotsIcon} alt="maginifier-icon"/>
-                          <div className={`product-three-dots-options product-three-dots-${index} d-none`}>
+                          <img className="three-dots" src={dotsIcon} alt="maginifier-icon"/>
+                          <div className={`product-three-dots-options product-three-dots-${index} d-none`} onMouseLeave={() => hideSubMenu()}>
                             <ul className="action-item-wrapper">
                               <li className="action-item" onClick={() => editProduct(item.id)}>
                                 <img src={gEdit} alt="Edit Pencil" />

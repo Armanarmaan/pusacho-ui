@@ -240,6 +240,9 @@
                   position: relative;
                   text-align: center;
                   padding: 26px;
+                  .three-dots {
+                    cursor: pointer;
+                  }
                   .product-three-dots-options {
                     right: 37.5%;
                     min-width: 238px;
@@ -479,6 +482,9 @@
 }
 
 .dialog-scan-wrapper {
+  p {
+    margin-bottom: 0px;
+  }
   .scan-first-step {
     padding: 16px;
     .dialog-header {
@@ -669,7 +675,7 @@
             left: 0px;
             bottom: 0px;
           }
-          .active-indicator.modal {
+          .active-indicator.supplier {
             width: 40px;
             left: 125px;
             bottom: 0px;
@@ -706,7 +712,7 @@
           }
         }
 
-        .modal-wrapper {
+        .supplier-wrapper {
           .modal-table {
             width: 100%;
             border-collapse: collapse;
@@ -740,6 +746,9 @@
           }
         }
       }
+    }
+    .dialog-body-mobile {
+      display: none;
     }
     .dialog-header-body {
       display: none;
@@ -1233,6 +1242,9 @@
 
 .add-product-wrapper {
   padding: 24px;
+  p {
+    margin-bottom: 0px;
+  }
     .add-product-first-step {
       .dialog-header {
         display: flex;
@@ -1708,7 +1720,7 @@
         }
 
         .body-suppliers-detail {
-          padding: 0px 22px;
+          padding: 0px 22px 20%;
           .supplier-card-wrapper {
             .supplier-card {
               padding: 20px;
@@ -1807,12 +1819,13 @@
             }
           }
           .edit-supplier-button-wrapper {
-            position: absolute;
-            display: flex;
+            position: fixed;
+            display: none;
             bottom: 50px;
             right: 16px;
             border-radius: 70px;
             padding: 12px 16px;
+            background: #FFF;
             box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
             .edit-icon {
               margin-right: 8px;

@@ -84,12 +84,6 @@ export default function AddProductDialog({ showModal, closeModal }) {
     setAddProduct({...addProduct, modals: newModal});
   };
 
-  const handleModalNettValue = (val, index) => {
-    let newModalNett = addProduct.modal_nett;
-    newModalNett[index] = val;
-    setAddProduct({...addProduct, modal_nett: newModalNett});
-  };
-
   const handleLogisticValue = (val, index) => {
     let newLogistic = addProduct.logistic_costs;
     newLogistic[index] = val;
@@ -98,12 +92,6 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
   const handlePriceValue = (val, index) => {
     setAddProduct({...addProduct, price: val});
-  };
-
-  const handleMarginValue = (val, index) => {
-    let newMargin = addProduct.margins;
-    newMargin[index] = val;
-    setAddProduct({...addProduct, margins: newMargin});
   };
 
   const handleModalNettPer = (val, index) => {
@@ -121,10 +109,8 @@ export default function AddProductDialog({ showModal, closeModal }) {
       ...addProduct,
       suppliers: [...addProduct.suppliers, ""],
       modals: [...addProduct.modals, ""],
-      modal_nett: [...addProduct.modal_nett, ""],
       modal_nett_per: [...addProduct.modal_nett_per, ""],
       logistic_costs: [...addProduct.logistic_costs, ""],
-      margins: [...addProduct.margins, ""],
     });
   };
 
@@ -140,7 +126,6 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
   const deleteChosenSupplier = () => {
     const deleteList = chosenSupplier;
-    let suppCount = supplierCount;
     let newProduct = addProduct;
 
     // Delete Item
@@ -148,10 +133,8 @@ export default function AddProductDialog({ showModal, closeModal }) {
       $(`.supplier-wrapper-${item}`).remove();
       newProduct.suppliers = newProduct.suppliers.splice(item, 1)
       newProduct.modals = newProduct.modals.splice(item, 1)
-      newProduct.modal_nett = newProduct.modal_nett.splice(item, 1)
       newProduct.modal_nett_per = newProduct.modal_nett_per.splice(item, 1)
       newProduct.logistic_costs = newProduct.logistic_costs.splice(item, 1)
-      newProduct.margins = newProduct.margins.splice(item, 1)
     });
 
     setAddProduct(newProduct);
@@ -180,6 +163,24 @@ export default function AddProductDialog({ showModal, closeModal }) {
     if (addStep === 1) {
       setAddStep(2);
     } else {
+      const modal_nett = [];
+      const margins = [];
+
+      // Modal Nett Calc.
+      addProduct.modal_nett_per.forEach((precentage, index) => {
+        let newModal = addProduct.modals[index];
+        const precentageList = precentage.split("|");
+        precentageList.map(percent => {
+          newModal = newModal - (newModal * (percent/100)) 
+        })
+        modal_nett.push(newModal);
+      });
+      // Margin Calc.
+      modal_nett.forEach((modal, index) => {
+        let newMargin = ((addProduct.price - modal) / modal) * 100;
+        margins.push(newMargin.toFixed(0));
+      });
+
       const submitProductData = {
         id: addProduct.id,
         category: addProduct.category_id,
@@ -189,26 +190,26 @@ export default function AddProductDialog({ showModal, closeModal }) {
         stock: addProduct.stock,
         suppliers: addProduct.suppliers.join("|"),
         modals: addProduct.modals.join("|"),
-        modal_nett: addProduct.modal_nett.join("|"),
         modal_nett_per: addProduct.modal_nett_per.join("|"),
+        modal_nett: modal_nett.join("|"),
         logistic_costs: addProduct.logistic_costs.join("|"),
-        margins: addProduct.margins.join("|")
+        margins: margins.join("|")
       };
 
       console.log(submitProductData);
 
-      const submitProduct =  await fetch(`${env_api}/manajemen/product`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(submitProductData)
-      })
-      .then(() => {
-        closeModal();
-        setAddStep(1);
-        setAddProduct({ id: "", category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
-        setSupplierCount(1);
-        setChosenSupplier([]);
-      }).catch(error => console.log(error));
+      // const submitProduct =  await fetch(`${env_api}/manajemen/product`, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(submitProductData)
+      // })
+      // .then(() => {
+      //   closeModal();
+      //   setAddStep(1);
+      //   setAddProduct({ id: "", category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
+      //   setSupplierCount(1);
+      //   setChosenSupplier([]);
+      // }).catch(error => console.log(error));
     }
   };
 
@@ -328,15 +329,6 @@ export default function AddProductDialog({ showModal, closeModal }) {
                         </div>
                       </div>
                       <div className="input-wrapper">
-                        <p className="input-title">Modal Nett</p>
-                        <div className="input-field-group">
-                          <div className="input-prefield-wrapper">
-                            <p className="input-prefield-text">Rp</p>
-                          </div>
-                          <input className="input-field" type="text" onInput={(val) => handleModalNettValue(val.target.value, index)}/>
-                        </div>
-                      </div>
-                      <div className="input-wrapper">
                         <p className="input-title">Modal Nett Per</p>
                         <input className="input-field" type="text" onInput={(val) => handleModalNettPer(val.target.value, index)}/>
                       </div>
@@ -357,10 +349,6 @@ export default function AddProductDialog({ showModal, closeModal }) {
                           </div>
                           <input className="input-field" type="text" value={addProduct.price} onInput={(val) => handlePriceValue(val.target.value)}/>
                         </div>
-                      </div>
-                      <div className="input-wrapper">
-                        <p className="input-title">Margin</p>
-                        <input className="input-field" type="text" onInput={(val) => handleMarginValue(val.target.value, index)}/>
                       </div>
                     </div>
                   )

@@ -27,17 +27,17 @@ export default function ScanDialog({ showScan, closeScan }) {
 
   const changeActiveTab = (type) => {
     $(".produk-modal-header-item").removeClass("active");
-    $(".active-indicator").removeClass("detil modal");
+    $(".active-indicator").removeClass("detil supplier");
     
     $(`.${type}`).addClass("active");
     $(".active-indicator").addClass(type);
 
-    if (type === "modal") {
+    if (type === "supplier") {
       $(".detil-produk-wrapper").addClass("d-none");
-      $(".modal-wrapper").removeClass("d-none");
+      $(".supplier-wrapper").removeClass("d-none");
     } else {
       $(".detil-produk-wrapper").removeClass("d-none");
-      $(".modal-wrapper").addClass("d-none");
+      $(".supplier-wrapper").addClass("d-none");
     }
   };
 
@@ -53,17 +53,16 @@ export default function ScanDialog({ showScan, closeScan }) {
     }
   };
 
-  // Product
+  // // Product
   const [product, setProduct] = useState({
-    id: "PSCH001",
-    name: "Manik-manik Hitam",
-    size: "10 x 10 mm",
-    category_name: "Manik-manik",
-    suppliers: ["A", "B", "C"],
-    modals: [10, 10, 10],
-    modal_nett: [9, 9, 9],
-    price: 25,
-
+  //   id: "PSCH001",
+  //   name: "Manik-manik Hitam",
+  //   size: "10 x 10 mm",
+  //   category_name: "Manik-manik",
+  //   suppliers: ["A", "B", "C"],
+  //   modals: [10, 10, 10],
+  //   modal_nett: [9, 9, 9],
+  //   price: 25,
   });
 
   // Product Amount
@@ -74,7 +73,7 @@ export default function ScanDialog({ showScan, closeScan }) {
   }
 
   // Steps
-  const [scanStep, setScanStep] = useState(2);
+  const [scanStep, setScanStep] = useState(1);
   const nextScanStep = async (event) => {
     event.preventDefault();
     let fetchedProduct = await fetch(`${env_api}/manajemen/products/${barcode}`)
@@ -203,7 +202,7 @@ export default function ScanDialog({ showScan, closeScan }) {
 
                 <ul className="produk-modal-header">
                   <li className="produk-modal-header-item detil active" onClick={() => changeActiveTab("detil")}>Detil Produk</li>
-                  <li className="produk-modal-header-item modal" onClick={() => changeActiveTab("modal")}>Modal</li>
+                  <li className="produk-modal-header-item supplier" onClick={() => changeActiveTab("supplier")}>Modal</li>
                   <div className="active-indicator detil"></div>
                 </ul>
 
@@ -231,7 +230,7 @@ export default function ScanDialog({ showScan, closeScan }) {
                     </ul>
                   </div>
 
-                  <div className="modal-wrapper d-none">
+                  <div className="supplier-wrapper d-none">
                     <table className="modal-table">
                       <thead>
                         <tr>
@@ -277,7 +276,7 @@ export default function ScanDialog({ showScan, closeScan }) {
               
               <div className="body-product-detail">
                 <div className="body-card">
-                  <p className="card-title">Manik-manik Hitam - 10 x 10 mm</p>
+                  <p className="card-title">{product.name} - {product.size}</p>
                   <p className="card-subtitle">Silahkan update stok barang ini, atau ubah detail produk</p>
 
                   <div className="card-img-wrapper">
@@ -287,23 +286,27 @@ export default function ScanDialog({ showScan, closeScan }) {
                   <ul className="card-details">
                     <li className="detail-items">
                       <p className="detail-title">Total Stok Saat Ini</p>
-                      <p className="detail-value">350 pcs</p>
+                      <p className="detail-value">{productStock} pcs</p>
                     </li>
                     <li className="detail-items">
                       <p className="detail-title">Harga</p>
-                      <p className="detail-value">{formatToCurrency(350000)}</p>
+                      <p className="detail-value">{formatToCurrency(product.price)}</p>
+                    </li>
+                    <li className="detail-items">
+                      <p className="detail-title">Kategori Produk</p>
+                      <p className="detail-value">{product.category_name}</p>
                     </li>
                     <li className="detail-items">
                       <p className="detail-title">Nama Produk</p>
-                      <p className="detail-value">Manik-manik Hitam</p>
+                      <p className="detail-value">{product.name}</p>
                     </li>
                     <li className="detail-items">
                       <p className="detail-title">Ukuran</p>
-                      <p className="detail-value">10 x 10 mm</p>
+                      <p className="detail-value">{product.size}</p>
                     </li>
                     <li className="detail-items">
                       <p className="detail-title">ID Produk</p>
-                      <p className="detail-value">PSCH00001</p>
+                      <p className="detail-value">{product.id}</p>
                     </li>
                   </ul>
 
@@ -317,50 +320,52 @@ export default function ScanDialog({ showScan, closeScan }) {
                 <div className="dialog-button-mobile-wrapper">
                   <p className="button-title">Update stok produk?</p>
                   <div className="button-stock-update-wrapper">
-                    <button className="add-dec-button">+</button>
+                    <button className="add-dec-button" onClick={() => handleProductStock("+")}>+</button>
                     <div className="value-input-wrapper">
                       <p className="value-input-title">Stok di gudang</p>
                       <input className="value-input" type="text" value={productStock} onInput={(val) => setProductStock(val.target.value)} />
                     </div>
-                    <button className="add-dec-button">-</button>
+                    <button className="add-dec-button" onClick={() => handleProductStock("-")}>-</button>
                   </div>
-                  <button className="button-submit">Simpan</button>
+                  <button className="button-submit" onClick={() => submitProduct()} disabled={isScanButtonDisabled()}>Simpan</button>
                 </div>
               </div>
 
               <div className="body-suppliers-detail d-none">
-                <div className="supplier-card-wrapper d-none">
-                  <div className="supplier-card">
+                <div className="supplier-card-wrapper">
+                { product && product.suppliers ? product.suppliers.map((item, index) => 
+                  <div className="supplier-card" key={index}>
                     <ul className="supplier-card-item">
                       <li className="supplier-item">
                         <p className="item-title">Supplier</p>
-                        <p className="item-value">Jaya Mustika A</p>
+                        <p className="item-value">{item}</p>
                       </li>
                       <li className="supplier-item">
                         <p className="item-title">Harga Modal</p>
-                        <p className="item-value">{formatToCurrency(550000)}</p>
+                        <p className="item-value">{product.modals[index]}</p>
                       </li>
                       <li className="supplier-item">
                         <p className="item-title">Harga Modal Nett</p>
-                        <p className="item-value">5% <span className="blue-dot"></span> {formatToCurrency(450000)}</p>
+                        <p className="item-value">{product.modal_nett[index]} <span className="blue-dot"></span> {formatToCurrency(450000)}</p>
                       </li>
                       <li className="supplier-item">
                         <p className="item-title">Biaya Logistik</p>
-                        <p className="item-value">{formatToCurrency(550000)}</p>
+                        <p className="item-value">{formatToCurrency(product.logistic_costs[index])}</p>
                       </li>
                       <li className="supplier-item">
                         <p className="item-title">Harga Jual</p>
-                        <p className="item-value">{formatToCurrency(550000)}</p>
+                        <p className="item-value">{formatToCurrency(product.price)}</p>
                       </li>
                       <li className="supplier-item">
                         <p className="item-title">Margin</p>
-                        <p className="item-value">5%</p>
+                        <p className="item-value">{product.margins[index]}</p>
                       </li>
                     </ul>
                   </div>
+                ) : <ul className="supplier-card-item"></ul> }
                 </div>
 
-                <div className="supplier-edit-wrapper">
+                <div className="supplier-edit-wrapper d-none">
                   <div className="supplier-edit-item-wrapper">
                     <div className="edit-forms">
                       <div className="input-wrapper">
@@ -428,8 +433,6 @@ export default function ScanDialog({ showScan, closeScan }) {
               <button className="btn btn-primary" onClick={() => submitProduct()} disabled={isScanButtonDisabled()}>Selanjutnya</button>
             </div>
 
-            
-
           </div>
         }
       </div>
@@ -444,7 +447,7 @@ const useStyles = makeStyles(() => ({
     }
   },
   paper: { 
-    width:"694px",
+    minWidth:"694px",
     "@media (max-width: 771px)": {
       width: "100%",
       margin: 0,
@@ -454,7 +457,7 @@ const useStyles = makeStyles(() => ({
     }
  },
  paper2: {
-  width:"694px",
+  minWidth:"694px",
   "@media (max-width: 771px)": {
     height: "100%",
     width: "100%",
