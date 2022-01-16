@@ -1563,6 +1563,329 @@
     }
 }
 
+.edit-product-wrapper {
+  padding: 24px;
+  p {
+    margin-bottom: 0px;
+  }
+    .edit-product-first-step {
+      .dialog-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        .dialog-title {
+          font-size: 24px;
+          font-weight: 700;
+          color: #31353B;
+          margin: 0px;
+        }
+        .btn.btn-close {
+          padding: 8px;
+          background: none;
+          border: none;
+        }
+      }
+      .dialog-body {
+        .dialog-subtitle {
+          font-size: 16px;
+          font-weight: 400;
+          color: #7E8287;
+          margin-bottom: 20px;
+        }
+        .input-wrapper {
+          padding: 8px 16px;
+          width: 100%;
+          background: #F5F5F5;
+          border-radius: 6px;
+          margin-bottom: 16px;
+          .input-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: #999CA0;
+          }
+          .input-field {
+            border: none;
+            background: none;
+            width: 100%;
+            outline: none;
+          }
+          .category-select-add__control, .category-select-add-lc__control {
+            width: 100%;
+            background: none;
+            border: none;
+
+            .category-select-add__value-container {
+              padding-left: 0;
+
+              .category-select-add__single-value {
+                font-size: 14px;
+                font-weight: 400;
+                color: #393939;
+              }
+            }
+      
+            .category-select-add__indicators, .category-select-add-lc__indicators {
+              .category-select-add__indicator-separator, .category-select-add-lc__indicator-separator {
+                display: none;
+              }
+            }
+          }
+          .product-select-lc__control {
+            margin-right: 0px;
+          }
+        }
+        .no-margin {
+          margin-bottom: 0px;
+        }
+        .dialog-second-subtitle {
+          font-size: 12px;
+          font-weight: 400;
+          color: #999CA0;
+          margin: 8px 0px 16px;
+        }
+      }
+      .dialog-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 32px;
+        .btn.btn-secondary {
+          padding: 11px 16px;
+          height: 40px;
+          border: 2px solid #017EFA;
+          border-radius: 6px;
+          background: #FFF;
+          font-size: 14px;
+          font-weight: 700;
+          color: #017EFA;
+          margin-right: 16px;
+          &:disabled {
+            background: #CDCDCD;
+            color: #7E8287;
+          }
+        }
+        .btn-primary {
+          padding: 11px 16px;
+          height: 40px;
+          border: none;
+          border-radius: 6px;
+          background: #017EFA;
+          font-size: 14px;
+          font-weight: 700;
+          color: #FFF;
+          &:disabled {
+            background: #CDCDCD;
+            color: #7E8287;
+          }
+        }
+      }
+    }
+    .edit-product-second-step {
+      .dialog-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        .header-inner-wrapper {
+          display: flex;
+          .btn-back {
+            background: none;
+            border: none;
+            margin-right: 20px;
+          }
+          .dialog-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #31353B;
+            margin: 0px;
+          }
+        }
+        .btn.btn-close {
+          padding: 8px;
+          background: none;
+          border: none;
+        }
+      }
+      .dialog-body {
+        .dialog-subtitle {
+          font-size: 16px;
+          font-weight: 400;
+          color: #7E8287;
+          margin-bottom: 25px;
+        }
+        .dialog-inner-body {
+          margin: 0px -24px;
+          padding: 24px;
+          background: rgba(244, 247, 252, 0.5);
+          border-top: 1px solid #CCC;
+          border-bottom: 1px solid #CCC;
+          .image-color-amount-wrapper {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            .input-img-wrapper {
+              margin-right: 16px;
+              .input-img-border {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100px;
+                width: 100px;
+                border-radius: 8px;
+                border: 1px dashed #017EFA;
+              }
+            }
+            .image-color-amount-inner-wrapper {
+              width: 100%;
+              display: flex;
+              align-items: flex-start;
+              .input-wrapper {
+                width: 100%;
+                .input-title {
+                  font-size: 14px;
+                  font-weight: 400;
+                  color: #393939;
+                  margin-bottom: 10px;
+                }
+                .input-field {
+                  padding: 14px 11px;
+                  border: 1px solid #DADADA;
+                  border-radius: 8px;
+                  width: 100%;
+                }
+                .input-subtitle {
+                  margin-top: 8px;
+                  font-size: 12px;
+                  font-weight: 400;
+                  color: #999CA0;
+                  .bold {
+                    color: #000;
+                  }
+                }
+              }
+            }
+          }
+          .supplier-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            .input-checkbox {
+              margin-top: 27px;
+              margin-right: 16px;
+            }
+            .input-wrapper {
+              margin-right: 16px;
+              .input-title {
+                font-size: 14px;
+                font-weight: 400;
+                color: #393939;
+                margin-bottom: 10px;
+              }
+              .input-field {
+                padding: 14px 11px;
+                border: 1px solid #DADADA;
+                border-radius: 8px;
+                width: 100%;
+                font-size: 16px;
+              }
+              .input-field-group {
+                display: flex;
+                border: 1px solid #DADADA;
+                border-radius: 8px;
+                width: 100%;
+                .input-prefield-wrapper {
+                  padding: 14px 11px;
+                  background: #F3F4F5;
+                  .input-prefield-text {
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #31353B;
+                  }
+                }
+                .input-field {
+                  padding: 0px 0px 0px 15px;
+                  background: #FFF;
+                  border: none;
+                  border-radius: none;
+                  outline: none;
+                  font-size: 16px;
+                }
+              }
+            }
+          }
+          .editsupplier-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            .add-supplier-text {
+              font-size: 14px;
+              font-weight: 700;
+              color: #017EFA;
+              text-decoration: underline; 
+            }
+            .delete-text-wrapper {
+              display: none;
+            }
+          }
+          .add-supplier-wrapper.delete-supplier-wrapper {
+            display: flex;
+            justify-content: space-between;
+            .delete-text-wrapper {
+              display: flex;
+              align-items: center;
+              .delete-icon {
+                margin-right: 5.5px;
+              }
+              .delete-supplier-text {
+                font-size: 14px;
+                font-weight: 700;
+                color: rgba(189, 30, 30, 0.6);
+                text-decoration: underline; 
+              }
+            }
+          }
+        }
+      }
+      .dialog-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 32px;
+        .btn.btn-secondary {
+          padding: 11px 16px;
+          height: 40px;
+          border: 2px solid #017EFA;
+          border-radius: 6px;
+          background: #FFF;
+          font-size: 14px;
+          font-weight: 700;
+          color: #017EFA;
+          margin-right: 16px;
+          &:disabled {
+            background: #CDCDCD;
+            color: #7E8287;
+          }
+        }
+        .btn-primary {
+          padding: 11px 16px;
+          height: 40px;
+          border: none;
+          border-radius: 6px;
+          background: #017EFA;
+          font-size: 14px;
+          font-weight: 700;
+          color: #FFF;
+          &:disabled {
+            background: #CDCDCD;
+            color: #7E8287;
+          }
+        }
+      }
+    }
+}
+
 .d-none {
   display: none!important;
 }

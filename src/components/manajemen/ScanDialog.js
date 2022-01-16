@@ -449,6 +449,7 @@ const useStyles = makeStyles(() => ({
   paper: { 
     minWidth:"694px",
     "@media (max-width: 771px)": {
+      minWidth: "unset",
       width: "100%",
       margin: 0,
       maxWidth: "unset",
@@ -459,6 +460,7 @@ const useStyles = makeStyles(() => ({
  paper2: {
   minWidth:"694px",
   "@media (max-width: 771px)": {
+    minWidth: "unset",
     height: "100%",
     width: "100%",
     margin: 0,

@@ -239,11 +239,11 @@ export default function EditProductDialog({ showModal, closeModal }) {
       fullWidth={true}
       classes={{ container: classes.root, paper: classes.paper }}
     >
-      <div className="add-product-wrapper">
+      <div className="edit-product-wrapper">
         { addStep === 1 ? 
-          <div className="add-product-first-step">
+          <div className="edit-product-first-step">
             <div className="dialog-header">
-              <h1 className="dialog-title">Tambah Produk</h1>
+              <h1 className="dialog-title">Edit Produk</h1>
               <button className="btn btn-close" onClick={handleCloseModal}>
                 <img src={gClose} alt="Close Icon" />
               </button>
@@ -251,7 +251,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
             
             <div className="dialog-body">
               <p className="dialog-subtitle">
-                Tambah jenis produk baru terlebih dahulu, lalu Anda bisa menambahkan varian warna, modal, modal nett, harga jual dan supplier.
+                Ubah data produk yang telah ada.
               </p>
 
               <div className="input-wrapper no-margin">
@@ -288,14 +288,14 @@ export default function EditProductDialog({ showModal, closeModal }) {
             </div>
           </div>
           :
-          <div className="add-product-second-step">
+          <div className="edit-product-second-step">
 
-              <div className="dialog-header">
+            <div className="dialog-header">
               <div className="header-inner-wrapper">
                 <button className="btn-back" onClick={backAddStep}>
                   <img src={bBlue} alt="Blue Back Arrow" />
                 </button>
-                <h1 className="dialog-title">Tambah Produk</h1>
+                <h1 className="dialog-title">Edit Produk</h1>
               </div>
               <button className="btn btn-close" onClick={handleCloseModal}>
                 <img src={gClose} alt="Close Icon" />
@@ -402,6 +402,7 @@ const useStyles = makeStyles(() => ({
   paper: { 
     minWidth:"1112px",
     "@media (max-width: 771px)": {
+      minWidth: "unset",
       width: "100%",
       margin: 0,
       maxWidth: "unset",
