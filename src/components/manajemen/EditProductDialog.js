@@ -18,6 +18,9 @@ export default function EditProductDialog({ showModal, closeModal }) {
    const uploadImgPlaceholder = require('../../assets/icons/upload-img-placeholder.svg').default;
    const rTrashCan = require('../../assets/icons/red-trashcan.svg').default;
 
+   // Asset Imports mobile
+  const bWhite = require('../../assets/icons/back-white-icon.svg').default;
+
   // Fetch Data for page
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState({
@@ -129,7 +132,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
   const handleChosenSupplier = (val) => {
     let chosenArray = chosenSupplier;
     
-    if (!chosenArray.includes(val)) chosenArray = [...chosenArray, val];
+    if (!chosenArray.includes(val + 1)) chosenArray = [...chosenArray, val];
     else chosenArray = chosenArray.filter(item => item !== val);
 
     setChosenSupplier(chosenArray);
@@ -142,16 +145,32 @@ export default function EditProductDialog({ showModal, closeModal }) {
     // Delete Item
     deleteList.forEach(item => {
       $(`.supplier-wrapper-${item}`).remove();
-      newProduct.suppliers = newProduct.suppliers.splice(item, 1)
-      newProduct.modals = newProduct.modals.splice(item, 1)
-      newProduct.modal_nett = newProduct.modal_nett.splice(item, 1)
-      newProduct.modal_nett_per = newProduct.modal_nett_per.splice(item, 1)
-      newProduct.logistic_costs = newProduct.logistic_costs.splice(item, 1)
-      newProduct.margins = newProduct.margins.splice(item, 1)
+      newProduct.suppliers.splice(item, 1)
+      newProduct.modals.splice(item, 1)
+      newProduct.modal_nett.splice(item, 1)
+      newProduct.modal_nett_per.splice(item, 1)
+      newProduct.logistic_costs.splice(item, 1)
+      newProduct.margins.splice(item, 1)
     });
 
+
     setProduct(newProduct);
-    setChosenSupplier(0);
+    setChosenSupplier([]);
+  };
+
+  const deleteMobileChosenSupplier = (index) => {
+    let newProduct = product;
+
+    // Delete Item
+    $(`.supplier-wrapper-${index}`).remove();
+    newProduct.suppliers.splice(index, 1)
+    newProduct.modals.splice(index, 1)
+    newProduct.modal_nett.splice(index, 1)
+    newProduct.modal_nett_per.splice(index, 1)
+    newProduct.logistic_costs.splice(index, 1)
+    newProduct.margins.splice(index, 1)
+
+    setProduct(newProduct);
   };
   
   // Steps
@@ -216,10 +235,6 @@ export default function EditProductDialog({ showModal, closeModal }) {
       })
       .then(() => {
         closeModal();
-        setAddStep(1);
-        setProduct({ id: "", category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
-        setSupplierCount(1);
-        setChosenSupplier([]);
       }).catch(error => console.log(error));
     }
   };
@@ -237,7 +252,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
     <Dialog
       open={showModal}
       fullWidth={true}
-      classes={{ container: classes.root, paper: classes.paper }}
+      classes={{ container: classes.root, paper: addStep === 1 ? classes.paper : classes.paper2 }}
     >
       <div className="edit-product-wrapper">
         { addStep === 1 ? 
@@ -293,7 +308,8 @@ export default function EditProductDialog({ showModal, closeModal }) {
             <div className="dialog-header">
               <div className="header-inner-wrapper">
                 <button className="btn-back" onClick={backAddStep}>
-                  <img src={bBlue} alt="Blue Back Arrow" />
+                  <img className="back-desktop" src={bBlue} alt="Blue Back Arrow" />
+                  <img className="back-mobile" src={bWhite} alt="White Back Arrow" />
                 </button>
                 <h1 className="dialog-title">Edit Produk</h1>
               </div>
@@ -322,6 +338,9 @@ export default function EditProductDialog({ showModal, closeModal }) {
                     </div>
                   </div>
                 </div>
+
+                <div className="mobile-separator"></div>
+
                 {supplierCount && supplierCount > 0 ?
                   [...Array(supplierCount)].map((item, index) =>
                     <div className={`supplier-wrapper supplier-wrapper-${index}`} key={index}>
@@ -331,7 +350,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
                         <input className="input-field" type="text" value={product.suppliers[index]} onInput={(val) => handleSupplierName(val.target.value, index)}/>
                       </div>
                       <div className="input-wrapper">
-                        <p className="input-title">Modal</p>
+                        <p className="input-title">Harga Modal</p>
                         <div className="input-field-group">
                           <div className="input-prefield-wrapper">
                             <p className="input-prefield-text">Rp</p>
@@ -340,7 +359,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
                         </div>
                       </div>
                       <div className="input-wrapper">
-                        <p className="input-title">Modal Nett Per</p>
+                        <p className="input-title">Harga Modal Nett</p>
                         <input className="input-field" type="text" value={product.modal_nett_per[index]} onInput={(val) => handleModalNettPer(val.target.value, index)}/>
                       </div>
                       <div className="input-wrapper">
@@ -361,6 +380,19 @@ export default function EditProductDialog({ showModal, closeModal }) {
                           <input className="input-field" type="text" value={product.price} onInput={(val) => handlePriceValue(val.target.value)}/>
                         </div>
                       </div>
+
+                      { supplierCount > 1 && index !== 0 ? 
+                        <div className="delete-supplier-wrapper">
+                        <div className="delete-text-wrapper" onClick={() => deleteMobileChosenSupplier(index)}>
+                          <img src={rTrashCan} className="delete-icon" alt="RedTrashCan" />
+                          <p className="delete-supplier-text">Hapus Supplier</p>
+                        </div>
+                        </div>
+                        :
+                        ""
+                      }
+
+                      <div className="mobile-supplier-separator"></div>
                     </div>
                   )
                   : ""
@@ -380,7 +412,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
 
             <div className="dialog-button-wrapper">
               <button className="btn btn-secondary">
-                Tambahkan Varian Nanti
+                Batalkan
               </button>
               <button className="btn btn-primary" disabled={isDisabled()} onClick={nextAddStep}>
                 Simpan
@@ -407,5 +439,18 @@ const useStyles = makeStyles(() => ({
       margin: 0,
       maxWidth: "unset",
     }
- },
+  },
+  paper2: {
+    minWidth: "1112px",
+    "@media (max-width: 771px)": {
+      minWidth: "unset",
+      height: "100%",
+      width: "100%",
+      margin: 0,
+      maxHeight: "unset",
+      maxWidth: "unset",
+      borderTopLeftRadius: "0px",
+      borderTopRightRadius: "0px",
+    }
+  }
 }));

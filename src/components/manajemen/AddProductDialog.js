@@ -131,14 +131,14 @@ export default function AddProductDialog({ showModal, closeModal }) {
     // Delete Item
     deleteList.forEach(item => {
       $(`.supplier-wrapper-${item}`).remove();
-      newProduct.suppliers = newProduct.suppliers.splice(item, 1)
-      newProduct.modals = newProduct.modals.splice(item, 1)
-      newProduct.modal_nett_per = newProduct.modal_nett_per.splice(item, 1)
-      newProduct.logistic_costs = newProduct.logistic_costs.splice(item, 1)
+      newProduct.suppliers.splice(item, 1)
+      newProduct.modals.splice(item, 1)
+      newProduct.modal_nett_per.splice(item, 1)
+      newProduct.logistic_costs.splice(item, 1)
     });
 
     setAddProduct(newProduct);
-    setChosenSupplier(0);
+    setChosenSupplier([]);
   };
   
   // Steps

@@ -1693,6 +1693,12 @@
             background: none;
             border: none;
             margin-right: 20px;
+            .back-desktop {
+              display: none;
+            }
+            .back-mobile {
+              display: block;
+            }
           }
           .dialog-title {
             font-size: 24px;
@@ -1767,6 +1773,9 @@
               }
             }
           }
+          .mobile-separator {
+            display: none;
+          }
           .supplier-wrapper {
             display: flex;
             justify-content: space-between;
@@ -1815,8 +1824,14 @@
                 }
               }
             }
+            .mobile-supplier-separator {
+              display: none;
+            }
+            .delete-supplier-wrapper {
+              display: none;
+            }
           }
-          .editsupplier-wrapper {
+          .add-supplier-wrapper {
             display: flex;
             justify-content: flex-end;
             .add-supplier-text {
@@ -2222,6 +2237,128 @@
           font-size: 16px;
           font-weight: 700;
           color: #FFF;
+        }
+      }
+    }
+  }
+
+  .edit-product-wrapper {
+    padding: 0px;
+
+    .edit-product-first-step {
+      padding: 24px;
+      .dialog-button-wrapper {
+        .btn-primary {
+          width: 100%;
+        }
+        .btn-secondary {
+          display: none;
+        }
+      }
+    }
+
+    .edit-product-second-step {
+      .dialog-header {
+        background: #081A51;
+        padding: 60px 25px 21px;
+       .header-inner-wrapper {
+         .btn-back {
+           .back-desktop {
+             display: none;
+           }
+           .back-mobile {
+             display: block;
+           }
+         }
+         .dialog-title {
+           color: #FFF;
+         }
+        }
+        .btn-close {
+          display: none;
+        }
+      }
+
+      .dialog-body {
+        
+        .dialog-subtitle {
+          padding: 0px 20px;
+        }
+
+        .dialog-inner-body {
+          background: #FFF;
+          padding-top: 0px;
+          border-top: none;
+          border-bottom: none;
+
+          .image-color-amount-wrapper {
+            padding: 0px 16px;
+            margin-bottom: 24px;
+          }
+
+          .mobile-separator {
+            display: block;
+            height: 8px;
+            width: 100%;
+            background: #F3F4F6;
+            margin-bottom: 24px;
+          }
+
+          .supplier-wrapper {
+            display: block;
+            padding: 0px 29px;
+            .input-checkbox {
+              display: none;
+            }
+            .input-wrapper {
+              margin-right: 0px;
+              margin-bottom: 16px;
+            }
+            .delete-supplier-wrapper {
+              display: flex;
+              justify-content: flex-end;
+              margin-bottom: 16px;
+              .delete-text-wrapper {
+                display: flex;
+                align-items: center;
+                .delete-icon {
+                  margin-right: 5.5px;
+                }
+                .delete-supplier-text {
+                  font-size: 14px;
+                  font-weight: 700;
+                  color: rgba(189, 30, 30, 0.6);
+                  text-decoration: underline; 
+                }
+              }
+            }
+            .mobile-supplier-separator {
+              display: block;
+              height: 8px;
+              width: 100vw;
+              background: #F3F4F6;
+              margin: 0px -29px 24px;
+            }
+          }
+
+          .add-supplier-wrapper {
+            padding: 0px 16px;
+            .delete-text-wrapper {
+              display: none;
+            }
+          }
+        }
+
+      }
+
+      .dialog-button-wrapper {
+        padding: 0px 24px 24px;
+        .btn-secondary {
+          display: none;
+        }
+        .btn-primary {
+          display: block;
+          width: 100%;
         }
       }
     }
