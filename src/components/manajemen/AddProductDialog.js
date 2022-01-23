@@ -37,6 +37,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
   // Functions filling values of add product
   const [addProduct, setAddProduct] = useState({
+    image: "",
     id: "",
     category_id: "",
     category_name: "",
@@ -51,6 +52,25 @@ export default function AddProductDialog({ showModal, closeModal }) {
     logistic_costs: [""],
     margins: [""]
   });
+
+  const uploadImage = () => {
+    const fileInput = $("#upload-image")[0];
+    const fileReader = new FileReader();
+
+    try {
+      fileReader.readAsDataURL(fileInput.files[0]);
+      fileReader.onload = (file) => {
+        $(".img-actual").attr("src", file.target.result);
+
+        $(".img-placeholder").addClass("d-none");
+        $(".img-actual").removeClass("d-none");
+
+        setAddProduct({ ...addProduct, image: fileInput.files[0] })
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  } 
 
    const handleCategoryInput = (val) => {
      setAddProduct({ ...addProduct, category_id: val.value, category_name: val.label });
@@ -196,20 +216,21 @@ export default function AddProductDialog({ showModal, closeModal }) {
         margins: margins.join("|")
       };
 
-      console.log(submitProductData);
+      let formData = new FormData();
+      formData.append("data", JSON.stringify(submitProductData));
+      formData.append("image", addProduct.image, addProduct.id);
 
-      // const submitProduct =  await fetch(`${env_api}/manajemen/product`, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(submitProductData)
-      // })
-      // .then(() => {
-      //   closeModal();
-      //   setAddStep(1);
-      //   setAddProduct({ id: "", category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
-      //   setSupplierCount(1);
-      //   setChosenSupplier([]);
-      // }).catch(error => console.log(error));
+      const submitProduct =  await fetch(`${env_api}/manajemen/product`, {
+        method: "POST",
+        body: formData
+      })
+      .then(() => {
+        closeModal();
+        setAddStep(1);
+        setAddProduct({ id: "", category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
+        setSupplierCount(1);
+        setChosenSupplier([]);
+      }).catch(error => console.log(error));
     }
   };
 
@@ -299,10 +320,11 @@ export default function AddProductDialog({ showModal, closeModal }) {
               <div className="dialog-inner-body">
                 <div className="image-color-amount-wrapper">
                   <div className="input-img-wrapper">
-                    <input className="d-none" type="file" />
-                    <div className="input-img-border">
+                    <input className="d-none" id="upload-image" type="file" onChange={(val) => uploadImage(val)}/>
+                    <label className="input-img-border" htmlFor="upload-image">
+                      <img className="img-actual d-none" alt="Uploaded image"/>
                       <img className="img-placeholder" src={uploadImgPlaceholder} alt="Upload Img Placeholder"/>
-                    </div>
+                    </label>
                   </div>
                   <div className="image-color-amount-inner-wrapper">
                     <div className="input-wrapper">
