@@ -24,7 +24,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
   // Fetch Data for page
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState({
-    image: "",
+    images: "",
     id: "",
     category_id: "",
     category_name: "",
@@ -83,7 +83,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
         $(".img-placeholder").addClass("d-none");
         $(".img-actual").removeClass("d-none");
 
-        setProduct({ ...product, image: fileInput.files[0] })
+        setProduct({ ...product, images: fileInput.files[0] })
       }
     } catch(error) {
       console.log(error)
@@ -250,7 +250,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
 
       let formData = new FormData();
       formData.append("data", JSON.stringify(submitProductData));
-      formData.append("image", product.image, product.id);
+      if (typeof(product.images) == "object") formData.append("image", product.images, product.id);
 
       const submitProduct =  await fetch(`${env_api}/manajemen/product/update`, {
         method: "POST",
@@ -352,7 +352,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
                     <input className="d-none" id="upload-image" type="file" onChange={(val) => uploadImage(val)}/>
                     <label className="input-img-border" htmlFor="upload-image">
                       <img className="img-actual d-none" alt="Uploaded image"/>
-                      <img className="img-placeholder" src={uploadImgPlaceholder} alt="Upload Img Placeholder"/>
+                      <img className="img-placeholder" src={`http://localhost:3007${product.images}`} alt="Upload Img Placeholder"/>
                     </label>
                   </div>
                   <div className="image-color-amount-inner-wrapper">

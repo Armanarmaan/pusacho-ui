@@ -55,14 +55,6 @@ export default function ScanDialog({ showScan, closeScan }) {
 
   // // Product
   const [product, setProduct] = useState({
-  //   id: "PSCH001",
-  //   name: "Manik-manik Hitam",
-  //   size: "10 x 10 mm",
-  //   category_name: "Manik-manik",
-  //   suppliers: ["A", "B", "C"],
-  //   modals: [10, 10, 10],
-  //   modal_nett: [9, 9, 9],
-  //   price: 25,
   });
 
   // Product Amount
@@ -178,7 +170,7 @@ export default function ScanDialog({ showScan, closeScan }) {
 
               <div className="img-and-update-stock-wrapper">
                 <div className="img-wrapper">
-                  <img src={manikExample} alt="Manik Manik" />
+                  <img className="img-actual" src={`http://localhost:3007${product.images}`} alt={product.name} />
                 </div>
                 <div className="update-stock-wrapper">
                   <p className="stock-title">{product.name} - {product.size}</p>
@@ -280,7 +272,7 @@ export default function ScanDialog({ showScan, closeScan }) {
                   <p className="card-subtitle">Silahkan update stok barang ini, atau ubah detail produk</p>
 
                   <div className="card-img-wrapper">
-                    <img src={manikExample} alt="Manik Example" />
+                    <img className="img-actual" src={`http://localhost:3007${product.images}`} alt="Manik Example" />
                   </div>
 
                   <ul className="card-details">

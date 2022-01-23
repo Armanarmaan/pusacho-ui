@@ -337,7 +337,9 @@ export default class Product extends React.Component {
                         </td>
                         <td className="product-description-item item-details">
                           <div className="img-and-name-wrapper">
-                            <div className="img-wrapper"></div>
+                            <div className="img-wrapper">
+                              <img className="img-file" src={`http://localhost:3007${item.images}`} alt={item.name} />
+                            </div>
                             <div className="name-wrapper">
                               <p className="name-title">{item.name}</p>
                               <p className="name-subtitle">
