@@ -50,19 +50,26 @@ function HomeLapangan() {
     console.log(keyword)
   }
 
+  //modal
   const handleClose = () => {
     $('.slide-up').addClass('slide-down');
     setTimeout(function () {
       setShow(false);
     }, 800);
-
   }
+
   const handleShow = () => {
     setShow(true);
   }
 
+  //inputan
   const changeKeyword = (event) => {
     setKeyword(event.target.value);
+  }
+
+  const submitLogout = () => {
+    localStorage.clear();
+    window.location.href = '/';
   }
 
   return (
@@ -106,7 +113,7 @@ function HomeLapangan() {
         </div>
       </div>
       <Navbar pageName="Lapangan"/>
-      <Modal id="ModalLogout" show={show} onHide={handleClose} animation={false} dialogClassName="slide-up">
+      <Modal id="Modal" show={show} onHide={handleClose} animation={false} dialogClassName="slide-up">
         <Modal.Body>
           <div className="garis">
             <img src={Garis} alt="garis" className="img" />
@@ -115,7 +122,7 @@ function HomeLapangan() {
             <div className="text">
               <p>Menu Lainnya</p>
             </div>
-            <div className="btnlogout">
+            <div className="btnlogout" onClick={submitLogout}>
               <img src={LogoutBtn} alt="logoutbtn" className="img" />
               <p>Keluar</p>
             </div>
