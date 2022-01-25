@@ -52,6 +52,7 @@ function Aktivitas() {
                                 <div className="anda">Anda</div>
                                 <div className="wording">{itemz.wording}</div>
                                 <div className="name">{itemz.name}</div>
+                                <div className="size">{itemz.size}</div>
                                 <div className="sebanyak">sebanyak</div>
                                 <div className="piece">{`${itemz.difference} buah`}</div>
                             </div>

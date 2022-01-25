@@ -24,7 +24,8 @@ function PDP() {
     const [produk, setProduk] = useState({
         name: "",
         stock: "",
-        price: ""
+        price: "",
+        size:""
     });
     // const [pengurangan, setPengurangan] = useState({
     //     jumlah: "",
@@ -63,6 +64,10 @@ function PDP() {
         }
     }
 
+    const refreshPage = ()=>{
+        window.location.reload();
+     }
+
     const handleSearch = async (event) => {
         event.preventDefault();
         // const token = localStorage.getItem('auth_token');
@@ -71,7 +76,7 @@ function PDP() {
         const id = searchParams.get("id")
         console.log(produk.stock - keyword >= 0);
         console.log(keyword);
-        if (produk.stock - keyword >= 0) {
+        if (produk.stock - keyword >= 0 && keyword >= 1) {
             try {
                 const datas = await fetch(`${env_api}/lapangan/pengurangan?id=${id}&jumlah=${keyword}&actorID=4`, {
                     method: 'POST',
@@ -106,6 +111,7 @@ function PDP() {
         $('.slide-up').addClass('slide-down');
         setTimeout(function () {
             setShow(false);
+            refreshPage();
         }, 800);
 
     }
@@ -192,7 +198,7 @@ function PDP() {
                     <div className="container-produk">
                         <div className="produk">
                             <div>
-                                <p className="namaproduk">{produk.name}</p>
+                                <p className="namaproduk">{produk.name} - {produk.size}</p>
                                 <p className="updateproduk">Silahkan update stok barang ini atau ubah detail produk</p>
                             </div>
                         </div>
@@ -250,17 +256,20 @@ function PDP() {
                         </div>
                         <div className="containerbtn">
                             <div className="inputjumlah">
-                                <form >
+                                <form>
                                     <p className="placeholder" id="jumlah"></p>
-                                    <input type="number" placeholder="Masukkan jumlah" onChange={changeKeyword} />
+                                    <input type="number" placeholder="Masukkan jumlah" onChange={changeKeyword} required/>
+                                    <div className="btnkurangistock" type="submit" onClick={handleSearch}>
+                                        <p>Kurangi Stock</p>
+                                    </div>
                                 </form>
                             </div>
                         </div>
-                        <div className="containerbtn">
+                        {/* <div className="containerbtn">
                             <div className="btnkurangistock" onClick={handleSearch}>
                                 <p>Kurangi Stock</p>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </Modal.Body>
             </Modal>
