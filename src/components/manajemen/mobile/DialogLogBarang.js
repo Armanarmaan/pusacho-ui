@@ -3,9 +3,11 @@ import { makeStyles } from "@mui/styles";
 import Dialog from '@mui/material/Dialog';
 import moment from 'moment';
 import DialogFilters from '../mobile/DialogFilters';
+import Pagination from '@mui/material/Pagination';
 
 function DialogLogBarang({ showDialog, handleCloseDialog, changeKeyword, datas, currencyFormat, 
-  handleSearch, categoryOptions, handleCategoryChange, setDateRangeFilter, selectedDateMobile }) {
+  handleSearch, categoryOptions, handleCategoryChange, setDateRangeFilter, selectedDateMobile, 
+  currentPage, totalDatas, handleChangePage }) {
   const icon_arrow_back_mobile = require('../../../assets/icons/arrow-back-mobile.svg').default;
   const icon_arrow_download = require('../../../assets/icons/icon-arrow-download.svg').default;
   const icon_search = require('../../../assets/icons/icon-search.svg').default;
@@ -74,6 +76,12 @@ function DialogLogBarang({ showDialog, handleCloseDialog, changeKeyword, datas, 
             </div>
             <div className="items">
               <LogBarangContentsMobile />
+              <Pagination 
+              defaultPage={currentPage}
+              count={Math.ceil(totalDatas / 10)} 
+              variant="outlined" shape="rounded" 
+              onChange={handleChangePage}
+              className="pagination-dashboard"/>
             </div>
           </div>
         </div>
@@ -90,7 +98,7 @@ const useStyles = makeStyles(() => ({
     // }
   },
   paper: { 
-    minWidth:"100vw",
+    minWidth:"100vw!important",
     maxHeight:"unset!important",
     borderRadius:"0!important"
     // "@media (max-width: 771px)": {

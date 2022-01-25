@@ -248,7 +248,7 @@
             }
           }
           .activity-items{
-            padding: 0 24px 24px;
+            padding: 0 24px;
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -311,6 +311,11 @@
                 padding-bottom: 0;
               }
             }
+          }
+          .pagination-dashboard{
+            display: flex;
+            justify-content: flex-end;
+            padding: 24px;
           }
         }
       }
@@ -445,6 +450,9 @@
         .btn-back-wrapper{
           margin-right: 20px;
           display: flex;
+          img{
+            width: 100%;
+          }
         }
         .label-title{
           font-weight: 700;
@@ -722,5 +730,9 @@
         border-bottom: none;
       }
     }
+  }
+  .pagination-dashboard{
+    justify-content: center;
+    display: flex;
   }
 }

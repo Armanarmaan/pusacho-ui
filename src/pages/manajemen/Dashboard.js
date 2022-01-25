@@ -8,6 +8,7 @@ import Select from 'react-select';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
 import DialogLogBarang from '../../components/manajemen/mobile/DialogLogBarang';
 import DialogActivity from '../../components/manajemen/mobile/DialogActivity';
+import Pagination from '@mui/material/Pagination';
 
 function Dashboard() {
   const env_api = process.env.REACT_APP_API_ENDPOINT;
@@ -36,8 +37,12 @@ function Dashboard() {
     keyword: null,
     categories: [],
     dateStart: moment().startOf('month').format('YYYY-MM-DD HH:mm:ss'),
-    dateEnd: moment().format('YYYY-MM-DD HH:mm:ss')
+    dateEnd: moment().format('YYYY-MM-DD HH:mm:ss'),
+    offset: 0,
+    limit: 10
   });
+  const [totalDatas, setTotalDatas] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
 
   const [showLog, setShowLog] = useState(false);
@@ -68,7 +73,7 @@ function Dashboard() {
     const token = localStorage.getItem('auth_token');
     const required_role = '0,';
     const params = 
-    `activeTab=${activeTab}&keyword=${paramsDashB.keyword}&categories=${paramsDashB.categories}&datestart=${paramsDashB.dateStart}&dateend=${paramsDashB.dateEnd}`;
+    `activeTab=${activeTab}&keyword=${paramsDashB.keyword}&categories=${paramsDashB.categories}&datestart=${paramsDashB.dateStart}&dateend=${paramsDashB.dateEnd}&offset=${paramsDashB.offset}&limit=${paramsDashB.limit}`;
     try {
       const datas = await fetch(`${env_api}/manajemen/dashboard/activity?${params}`, {
         method: 'GET',
@@ -83,20 +88,24 @@ function Dashboard() {
         if(activeTab === 0){
           setDashboardDatas(datas.data.datas);
           setCategories(datas.data.categories);
+          setTotalDatas(datas.meta.total);
         }
         else{
           setActivityDatas(datas.data.datas);
           setCategories(datas.data.categories);
+          setTotalDatas(datas.meta.total);
         }
       }
       else{
         if(activeTab === 0){
           setDashboardDatas([]);
           setCategories([]);
+          setTotalDatas(0);
         }
         else{
           setActivityDatas([]);
           setCategories([]);
+          setTotalDatas(0);
         }
       }
       
@@ -104,10 +113,12 @@ function Dashboard() {
       if(activeTab === 0){
         setDashboardDatas([]);
         setCategories([]);
+        setTotalDatas(0);
       }
       else{
         setActivityDatas([]);
         setCategories([]);
+        setTotalDatas(0);
       }
     }
     
@@ -303,6 +314,23 @@ function Dashboard() {
     setShowActivity(false);
   }
 
+  const handleChangePage = (_, value) => {
+    setCurrentPage(value);
+    if (value === 1) {
+      setParamsDashB({
+        ...paramsDashB,
+        offset: 0
+      })
+    }
+    else{
+      const tempOffset = (value - 1) * paramsDashB.limit;
+      setParamsDashB({
+        ...paramsDashB,
+        offset: tempOffset
+      })
+    }
+  }
+
   return (
     <div className="container-manajemen">
       <Navbar pageName="Dashboard"/>
@@ -391,6 +419,12 @@ function Dashboard() {
                       {tableContents}
                     </tbody>
                   </table>
+                  <Pagination 
+                  defaultPage={currentPage}
+                  count={Math.ceil(totalDatas / paramsDashB.limit)} 
+                  variant="outlined" shape="rounded" 
+                  onChange={handleChangePage}
+                  className="pagination-dashboard"/>
                 </div>
               </div>
 
@@ -429,6 +463,12 @@ function Dashboard() {
                   <div className="activity-items">
                     <ActivityContents />
                   </div>
+                  <Pagination 
+                  defaultPage={currentPage}
+                  count={Math.ceil(totalDatas / paramsDashB.limit)} 
+                  variant="outlined" shape="rounded" 
+                  onChange={handleChangePage}
+                  className="pagination-dashboard"/>
                 </div>
               </div>
             </div>
@@ -484,10 +524,12 @@ function Dashboard() {
       <DialogLogBarang showDialog={showLog} handleCloseDialog={handleCloseLogMobile} 
         changeKeyword={changeKeyword} datas={dashboardDatas} currencyFormat={currencyFormat} handleSearch={handleSearch}
         categoryOptions={categoryOptions} handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter}
-        selectedDateMobile={selectedDateMobile}/>
+        selectedDateMobile={selectedDateMobile}
+        currentPage={currentPage} totalDatas={totalDatas} handleChangePage={handleChangePage}/>
       <DialogActivity showDialog={showActivity} handleCloseDialog={handleCloseActivityMobile} datas={activityDatas}
         categoryOptions={categoryOptions} handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter}
-        selectedDateMobile={selectedDateMobile}/>
+        selectedDateMobile={selectedDateMobile}
+        currentPage={currentPage} totalDatas={totalDatas} handleChangePage={handleChangePage}/>
     </div>
   );
 }

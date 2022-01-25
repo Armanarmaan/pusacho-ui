@@ -3,8 +3,11 @@ import { makeStyles } from "@mui/styles";
 import Dialog from '@mui/material/Dialog';
 import moment from 'moment';
 import DialogFilters from '../mobile/DialogFilters';
+import Pagination from '@mui/material/Pagination';
 
-function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions, handleCategoryChange, setDateRangeFilter, selectedDateMobile }) {
+function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions, 
+  handleCategoryChange, setDateRangeFilter, selectedDateMobile,
+  currentPage, totalDatas, handleChangePage }) {
   const icon_arrow_back_mobile = require('../../../assets/icons/arrow-back-mobile.svg').default;
   const icon_arrow_download = require('../../../assets/icons/icon-arrow-download.svg').default;
   const icon_filters = require('../../../assets/icons/icon-filters.svg').default;
@@ -79,6 +82,12 @@ function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions,
             </div>
             <div className="activity-items">
               <ActivityContentsMobile />
+              <Pagination 
+              defaultPage={currentPage}
+              count={Math.ceil(totalDatas / 10)} 
+              variant="outlined" shape="rounded" 
+              onChange={handleChangePage}
+              className="pagination-dashboard"/>
             </div>
           </div>
         </div>
@@ -95,7 +104,7 @@ const useStyles = makeStyles(() => ({
     // }
   },
   paper: { 
-    minWidth:"100vw",
+    minWidth:"100vw!important",
     maxHeight:"unset!important",
     borderRadius:"0!important"
     // "@media (max-width: 771px)": {
