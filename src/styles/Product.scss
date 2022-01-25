@@ -1574,6 +1574,14 @@
   display: none!important;
 }
 
+.btnModal{
+  display: none;
+}
+
+.mobileView{
+  display: none;
+}
+
 @media (max-width: 771px) {
   .dialog-scan-wrapper {
     p {
@@ -2035,13 +2043,7 @@
       }
     }
   }
-.btnModal{
-  display: none;
-}
 
-.mobileView{
-  display: none;
-}
 
 
 @media (max-width: 768px) {
