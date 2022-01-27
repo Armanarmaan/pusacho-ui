@@ -8,6 +8,7 @@ import Select from 'react-select';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
 import DialogLogBarang from '../../components/manajemen/mobile/DialogLogBarang';
 import DialogActivity from '../../components/manajemen/mobile/DialogActivity';
+import DialogLogout from '../../components/manajemen/mobile/DialogLogout';
 import Pagination from '@mui/material/Pagination';
 
 function Dashboard() {
@@ -22,6 +23,7 @@ function Dashboard() {
   const sample_manik = require('../../assets/sample-manik.png').default;
   const icon_three_dot_white = require('../../assets/icons/three_dot_icon_white.svg').default;
   const icon_arrow_blue_mobile = require('../../assets/icons/arrow_blue_mobile.svg').default;
+  const blueCIcon = require('../../assets/icons/close-blue-icon.svg').default;
   
   // 0 is Dashboard Barang, 1 is Aktivitas
   const [activeTab, setActiveTab] = useState(0);
@@ -32,6 +34,7 @@ function Dashboard() {
     keluar: 0
   })
   const [categoryOptions, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const [keyword, setKeyword] = useState(null);
   const [paramsDashB, setParamsDashB] = useState({
     keyword: null,
@@ -48,25 +51,7 @@ function Dashboard() {
   const [showLog, setShowLog] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
   const [selectedDateMobile, setSelectedDateMobile] = useState('');
-
-  // Check if admin is logged in or not && check token if valid based on token & required role for this page
-  // const verifyToken = async () => {
-  //   const token = localStorage.getItem('auth_token');
-  //   const required_role = '0,';
-
-  //   const respon = await fetch(`${env_api}/auth/user/verify`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'auth_token': token,
-  //       'required_role': required_role
-  //     }
-  //   })
-  //   if(respon.status !== 200){
-  //     localStorage.clear();
-  //     window.location.href = "/";
-  //   }
-  // }
+  const [showLogoutMobile, setShowLogoutMobile] = useState(false);
 
   // Fetch data for this page
   const fetchItems = async () => {
@@ -192,7 +177,7 @@ function Dashboard() {
           <div className="item-row" key={item2.id}>
             <div className="item-details">
               <div className="img-wrapper">
-                <img src={sample_manik} alt="pic" />
+                <img src={`http://localhost:3007${item2.images}`} alt="pic" />
               </div>
               <div className="desc">
                 <p className="actor">{item2.actor_name}</p>
@@ -227,13 +212,37 @@ function Dashboard() {
   }
   const handleCategoryChange = (event) => {
     let arrCategories = [];
+    let arrFilterCategories = [];
     event.forEach((item) => {
       arrCategories.push(item.value);
+      arrFilterCategories.push(item);
     })
     setParamsDashB({
       ...paramsDashB,
       categories: arrCategories
     })
+    setSelectedCategory(arrFilterCategories);
+  }
+  const removeSelectedCategory = (index) => {
+    let arrFilterCat = selectedCategory;
+    arrFilterCat.splice(index, 1);
+    let param = [];
+    arrFilterCat.forEach((item) => {
+      param.push(item.value);
+    })
+    setParamsDashB({
+      ...paramsDashB,
+      categories: param
+    })
+    setSelectedCategory(arrFilterCat);
+  }
+  const resetCategoryFilter = () => {
+    let arrFilterCat = [];
+    setParamsDashB({
+      ...paramsDashB,
+      categories: []
+    })
+    setSelectedCategory(arrFilterCat);
   }
   const setDateRangeFilter = (event) => {
     if(event.startDate && event.endDate){
@@ -288,6 +297,63 @@ function Dashboard() {
     daterangeObj.show();
   }
 
+  const handleDownloadLaporan = async (event) => {
+    if(event.startDate && event.endDate){
+      const token = localStorage.getItem('auth_token');
+      const required_role = '0,';
+      const start_date = moment(event.startDate).format("YYYY-MM-DD");
+      const end_date = moment(event.endDate).format("YYYY-MM-DD");
+      if(activeTab === 0){
+        let fileName = `Laporan Barang (${moment(event.startDate).format("DD MMMM YYYY")} - ${moment(event.endDate).format("DD MMMM YYYY")}).xlsx`;
+        let excel = await fetch(`${env_api}/manajemen/dashboard/download/report/log?start_date=${start_date}&end_date=${end_date}`, {
+          method: "GET",
+          headers: {
+            'auth_token': token,
+            'required_role': required_role,
+            "Content-disposition" : `attachment; filename=${fileName}`,
+            "Content-Type" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          },
+        })
+        .then(response => response.blob())
+        .catch(error => console.log(error));
+        
+        let blob = await new Blob([excel], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+        let url = window.URL.createObjectURL(blob);
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = url;
+        downloadLink.download = fileName;
+        downloadLink.click();
+        window.URL.revokeObjectURL(url);
+        downloadLink.remove();
+      }
+      else{
+        let fileName = `Laporan Aktivitas (${moment(event.startDate).format("DD MMMM YYYY")} - ${moment(event.endDate).format("DD MMMM YYYY")}).xlsx`;
+        let excel = await fetch(`${env_api}/manajemen/dashboard/download/report/activity?start_date=${start_date}&end_date=${end_date}`, {
+          method: "GET",
+          headers: {
+            'auth_token': token,
+            'required_role': required_role,
+            "Content-disposition" : `attachment; filename=${fileName}`,
+            "Content-Type" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          },
+        })
+        .then(response => response.blob())
+        .catch(error => console.log(error));
+        
+        let blob = await new Blob([excel], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+        let url = window.URL.createObjectURL(blob);
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = url;
+        downloadLink.download = fileName;
+        downloadLink.click();
+        window.URL.revokeObjectURL(url);
+        downloadLink.remove();
+      }
+    }
+  }
+
   const openModalMobile = (tab) => {
     if(tab === 0){
       setActiveTab(0);
@@ -312,6 +378,9 @@ function Dashboard() {
   }
   const handleCloseActivityMobile = () => {
     setShowActivity(false);
+  }
+  const handleCloseLogoutMobile = () => {
+    setShowLogoutMobile(false);
   }
 
   const handleChangePage = (_, value) => {
@@ -372,7 +441,7 @@ function Dashboard() {
                         <p>Download Laporan</p>
                       </div>
                       <DateRangePickerComponent id="daterangepicker-laporan-one" 
-                      // change={setDateRangeLaporanOne}
+                      change={handleDownloadLaporan}
                       cssClass="laporan-one"
                       />
                     </div>
@@ -385,10 +454,11 @@ function Dashboard() {
                       </div>
                     </form>
                     <div className="dropdowns">
-                      <Select placeholder="Kategori" options={categoryOptions} classNamePrefix="product-select" isMulti={true} onChange={handleCategoryChange}/>
+                      <Select placeholder="Kategori" options={categoryOptions} classNamePrefix="product-select" 
+                      isMulti={true} onChange={handleCategoryChange} controlShouldRenderValue={false}
+                      value={selectedCategory}/>
                       <button className="filter" onClick={showDateFilter}>
                         <div>
-                          {/* <input type="text" className="d-none" id="daterangepicker-filter" onChange={() => {alert(this.event.target.value)}}/> */}
                           <img src={icon_calendar} alt="clndr" />
                           <p className="label-chosen-date-filter">Pilih Tanggal</p>
                         </div>
@@ -399,6 +469,23 @@ function Dashboard() {
                       startDate={paramsDashB.startDate}
                       endDate={paramsDashB.endDate}
                       />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="product-applied-filters">
+                      <ul className="applied-filter-list">
+                        {selectedCategory && selectedCategory.length > 0 ?
+                          selectedCategory.map((filterItem, index) => (
+                            <li className="applied-filter-item" key={index}>
+                              <p className="filter-title">{filterItem.label}</p>
+                              <img className="filter-remove" src={blueCIcon} alt="close icon" onClick={() => removeSelectedCategory(index)}/>
+                            </li>
+                          ))
+                          : ""}
+                      </ul>
+                      {selectedCategory && selectedCategory.length > 0 ?
+                        <p className="reset-filter-title" onClick={resetCategoryFilter}>Reset Kategori</p>
+                        : ""}
                     </div>
                   </div>
                 </div>
@@ -432,10 +519,11 @@ function Dashboard() {
                 <div className="head-content activity">
                   <div className="row">
                     <div className="dropdowns">
-                      <Select placeholder="Kategori" options={categoryOptions} classNamePrefix="product-select" isMulti={true} onChange={handleCategoryChangeTwo}/>
+                      <Select placeholder="Kategori" options={categoryOptions} classNamePrefix="product-select" 
+                        isMulti={true} onChange={handleCategoryChange} controlShouldRenderValue={false}
+                        value={selectedCategory}/>
                       <button className="filter" onClick={showDateFilterTwo}>
                         <div>
-                          {/* <input type="text" className="d-none" id="daterangepicker-filter" onChange={() => {alert(this.event.target.value)}}/> */}
                           <img src={icon_calendar} alt="clndr" />
                           <p className="label-chosen-date-filter">Pilih Tanggal</p>
                         </div>
@@ -454,8 +542,25 @@ function Dashboard() {
                         <p>Download Laporan</p>
                       </div>
                       <DateRangePickerComponent id="daterangepicker-laporan-two" 
-                      // change={setDateRangeLaporanOne}
+                      change={handleDownloadLaporan}
                       />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="product-applied-filters">
+                      <ul className="applied-filter-list">
+                        {selectedCategory && selectedCategory.length > 0 ?
+                          selectedCategory.map((filterItem, index) => (
+                            <li className="applied-filter-item" key={index}>
+                              <p className="filter-title">{filterItem.label}</p>
+                              <img className="filter-remove" src={blueCIcon} alt="close icon" onClick={() => removeSelectedCategory(index)}/>
+                            </li>
+                          ))
+                          : ""}
+                      </ul>
+                      {selectedCategory && selectedCategory.length > 0 ?
+                        <p className="reset-filter-title" onClick={resetCategoryFilter}>Reset Kategori</p>
+                        : ""}
                     </div>
                   </div>
                 </div>
@@ -478,7 +583,9 @@ function Dashboard() {
           <div className="dashboard-mobile-header">
             <div className="container-content-header-mobile">
               <p>Dashboard</p>
-              <img src={icon_three_dot_white} alt="dots" />
+              <div onClick={() => setShowLogoutMobile(true)} style={{"zIndex": "1"}}>
+                <img src={icon_three_dot_white} alt="dots"/>
+              </div>
             </div>
           </div>
           <div className="dashboard-mobile-contents">
@@ -525,13 +632,39 @@ function Dashboard() {
         changeKeyword={changeKeyword} datas={dashboardDatas} currencyFormat={currencyFormat} handleSearch={handleSearch}
         categoryOptions={categoryOptions} handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter}
         selectedDateMobile={selectedDateMobile}
-        currentPage={currentPage} totalDatas={totalDatas} handleChangePage={handleChangePage}/>
+        currentPage={currentPage} totalDatas={totalDatas} handleChangePage={handleChangePage} showDateLaporanOne={showDateLaporanOne}
+        selectedCategory={selectedCategory} removeSelectedCategory={removeSelectedCategory} resetCategoryFilter={resetCategoryFilter}/>
+
       <DialogActivity showDialog={showActivity} handleCloseDialog={handleCloseActivityMobile} datas={activityDatas}
         categoryOptions={categoryOptions} handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter}
         selectedDateMobile={selectedDateMobile}
-        currentPage={currentPage} totalDatas={totalDatas} handleChangePage={handleChangePage}/>
+        currentPage={currentPage} totalDatas={totalDatas} handleChangePage={handleChangePage} showDateLaporanOne={showDateLaporanOne}
+        selectedCategory={selectedCategory} removeSelectedCategory={removeSelectedCategory} resetCategoryFilter={resetCategoryFilter}/>
+
+      <DialogLogout showDialog={showLogoutMobile} handleCloseDialog={handleCloseLogoutMobile} />
     </div>
   );
 }
 
 export default Dashboard;
+
+
+
+  // Check if admin is logged in or not && check token if valid based on token & required role for this page
+  // const verifyToken = async () => {
+  //   const token = localStorage.getItem('auth_token');
+  //   const required_role = '0,';
+
+  //   const respon = await fetch(`${env_api}/auth/user/verify`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'auth_token': token,
+  //       'required_role': required_role
+  //     }
+  //   })
+  //   if(respon.status !== 200){
+  //     localStorage.clear();
+  //     window.location.href = "/";
+  //   }
+  // }

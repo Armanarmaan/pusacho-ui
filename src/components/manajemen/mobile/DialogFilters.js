@@ -4,8 +4,14 @@ import Dialog from '@mui/material/Dialog';
 import moment from 'moment';
 import Select from 'react-select';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
+import Slide from '@mui/material/Slide';
 
-function DialogFilters({ showDialog, handleCloseDialog, categoryOptions, handleCategoryChange, setDateRangeFilter, selectedDateMobile }) {
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+function DialogFilters({ showDialog, handleCloseDialog, categoryOptions, handleCategoryChange, 
+  setDateRangeFilter, selectedDateMobile, selectedCategory }) {
 
   const line = require('../../../assets/icons/Garis.svg').default;
   const icon_expand = require('../../../assets/icons/icon-expand.svg').default;
@@ -23,6 +29,7 @@ function DialogFilters({ showDialog, handleCloseDialog, categoryOptions, handleC
         fullWidth={true}
         classes={{ container: classes.root, paper: classes.paper }}
         onClose={handleCloseDialog}
+        TransitionComponent={Transition}
       >
         <div className="dialog-filter-mobile-dashboard">
           <div className="header-filter-mobile">
@@ -31,7 +38,8 @@ function DialogFilters({ showDialog, handleCloseDialog, categoryOptions, handleC
           <div className="filter-container">
             <div className="filter">
               <Select placeholder="Kategori" options={categoryOptions} classNamePrefix="product-select" 
-              isMulti={true} onChange={handleCategoryChange} className="container-select"/>
+              isMulti={true} onChange={handleCategoryChange} className="container-select"
+              value={selectedCategory} controlShouldRenderValue={false}/>
             </div>
             <div className="filter">
               <div className="content">
@@ -61,7 +69,7 @@ const useStyles = makeStyles(() => ({
     // }
   },
   paper: { 
-    minWidth:"100vw",
+    minWidth:"100vw!important",
     maxHeight:"unset!important",
     borderRadius:"0!important",
     margin: 0,

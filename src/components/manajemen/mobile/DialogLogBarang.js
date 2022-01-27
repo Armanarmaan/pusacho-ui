@@ -4,14 +4,22 @@ import Dialog from '@mui/material/Dialog';
 import moment from 'moment';
 import DialogFilters from '../mobile/DialogFilters';
 import Pagination from '@mui/material/Pagination';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="left" ref={ref} {...props} />;
+});
 
 function DialogLogBarang({ showDialog, handleCloseDialog, changeKeyword, datas, currencyFormat, 
   handleSearch, categoryOptions, handleCategoryChange, setDateRangeFilter, selectedDateMobile, 
-  currentPage, totalDatas, handleChangePage }) {
+  currentPage, totalDatas, handleChangePage, showDateLaporanOne, 
+  selectedCategory, removeSelectedCategory, resetCategoryFilter }) {
+
   const icon_arrow_back_mobile = require('../../../assets/icons/arrow-back-mobile.svg').default;
   const icon_arrow_download = require('../../../assets/icons/icon-arrow-download.svg').default;
   const icon_search = require('../../../assets/icons/icon-search.svg').default;
   const icon_filters = require('../../../assets/icons/icon-filters.svg').default;
+  const blueCIcon = require('../../../assets/icons/close-blue-icon.svg').default;
   const classes = useStyles();
 
   const [showFilter, setShowFilter] = useState(false);
@@ -46,6 +54,7 @@ function DialogLogBarang({ showDialog, handleCloseDialog, changeKeyword, datas, 
         open={showDialog}
         fullWidth={true}
         classes={{ container: classes.root, paper: classes.paper }}
+        TransitionComponent={Transition}
       >
         <div className="dialog-log-barang">
           <div className="header-dialog">
@@ -56,7 +65,7 @@ function DialogLogBarang({ showDialog, handleCloseDialog, changeKeyword, datas, 
               <div className="label-title">Log Barang</div>
             </div>
             <div className="wrap-wrap">
-              <div className="download-wrapper">
+              <div className="download-wrapper" onClick={showDateLaporanOne}>
                 <img src={icon_arrow_download} alt="dwnld" />
                 <p>Laporan</p>
               </div>
@@ -74,6 +83,21 @@ function DialogLogBarang({ showDialog, handleCloseDialog, changeKeyword, datas, 
                 </div>
               </form>
             </div>
+            <div className="product-applied-filters">
+              <div className="applied-filter-list">
+                {selectedCategory && selectedCategory.length > 0 ?
+                  selectedCategory.map((filterItem, index) => (
+                    <div className="applied-filter-item" key={index}>
+                      <p className="filter-title">{filterItem.label}</p>
+                      <img className="filter-remove" src={blueCIcon} alt="close icon" onClick={() => removeSelectedCategory(index)}/>
+                    </div>
+                  ))
+                  : ""}
+              </div>
+              {selectedCategory && selectedCategory.length > 0 ?
+                <p className="reset-filter-title" onClick={resetCategoryFilter}>Reset Kategori</p>
+                : ""}
+            </div>
             <div className="items">
               <LogBarangContentsMobile />
               <Pagination 
@@ -86,7 +110,8 @@ function DialogLogBarang({ showDialog, handleCloseDialog, changeKeyword, datas, 
           </div>
         </div>
         <DialogFilters showDialog={showFilter} handleCloseDialog={handleCloseFilter} categoryOptions={categoryOptions} 
-        handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter} selectedDateMobile={selectedDateMobile}/>
+        handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter} selectedDateMobile={selectedDateMobile}
+        selectedCategory={selectedCategory}/>
       </Dialog>
   );
 }

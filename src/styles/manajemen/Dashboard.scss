@@ -324,6 +324,41 @@
       }
     }
   }
+  .product-applied-filters {
+    display: flex;
+    align-items: center;
+    .applied-filter-list {
+      display: flex;
+      margin: 0px;
+      padding: 0px;
+      list-style: none;
+      .applied-filter-item {
+        display: flex;
+        align-items: center;
+        margin-right: 16px;
+        padding: 12px 8px 12px 14px;
+        background: #F4F7FC;
+        border-radius: 15px;
+        border: 1px solid #017EFA;
+        .filter-title {
+          font-size: 14px;
+          font-weight: 400;
+          color: #017EFA;
+          margin-right: 10px;
+        }
+        .filter-remove {
+          cursor: pointer;
+        }
+      }
+    }
+    .reset-filter-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #017EFA;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
 }
 
 .desktop-view{
@@ -657,6 +692,49 @@
         }
       }
     }
+    .product-applied-filters {
+      padding-left: 16px;
+      padding-right: 0;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      .applied-filter-list {
+        display: flex;
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+        gap: 16px;
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        .applied-filter-item {
+          display: flex;
+          align-items: center;
+          padding: 12px 8px 12px 14px;
+          background: #F4F7FC;
+          border-radius: 15px;
+          border: 1px solid #017EFA;
+          min-width: fit-content;
+          .filter-title {
+            font-size: 14px;
+            font-weight: 400;
+            color: #017EFA;
+            margin-right: 10px;
+          }
+          .filter-remove {
+            cursor: pointer;
+          }
+        }
+      }
+      .reset-filter-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #017EFA;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
   }
   .dialog-filter-mobile-dashboard{
     height: 50vh;
@@ -728,6 +806,19 @@
       }
       .filter:last-child{
         border-bottom: none;
+      }
+    }
+  }
+  .dialog-filter-mobile-dashboard.logout{
+    height: 30vh;
+    .filter-container{
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      p{
+        font-size: 16px;
+        font-weight: 600;
       }
     }
   }

@@ -4,14 +4,21 @@ import Dialog from '@mui/material/Dialog';
 import moment from 'moment';
 import DialogFilters from '../mobile/DialogFilters';
 import Pagination from '@mui/material/Pagination';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="left" ref={ref} {...props} />;
+});
 
 function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions, 
   handleCategoryChange, setDateRangeFilter, selectedDateMobile,
-  currentPage, totalDatas, handleChangePage }) {
+  currentPage, totalDatas, handleChangePage, showDateLaporanOne, 
+  selectedCategory, removeSelectedCategory, resetCategoryFilter }) {
+
   const icon_arrow_back_mobile = require('../../../assets/icons/arrow-back-mobile.svg').default;
   const icon_arrow_download = require('../../../assets/icons/icon-arrow-download.svg').default;
   const icon_filters = require('../../../assets/icons/icon-filters.svg').default;
-  const sample_manik = require('../../../assets/sample-manik.png').default;
+  const blueCIcon = require('../../../assets/icons/close-blue-icon.svg').default;
   const classes = useStyles();
 
 
@@ -33,7 +40,7 @@ function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions,
           <div className="item-row" key={item2.id}>
             <div className="item-details">
               <div className="img-wrapper">
-                <img src={sample_manik} alt="pic" />
+                <img src={`http://localhost:3007${item2.images}`} alt="pic" />
               </div>
               <div className="desc">
                 <p className="actor">{item2.actor_name}</p>
@@ -57,6 +64,7 @@ function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions,
         open={showDialog}
         fullWidth={true}
         classes={{ container: classes.root, paper: classes.paper }}
+        TransitionComponent={Transition}
       >
         <div className="dialog-activity-barang">
           <div className="header-dialog">
@@ -67,7 +75,7 @@ function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions,
               <div className="label-title">Aktivitas</div>
             </div>
             <div className="wrap-wrap">
-              <div className="download-wrapper">
+              <div className="download-wrapper" onClick={showDateLaporanOne}>
                 <img src={icon_arrow_download} alt="dwnld" />
                 <p>Laporan</p>
               </div>
@@ -79,6 +87,21 @@ function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions,
                 <img src={icon_filters} alt="filt" />
                 Filter
               </div>
+            </div>
+            <div className="product-applied-filters">
+              <div className="applied-filter-list">
+                {selectedCategory && selectedCategory.length > 0 ?
+                  selectedCategory.map((filterItem, index) => (
+                    <div className="applied-filter-item" key={index}>
+                      <p className="filter-title">{filterItem.label}</p>
+                      <img className="filter-remove" src={blueCIcon} alt="close icon" onClick={() => removeSelectedCategory(index)}/>
+                    </div>
+                  ))
+                  : ""}
+              </div>
+              {selectedCategory && selectedCategory.length > 0 ?
+                <p className="reset-filter-title" onClick={resetCategoryFilter}>Reset Kategori</p>
+                : ""}
             </div>
             <div className="activity-items">
               <ActivityContentsMobile />
@@ -92,7 +115,8 @@ function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions,
           </div>
         </div>
         <DialogFilters showDialog={showFilter} handleCloseDialog={handleCloseFilter} categoryOptions={categoryOptions} 
-        handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter} selectedDateMobile={selectedDateMobile}/>
+        handleCategoryChange={handleCategoryChange} setDateRangeFilter={setDateRangeFilter} selectedDateMobile={selectedDateMobile}
+        selectedCategory={selectedCategory}/>
       </Dialog>
   );
 }
