@@ -5,6 +5,9 @@ import $ from "jquery";
 import Slide from '@mui/material/Slide';
 import { makeStyles } from "@mui/styles";
 import Pagination from '@mui/material/Pagination';
+import JsBarcode from "jsbarcode";
+import pdfMake from "pdfmake";
+import { createCanvas } from "canvas";
 
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -17,6 +20,10 @@ import ScanDialog from '../../components/manajemen/ScanDialog';
 import AddCategoryDialog from '../../components/manajemen/AddCategoryDialog';
 import AddProductDialog from '../../components/manajemen/AddProductDialog';
 import EditProductDialog from '../../components/manajemen/EditProductDialog';
+import moment from 'moment';
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { width } from '@mui/system';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default class Product extends React.Component {
   constructor(props) {
@@ -111,7 +118,7 @@ export default class Product extends React.Component {
         const checkedProducts = [];
         if (this.state.products.length > 0) {
           $(".checkbox-item").prop("checked", true);
-          this.state.products.forEach(item => { checkedProducts.push(item.id) });
+          this.state.products.forEach(item => { checkedProducts.push(item) });
           this.setState({ ...this.state, checkedProducts: checkedProducts });
         };
       } else {
@@ -120,12 +127,16 @@ export default class Product extends React.Component {
       }
 
     };
-    const markProduct = (id) => {
+    const markProduct = (product) => {
       let checkedProducts = this.state.checkedProducts;
+      let IDs = [];
+      checkedProducts.forEach((itemz) => {
+        IDs.push(itemz.id);
+      })
 
-      if (checkedProducts.includes(id)) checkedProducts = checkedProducts.filter(item => item == id);
-      else checkedProducts.push(id);
-
+      if (IDs.includes(product.id)) checkedProducts = checkedProducts.filter(item => item.id !== product.id);
+      
+      else checkedProducts.push(product);
       this.setState({ ...this.state, checkedProducts: checkedProducts });
     };
     const showAddOptions = () => {
@@ -152,9 +163,6 @@ export default class Product extends React.Component {
     const editProduct = (id) => {
       if (typeof window !== undefined) localStorage.setItem("editId", id);
       this.setState({ ...this.state, showEditProduct: true });
-    };
-    const printBarcode = (id) => {
-
     };
     const deleteProduct = (id) => {
 
@@ -283,7 +291,50 @@ export default class Product extends React.Component {
       this.setState({ ...this.state, offset: tempOffset, products: filteredProduct.data, totalData: filteredProduct.meta.total, currentPage: value });
 
     };
+    
 
+    const handlePrintBarcode = (single, singleItem) => {
+      let productsList = single ? [ singleItem ] : this.state.checkedProducts;
+      let docContent = [];
+      productsList.forEach(item => {
+        const svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        JsBarcode(svg1, item.id);
+        let page = [];
+        page.push({svg: `${svg1.outerHTML}`, width: 100, alignment: 'center'});
+        page.push({
+          text: item.name,
+          fontSize: 6
+        });
+        page.push({
+          columns: [
+            {
+              text: item.size,
+              fontSize: 6,
+              width: '80%',
+            },
+            {
+              width: '20%',
+              text: formatToCurrency(item.price),
+              fontSize: 6,
+            },
+          ],
+          // optional space between columns
+          columnGap: 0
+        });
+        docContent.push(page);
+      })
+      
+      let docDefinition = {
+        pageSize: 'A10',
+        pageMargins: [4,8,4,0],
+        pageOrientation: 'landscape',
+        content: docContent,
+        styles: {
+        },
+      };
+      const titlePDF = single ? `Barcode ${singleItem.name} ${singleItem.id}` : `Barcode sekaligus ${moment().format('DD MMMM YYYY')}`;
+      pdfMake.createPdf(docDefinition).download(titlePDF);
+    }
 
     // Renders
     return (
@@ -362,7 +413,7 @@ export default class Product extends React.Component {
                         <th className="head-custom-checkbox" colSpan="5">
                           <div className="button-inner-wrappers">
                             <p className="amount-indicators">{this.state.checkedProducts.length} Produk dipilih</p>
-                            <button className="btn btn-outer-primary">Cetak Barcode Sekaligus</button>
+                            <button className="btn btn-outer-primary" onClick={() => handlePrintBarcode(false, null)}>Cetak Barcode Sekaligus</button>
                             <button className="btn btn-outer-secondary">
                               <img src={rTrashCan} className="trash-icon" alt="Red Trashcan" />
                               Hapus
@@ -419,7 +470,7 @@ export default class Product extends React.Component {
                                   <img src={gEdit} alt="Edit Pencil" />
                                   Ubah Detil Produk
                                 </li>
-                                <li className="action-item" onClick={() => printBarcode(item.id)}>
+                                <li className="action-item" onClick={() => handlePrintBarcode(true, item)}>
                                   <img src={gScan} alt="Scan Barcode" />
                                   Cetak Barcode
                                 </li>
@@ -587,7 +638,7 @@ export default class Product extends React.Component {
                           <th className="head-custom-checkbox" colSpan="5">
                             <div className="button-inner-wrappers">
                               <p className="amount-indicators">{this.state.checkedProducts.length} Produk dipilih</p>
-                              <button className="btn btn-outer-primary">Cetak Barcode</button>
+                              <button className="btn btn-outer-primary" onClick={() => handlePrintBarcode(false, null)}>Cetak Barcode</button>
                               <button className="btn btn-outer-secondary">
                                 <img src={rTrashCan} className="trash-icon" alt="Red Trashcan" />
                                 Hapus
@@ -609,7 +660,7 @@ export default class Product extends React.Component {
 
                           <tr className="product-description-highlights-mobile">
                             <td className="product-description-item">
-                              <input type="checkbox" className={`checkbox-item d-none checkbox-${item.id}`} onClick={() => markProduct(item.id)} />
+                              <input type="checkbox" className={`checkbox-item d-none checkbox-${item.id}`} onClick={() => markProduct(item)} />
                             </td>
                             <div className="product-description-item item-details">
                               <div className="img-and-name-wrapper">
