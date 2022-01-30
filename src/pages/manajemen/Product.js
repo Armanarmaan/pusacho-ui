@@ -690,30 +690,6 @@ export default class Product extends React.Component {
             </div>
           </div>
 
-          <Modal id="ModalAddOption" show={this.state.showAddMenu} onHide={handleCloseAddMenu} animation={false} dialogClassName="slide-up">
-            <Modal.Body>
-              <div className="garis">
-                <img src={Garis} alt="garis" className="img" />
-              </div>
-              <div className="menu">
-                <div className="text">
-                  <p>Tambah</p>
-                </div>
-                <div className="addOption">
-                  <div className="tambahKategori" onClick={() => choseAddOptions("addCategory")}>
-                    <p>Tambah Kategori</p>
-                  </div>
-                  <div className="tambahProduk" onClick={() => choseAddOptions("addProduct")}>
-                    <p>Tambah Produk</p>
-                  </div>
-                  <div className="tambahSekaligus" onClick={() => choseAddOptions("addBoth")}>
-                    <p>Tambah Sekaligus</p>
-                  </div>
-                </div>
-              </div>
-            </Modal.Body>
-          </Modal>
-
         </div>
 
         <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan} />
