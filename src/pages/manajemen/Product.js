@@ -4,6 +4,7 @@ import Select from 'react-select'
 import $ from "jquery";
 import Slide from '@mui/material/Slide';
 import { makeStyles } from "@mui/styles";
+import Pagination from '@mui/material/Pagination';
 
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -42,7 +43,11 @@ export default class Product extends React.Component {
       showEditProduct: false,
       emptyCategory: "",
       editProductId: "",
-      showAddMenu: "",
+      showAddMenu: false,
+      currentPage: 1,
+      offset: 0,
+      limit: 10,
+      totalData: 0
     };
   }
 
@@ -53,7 +58,9 @@ export default class Product extends React.Component {
     const product = await fetch(`${env_api}/manajemen/products`)
       .then(response => response.json())
       .catch(error => console.log(error));
-    this.setState({ ...this.state, products: product ? product.data : [] });
+    this.setState({ ...this.state, products: product ? product.data : [], totalData: product.meta.total, currentPage: 1 });
+    // this.setState({ ...this.state, totalDatas: product ? product.meta : [] });
+    // this.state.totalDatas(product.meta);
 
     // Fetch Categories
     const categories = await fetch(`${env_api}/manajemen/categories`)
@@ -72,7 +79,7 @@ export default class Product extends React.Component {
     const blueCIcon = require('../../assets/icons/close-blue-icon.svg').default;
     const rTrashCan = require('../../assets/icons/red-trashcan.svg').default;
     const gEdit = require('../../assets/icons/gray-edit-icon.svg').default;
-    const gScan = require('../../assets/icons/gray-scan-icon.svg').default;    
+    const gScan = require('../../assets/icons/gray-scan-icon.svg').default;
     const scanBtn = require('../../assets/icons/ScanBtn.svg').default;
     const checkboxBtn = require('../../assets/icons/CheckBtn.svg').default;
     const Garis = require('../../assets/icons/Garis.svg').default;
@@ -175,7 +182,7 @@ export default class Product extends React.Component {
         .then(response => response.json())
         .catch(error => console.log(error));
 
-      this.setState({ ...this.state, appliedQuery: string, products: filteredProduct.data });
+      this.setState({ ...this.state, appliedQuery: string, products: filteredProduct.data, totalData: filteredProduct.meta.total, currentPage: 1 });
 
     };
 
@@ -188,7 +195,7 @@ export default class Product extends React.Component {
         .then(response => response.json())
         .catch(error => console.log(error));
 
-      this.setState({ ...this.state, appliedSort: sort, products: sortedProduct.data });
+      this.setState({ ...this.state, appliedSort: sort, products: sortedProduct.data, totalData: sortedProduct.meta.total, currentPage: 1 });
     };
 
     const applyFilter = async (filter) => {
@@ -202,7 +209,7 @@ export default class Product extends React.Component {
           .then(response => response.json())
           .catch(error => console.log(error));
 
-        this.setState({ ...this.state, emptyCategory: "", appliedFilter: newAppliedFilter, products: filteredProduct.data });
+        this.setState({ ...this.state, emptyCategory: "", appliedFilter: newAppliedFilter, products: filteredProduct.data, totalData: filteredProduct.meta.total, currentPage: 1 });
       }
 
     };
@@ -218,7 +225,7 @@ export default class Product extends React.Component {
         .then(response => response.json())
         .catch(error => console.log(error));
 
-      this.setState({ ...this.state, appliedFilter: newAppliedFilter, products: filteredProduct.data });
+      this.setState({ ...this.state, appliedFilter: newAppliedFilter, products: filteredProduct.data, totalData: filteredProduct.meta.total, currentPage: 1 });
     };
 
     const resetFilter = async () => {
@@ -230,7 +237,7 @@ export default class Product extends React.Component {
         .then(response => response.json())
         .catch(error => console.log(error));
 
-      this.setState({ ...this.state, appliedFilter: newAppliedFilter, products: filteredProduct.data });
+      this.setState({ ...this.state, appliedFilter: newAppliedFilter, products: filteredProduct.data, totalData: filteredProduct.meta.total, currentPage: 1 });
     };
 
     // Modals
@@ -261,6 +268,22 @@ export default class Product extends React.Component {
     const handleCloseAddMenu = () => {
       this.setState({ ...this.state, showAddMenu: false })
     };
+
+    //Pagination
+    const handleChangePage = async (_, value) => {
+      const env_api = process.env.REACT_APP_API_ENDPOINT;
+      const tempOffset = value === 1 ? 0 : (value - 1) * this.state.limit;
+
+      const filterQuery = this.state.appliedFilter ? this.state.appliedFilter.map(item => item.value).join(",") : "";
+      const query = `?query=${this.state.appliedQuery}&filter=${filterQuery}&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}&offset=${tempOffset}&limit=${this.state.limit}`;
+      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+        .then(response => response.json())
+        .catch(error => console.log(error));
+
+      this.setState({ ...this.state, offset: tempOffset, products: filteredProduct.data, totalData: filteredProduct.meta.total, currentPage: value });
+
+    };
+
 
     // Renders
     return (
@@ -329,190 +352,195 @@ export default class Product extends React.Component {
             </div>
 
             <div className="product-list-content">
-            <div className="product-list-table-wrapper">
+              <div className="product-list-table-wrapper">
 
-              <table className="product-list-table">
-                <thead className="product-list-table-head">
-                { this.state.checkedProducts && this.state.checkedProducts.length > 0 ? 
-                  <tr>
-                    <th className="head-checkbox"><input type="checkbox" className="checkbox-head" onClick={() => markAllProduct()}/></th>
-                    <th className="head-custom-checkbox" colSpan="5">
-                      <div className="button-inner-wrappers">
-                        <p className="amount-indicators">{this.state.checkedProducts.length} Produk dipilih</p>
-                        <button className="btn btn-outer-primary">Cetak Barcode Sekaligus</button>
-                        <button className="btn btn-outer-secondary"> 
-                          <img src={rTrashCan} className="trash-icon" alt="Red Trashcan" /> 
-                          Hapus
-                        </button>
-                      </div>
-                    </th>
-                  </tr>
-                  : 
-                  <tr>
-                    <th className="head-checkbox"><input type="checkbox" className="checkbox-head" onClick={() => markAllProduct()}/></th>
-                    <th className="head-prod-name"><p className="table-title">Nama Produk</p></th>
-                    <th className="head-prod-size"><p className="table-title">Ukuran</p></th>
-                    <th className="head-prod-amount"><p className="table-title">Jumlah</p></th>
-                    <th className="head-prod-margin"></th>
-                    <th className="head-prod-dots"></th>
-                  </tr>
-                }
-                </thead>
-
-                {this.state.products && this.state.products.length > 0 ? 
-                  this.state.products.map((item, index) => (
-                    <tbody className={`product-description product-description-${index}`} key={index}>
-                      <tr className="product-description-highlights">
-                        <td className="product-description-item">
-                          <input type="checkbox" className={`checkbox-item checkbox-${item.id}`} onClick={() => markProduct(item.id)}/>
-                        </td>
-                        <td className="product-description-item item-details">
-                          <div className="img-and-name-wrapper">
-                            <div className="img-wrapper">
-                              <img className="img-file" src={`http://localhost:3007${item.images}`} alt={item.name} />
-                            </div>
-                            <div className="name-wrapper">
-                              <p className="name-title">{item.name}</p>
-                              <p className="name-subtitle">
-                                ID: {item.id}
-                                <span className="blue-dot"></span>
-                                {item.category_name}
-                              </p>
-                            </div>
-
+                <table className="product-list-table">
+                  <thead className="product-list-table-head">
+                    {this.state.checkedProducts && this.state.checkedProducts.length > 0 ?
+                      <tr>
+                        <th className="head-checkbox"><input type="checkbox" className="checkbox-head" onClick={() => markAllProduct()} /></th>
+                        <th className="head-custom-checkbox" colSpan="5">
+                          <div className="button-inner-wrappers">
+                            <p className="amount-indicators">{this.state.checkedProducts.length} Produk dipilih</p>
+                            <button className="btn btn-outer-primary">Cetak Barcode Sekaligus</button>
+                            <button className="btn btn-outer-secondary">
+                              <img src={rTrashCan} className="trash-icon" alt="Red Trashcan" />
+                              Hapus
+                            </button>
                           </div>
-                        </td>
-                        <td className="product-description-item">
-                          <p className="table-title">{item.size}</p>
-                        </td>
-                        <td className="product-description-item">
-                          <p className="table-title">{item.stock}</p>
-                        </td>
-                        <td className="product-description-item" colSpan={2}  onClick={() => showSubMenu(index)}>
-                          <img className="three-dots" src={dotsIcon} alt="maginifier-icon"/>
-                          <div className={`product-three-dots-options product-three-dots-${index} d-none`} onMouseLeave={() => hideSubMenu()}>
-                            <ul className="action-item-wrapper">
-                              <li className="action-item" onClick={() => editProduct(item.id)}>
-                                <img src={gEdit} alt="Edit Pencil" />
-                                Ubah Detil Produk
-                              </li>
-                              <li className="action-item" onClick={() => printBarcode(item.id)}>
-                                <img src={gScan} alt="Scan Barcode" />
-                                Cetak Barcode
-                              </li>
-                              <li className="action-item red-highlight" onClick={() => deleteProduct(item.id)}>
-                                <img src={rTrashCan} alt="Delete Product" />
-                                Hapus Produk
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
+                        </th>
                       </tr>
-                      <tr className="product-description-pricing-detail d-none">
-                        <td className="product-description-outer-table" colSpan={6}>
+                      :
+                      <tr>
+                        <th className="head-checkbox"><input type="checkbox" className="checkbox-head" onClick={() => markAllProduct()} /></th>
+                        <th className="head-prod-name"><p className="table-title">Nama Produk</p></th>
+                        <th className="head-prod-size"><p className="table-title">Ukuran</p></th>
+                        <th className="head-prod-amount"><p className="table-title">Jumlah</p></th>
+                        <th className="head-prod-margin"></th>
+                        <th className="head-prod-dots"></th>
+                      </tr>
+                    }
+                  </thead>
 
-                          <table className="product-pricing-table">
-                            <thead className="product-pricing-header">
-                              <tr>
-                                <th className="head-item">
-                                  <p className="table-title">Supplier</p>
-                                </th>
-                                <th className="head-item">
-                                  <p className="table-title">Harga Modal</p>
-                                </th>
-                                <th className="head-item">
-                                  <p className="table-title">Harga Modal Nett</p>
-                                </th>
-                                <th className="head-item">
-                                  <p className="table-title">Biaya Logistik</p>
-                                </th>
-                                <th className="head-item">
-                                  <p className="table-title">Harga Jual</p>
-                                </th>
-                                <th className="head-item">
-                                  <p className="table-title">Margin</p>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="product-pricing-body">
-                              <tr className="product-pricing-row">
-                                <td className="product-supplier">
-                                  {item.suppliers.map((item, index) => (
-                                    <input key={index} type="text" value={item} readOnly/>
-                                  ))}
-                                </td>
-                                <td className="product-modal">
-                                  {item.modals.map((item, index) => (
-                                    <div className="input-pricing" key={index}>
-                                      <div className="input-prepend">
-                                        <p className="prepend-text">Rp</p>
-                                      </div>
-                                      <input type="text" value={item.price} readOnly />
-                                    </div>
-                                  ))}
-                                </td>
-                                <td className="product-modal-nett">
-                                  {item.modal_nett.map((item, index) => (
-                                    <div className="product-modal-nett-inner" key={index}>
-                                      <div className="input-precentage">
-                                        <input type="text" />
-                                        <div className="input-append">
-                                          <p className="append-text">%</p>
+                  {this.state.products && this.state.products.length > 0 ?
+                    this.state.products.map((item, index) => (
+                      <tbody className={`product-description product-description-${index}`} key={index}>
+                        <tr className="product-description-highlights">
+                          <td className="product-description-item">
+                            <input type="checkbox" className={`checkbox-item checkbox-${item.id}`} onClick={() => markProduct(item.id)} />
+                          </td>
+                          <td className="product-description-item item-details">
+                            <div className="img-and-name-wrapper">
+                              <div className="img-wrapper">
+                                <img className="img-file" src={`http://localhost:3007${item.images}`} alt={item.name} />
+                              </div>
+                              <div className="name-wrapper">
+                                <p className="name-title">{item.name}</p>
+                                <p className="name-subtitle">
+                                  ID: {item.id}
+                                  <span className="blue-dot"></span>
+                                  {item.category_name}
+                                </p>
+                              </div>
+
+                            </div>
+                          </td>
+                          <td className="product-description-item">
+                            <p className="table-title">{item.size}</p>
+                          </td>
+                          <td className="product-description-item">
+                            <p className="table-title">{item.stock}</p>
+                          </td>
+                          <td className="product-description-item" colSpan={2} onClick={() => showSubMenu(index)}>
+                            <img className="three-dots" src={dotsIcon} alt="maginifier-icon" />
+                            <div className={`product-three-dots-options product-three-dots-${index} d-none`} onMouseLeave={() => hideSubMenu()}>
+                              <ul className="action-item-wrapper">
+                                <li className="action-item" onClick={() => editProduct(item.id)}>
+                                  <img src={gEdit} alt="Edit Pencil" />
+                                  Ubah Detil Produk
+                                </li>
+                                <li className="action-item" onClick={() => printBarcode(item.id)}>
+                                  <img src={gScan} alt="Scan Barcode" />
+                                  Cetak Barcode
+                                </li>
+                                <li className="action-item red-highlight" onClick={() => deleteProduct(item.id)}>
+                                  <img src={rTrashCan} alt="Delete Product" />
+                                  Hapus Produk
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr className="product-description-pricing-detail d-none">
+                          <td className="product-description-outer-table" colSpan={6}>
+
+                            <table className="product-pricing-table">
+                              <thead className="product-pricing-header">
+                                <tr>
+                                  <th className="head-item">
+                                    <p className="table-title">Supplier</p>
+                                  </th>
+                                  <th className="head-item">
+                                    <p className="table-title">Harga Modal</p>
+                                  </th>
+                                  <th className="head-item">
+                                    <p className="table-title">Harga Modal Nett</p>
+                                  </th>
+                                  <th className="head-item">
+                                    <p className="table-title">Biaya Logistik</p>
+                                  </th>
+                                  <th className="head-item">
+                                    <p className="table-title">Harga Jual</p>
+                                  </th>
+                                  <th className="head-item">
+                                    <p className="table-title">Margin</p>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="product-pricing-body">
+                                <tr className="product-pricing-row">
+                                  <td className="product-supplier">
+                                    {item.suppliers.map((item, index) => (
+                                      <input key={index} type="text" value={item} readOnly />
+                                    ))}
+                                  </td>
+                                  <td className="product-modal">
+                                    {item.modals.map((item, index) => (
+                                      <div className="input-pricing" key={index}>
+                                        <div className="input-prepend">
+                                          <p className="prepend-text">Rp</p>
                                         </div>
+                                        <input type="text" value={item.price} readOnly />
                                       </div>
-                                      <input type="text" value={item.price} readOnly />
-                                    </div>
-                                  ))}
-                                </td>
-                                <td className="product-logistic">
-                                  {item.logistic_costs.map((item, index) => (
-                                    <div className="input-pricing" key={index}>
-                                      <div className="input-prepend">
-                                        <p className="prepend-text">Rp</p>
+                                    ))}
+                                  </td>
+                                  <td className="product-modal-nett">
+                                    {item.modal_nett.map((item, index) => (
+                                      <div className="product-modal-nett-inner" key={index}>
+                                        <div className="input-precentage">
+                                          <input type="text" />
+                                          <div className="input-append">
+                                            <p className="append-text">%</p>
+                                          </div>
+                                        </div>
+                                        <input type="text" value={item.price} readOnly />
                                       </div>
-                                      <input type="text" value={item.price} readOnly />
-                                    </div>
-                                  ))}
-                                </td>
-                                <td className="product-jual">
-                                  {item.suppliers.map((innerItem, index) => (
-                                    <div className="input-pricing" key={index}>
-                                      <div className="input-prepend">
-                                        <p className="prepend-text">Rp</p>
+                                    ))}
+                                  </td>
+                                  <td className="product-logistic">
+                                    {item.logistic_costs.map((item, index) => (
+                                      <div className="input-pricing" key={index}>
+                                        <div className="input-prepend">
+                                          <p className="prepend-text">Rp</p>
+                                        </div>
+                                        <input type="text" value={item.price} readOnly />
                                       </div>
-                                      <input type="text" value={item.price} readOnly />
-                                    </div>
-                                  ))}
-                                </td>
-                                <td className="product-margin">
-                                  {item.margins.map((item, index) => (
-                                    <div className="margin-wrapper" key={index}>
-                                      <p className="margin-text">{item}%</p>
-                                    </div>
-                                  ))}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
+                                    ))}
+                                  </td>
+                                  <td className="product-jual">
+                                    {item.suppliers.map((innerItem, index) => (
+                                      <div className="input-pricing" key={index}>
+                                        <div className="input-prepend">
+                                          <p className="prepend-text">Rp</p>
+                                        </div>
+                                        <input type="text" value={item.price} readOnly />
+                                      </div>
+                                    ))}
+                                  </td>
+                                  <td className="product-margin">
+                                    {item.margins.map((item, index) => (
+                                      <div className="margin-wrapper" key={index}>
+                                        <p className="margin-text">{item}%</p>
+                                      </div>
+                                    ))}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
 
-                        </td>
-                      </tr>
-                      <tr className="product-see-more-row">
-                        <td className="see-more-wrapper" colSpan={6} onClick={() => seeDetails(index)}>
-                          <div className="see-all-wrapper">
-                            <p className="see-all">lihat selengkapnya</p>
-                            <img className="lb-arrow" src={lbArrow} alt="blue arrow" />
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody> 
-                  ))
-                    : 
-                  <tbody></tbody>
-                }
+                          </td>
+                        </tr>
+                        <tr className="product-see-more-row">
+                          <td className="see-more-wrapper" colSpan={6} onClick={() => seeDetails(index)}>
+                            <div className="see-all-wrapper">
+                              <p className="see-all">lihat selengkapnya</p>
+                              <img className="lb-arrow" src={lbArrow} alt="blue arrow" />
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))
+                    :
+                    <tbody></tbody>
+                  }
 
                 </table>
-
+                <Pagination
+                  defaultPage={this.state.currentPage}
+                  count={Math.ceil(this.state.totalData / this.state.limit)}
+                  variant="outlined" shape="rounded"
+                  onChange={handleChangePage}
+                  className="pagination-product" />
               </div>
             </div>
 
@@ -585,7 +613,9 @@ export default class Product extends React.Component {
                             </td>
                             <div className="product-description-item item-details">
                               <div className="img-and-name-wrapper">
-                                <div className="img-wrapper"></div>
+                                <div className="img-wrapper">
+                                  <img className="img-file" src={`http://localhost:3007${item.images}`} alt={item.name} />
+                                </div>
                                 <div className="name-wrapper">
                                   <p className="name-title">{item.name}</p>
                                   <p className="name-subtitle">
@@ -603,13 +633,19 @@ export default class Product extends React.Component {
                             </div>
                           </tr>
                         </tbody>
+
                       ))
                       :
                       <tbody></tbody>
                     }
 
                   </table>
-
+                  <Pagination
+                    defaultPage={this.state.currentPage}
+                    count={Math.ceil(this.state.totalData / this.state.limit)}
+                    variant="outlined" shape="rounded"
+                    onChange={handleChangePage}
+                    className="pagination-product-mobile" />
                 </div>
               </div>
             </div>
@@ -617,7 +653,7 @@ export default class Product extends React.Component {
           </div>
 
           <div className="btnModal">
-            <div className="add" onClick={() => handleOpenAddMenu()}>
+            <div className="add" onClick={() => showAddOptions()}>
               <img src={addIcon} alt="add" className="img" />
             </div>
             <div className="scan" onClick={() => handleOpenScan()}>
@@ -625,6 +661,32 @@ export default class Product extends React.Component {
             </div>
             <div className="checkbox" onClick={() => showCheckBox()}>
               <img src={checkboxBtn} alt="checkbox" className="img" />
+            </div>
+            <div className="add-button-options d-none">
+              <div className="upperbody" onClick={() => closeAddOptions()}></div>
+              <div className="container">
+                <div className="body">
+                  <div className="garis">
+                    <img src={Garis} alt="garis" className="img" />
+                  </div>
+                  <div className="menu">
+                    <div className="text">
+                      <p>Tambah</p>
+                    </div>
+                    <div className="addOption">
+                      <div className="tambahKategori" onClick={() => choseAddOptions("addCategory")}>
+                        <p>Tambah Kategori</p>
+                      </div>
+                      <div className="tambahProduk" onClick={() => choseAddOptions("addProduct")}>
+                        <p>Tambah Produk</p>
+                      </div>
+                      <div className="tambahSekaligus" onClick={() => choseAddOptions("addBoth")}>
+                        <p>Tambah Sekaligus</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -649,15 +711,14 @@ export default class Product extends React.Component {
                   </div>
                 </div>
               </div>
-
             </Modal.Body>
           </Modal>
 
         </div>
 
-        <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan}/>
-        <AddCategoryDialog showModal={this.state.showAddCategory} closeModal={handleCloseAddCategory}/>
-        <AddProductDialog showModal={this.state.showAddProduct} closeModal={handleCloseAddProduct}/>
+        <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan} />
+        <AddCategoryDialog showModal={this.state.showAddCategory} closeModal={handleCloseAddCategory} />
+        <AddProductDialog showModal={this.state.showAddProduct} closeModal={handleCloseAddProduct} />
         <EditProductDialog showModal={this.state.showEditProduct} closeModal={handleCloseEditProduct} />
       </div>
     )

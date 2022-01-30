@@ -13,7 +13,6 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
 
   // Asset Imports
   const gClose = require('../../assets/icons/gray-close-icon.svg').default;
-  const Garis = require('../../assets/icons/Garis.svg').default;
 
   // Category Name
   const [categoryName, setCategoryName] = useState("");
@@ -34,12 +33,12 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ category: categoryName })
     })
-      .then(() => {
-        closeModal();
-        setCategoryName("");
-        window.location.reload();
-      })
-      .catch(error => console.log(error));
+    .then(() => { 
+      closeModal();
+      setCategoryName("");
+      window.location.reload();
+    })
+    .catch(error => console.log(error));
   };
 
   const isDisabled = () => {
@@ -51,12 +50,8 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
       open={showModal}
       fullWidth={true}
       classes={{ container: classes.root, paper: classes.paper }}
-      onClose={handleCloseModal}
     >
       <div className="add-category-wrapper">
-        <div className="garis">
-          <img src={Garis} alt="garis" className="img" />
-        </div>
         <div className="dialog-header">
           <h1 className="dialog-title">Tambah Kategori</h1>
           <button className="btn btn-close" onClick={handleCloseModal}>
@@ -71,7 +66,7 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
 
           <div className="input-category-wrapper">
             <p className="input-category-title">Nama Kategori</p>
-            <input className="input-category-field" type="text" value={categoryName} onInput={(val) => handleCategory(val.target.value)} />
+            <input className="input-category-field" type="text" value={categoryName} onInput={(val) => handleCategory(val.target.value)}/>
           </div>
         </div>
 
@@ -99,12 +94,12 @@ const useStyles = makeStyles(() => ({
       alignItems: "flex-end",
     }
   },
-  paper: {
-    minWidth: "694px",
+  paper: { 
+    minWidth:"694px",
     "@media (max-width: 771px)": {
       width: "100%",
       margin: 0,
       maxWidth: "unset",
     }
-  },
+ },
 }));

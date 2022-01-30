@@ -25,7 +25,8 @@ function PDP() {
         name: "",
         stock: "",
         price: "",
-        size:""
+        size:"",
+        images:""
     });
     // const [pengurangan, setPengurangan] = useState({
     //     jumlah: "",
@@ -203,7 +204,7 @@ function PDP() {
                             </div>
                         </div>
                         <div className="imgproduk">
-                            <img src={ExampleProduct} alt="exampleproduct" className="img" />
+                            <img src={`http://localhost:3007${produk.images}`} alt="exampleproduct" className="img" />
                         </div>
                         <div className="infostock">
                             <div className="totalstock">
