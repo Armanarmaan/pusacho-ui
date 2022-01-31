@@ -47,26 +47,34 @@ export default class Product extends React.Component {
       currentPage: 1,
       offset: 0,
       limit: 10,
-      totalData: 0
+      totalData: 0,
+      authId: "",
     };
   }
 
   async componentDidMount() {
-    const env_api = process.env.REACT_APP_API_ENDPOINT;
+    if (!localStorage.getItem("auth_token")) {
+      localStorage.clear();
+      window.location.href = "/";
+    } else {
+      const env_api = process.env.REACT_APP_API_ENDPOINT;
+      const auth_id = localStorage.getItem("id");
+  
+      // Fetch Product
+      const product = await fetch(`${env_api}/manajemen/products`)
+        .then(response => response.json())
+        .catch(error => console.log(error));
+      this.setState({ ...this.state, products: product ? product.data : [], totalData: product.meta.total, currentPage: 1 });
+  
+      // Fetch Categories
+      const categories = await fetch(`${env_api}/manajemen/categories`)
+        .then(response => response.json())
+        .catch(error => console.log(error));
+      this.setState({ ...this.state, categories: categories ? categories.data : [] });
 
-    // Fetch Product
-    const product = await fetch(`${env_api}/manajemen/products`)
-      .then(response => response.json())
-      .catch(error => console.log(error));
-    this.setState({ ...this.state, products: product ? product.data : [], totalData: product.meta.total, currentPage: 1 });
-    // this.setState({ ...this.state, totalDatas: product ? product.meta : [] });
-    // this.state.totalDatas(product.meta);
-
-    // Fetch Categories
-    const categories = await fetch(`${env_api}/manajemen/categories`)
-      .then(response => response.json())
-      .catch(error => console.log(error));
-    this.setState({ ...this.state, categories: categories ? categories.data : [] });
+      // Set Token to State
+      this.setState({ ...this.state, authId: auth_id });
+    }
   }
 
   render() {
@@ -111,7 +119,7 @@ export default class Product extends React.Component {
         const checkedProducts = [];
         if (this.state.products.length > 0) {
           $(".checkbox-item").prop("checked", true);
-          this.state.products.forEach(item => { checkedProducts.push(item.id) });
+          this.state.products.forEach(item => { checkedProducts.push(item) });
           this.setState({ ...this.state, checkedProducts: checkedProducts });
         };
       } else {
@@ -156,8 +164,17 @@ export default class Product extends React.Component {
     const printBarcode = (id) => {
 
     };
-    const deleteProduct = (id) => {
-
+    const deleteProduct = async (id) => {
+      const listOfIds = [id];
+      await fetch(`${env_api}/manajemen/products`, { method: "DELETE", body: listOfIds }).then(() => {
+        window.location.reload();
+      });
+    };
+    const deleteMultipleProduct = () => {
+      const listOfIds = checkedProducts.map(item => item.id);
+      await fetch(`${env_api}/manajemen/products`, { method: "DELETE", body: listOfIds }).then(() => {
+        window.location.reload();
+      });
     };
 
     const showCheckBox = () => {
@@ -260,6 +277,7 @@ export default class Product extends React.Component {
       if (typeof window !== "undefined") localStorage.removeItem("editId");
       this.setState({ ...this.state, showEditProduct: false });
     };
+
     //ModalMobile
     const handleOpenAddMenu = () => {
       this.setState({ ...this.state, showAddMenu: true })
@@ -483,7 +501,7 @@ export default class Product extends React.Component {
                                             <p className="append-text">%</p>
                                           </div>
                                         </div>
-                                        <input type="text" value={item.price} readOnly />
+                                        <p className="price">{formatToCurrency(item.price)}</p>
                                       </div>
                                     ))}
                                   </td>
@@ -692,10 +710,10 @@ export default class Product extends React.Component {
 
         </div>
 
-        <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan} />
+        <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan} auth={this.state.authId}/>
         <AddCategoryDialog showModal={this.state.showAddCategory} closeModal={handleCloseAddCategory} />
         <AddProductDialog showModal={this.state.showAddProduct} closeModal={handleCloseAddProduct} />
-        <EditProductDialog showModal={this.state.showEditProduct} closeModal={handleCloseEditProduct} />
+        <EditProductDialog showModal={this.state.showEditProduct} closeModal={handleCloseEditProduct} auth={this.state.authId}/>
       </div>
     )
   }
