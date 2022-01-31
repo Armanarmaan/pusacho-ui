@@ -6,7 +6,7 @@ import { makeStyles } from "@mui/styles";
 
 import $ from "jquery";
 
-export default function EditProductDialog({ showModal, closeModal }) {
+export default function EditProductDialog({ showModal, closeModal, auth }) {
   const classes = useStyles();
 
   // Constant data
@@ -24,6 +24,7 @@ export default function EditProductDialog({ showModal, closeModal }) {
   // Fetch Data for page
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState({
+    auth: auth,
     images: "",
     id: "",
     category_id: "",
@@ -38,7 +39,25 @@ export default function EditProductDialog({ showModal, closeModal }) {
     modal_nett_per: [""],
     logistic_costs: [""],
     margins: [""]
-  })
+  });
+  
+  const [originalProduct, setOriginalProduct] = useState({
+    auth: auth,
+    images: "",
+    id: "",
+    category_id: "",
+    category_name: "",
+    name: "",
+    size: "",
+    price: 0,
+    stock: 0,
+    suppliers: [""],
+    modals: [""],
+    modal_nett: [""],
+    modal_nett_per: [""],
+    logistic_costs: [""],
+    margins: [""]
+  });
 
   const fetchCategory = async () => {
     const env_api = process.env.REACT_APP_API_ENDPOINT;
@@ -60,11 +79,12 @@ export default function EditProductDialog({ showModal, closeModal }) {
                                       .catch(error => console.log(error));
         if (product) { 
           setProduct(product.data) 
+          setOriginalProduct(product.data);
           setSupplierCount(product.data.suppliers.length);
         }
       }
     }
-  }
+  };
 
   useEffect( () => {
     fetchCategory();
@@ -95,43 +115,43 @@ export default function EditProductDialog({ showModal, closeModal }) {
    };
 
    const handleNameInput = (val) => {
-     setProduct({ ...product, name: val });
+     setProduct({ ...product, name: val, orig_name: originalProduct.name });
    };
 
    const handleSizeInput = (val) => {
-    setProduct({ ...product, size: val });
+    setProduct({ ...product, size: val, orig_size: originalProduct.size });
   };
 
   const handleAmountInput = (val) => {
-    setProduct({ ...product, stock: val });
+    setProduct({ ...product, stock: val, orig_stock: originalProduct.stock });
   };
 
   const handleSupplierName = (val, index) => {
     let newSupplier = product.suppliers;
     newSupplier[index] = val;
-    setProduct({...product, suppliers: newSupplier});
+    setProduct({...product, suppliers: newSupplier, orig_suppliers: originalProduct.suppliers });
   };
 
   const handleModalValue = (val, index) => {
     let newModal = product.modals;
     newModal[index] = val;
-    setProduct({...product, modals: newModal});
+    setProduct({...product, modals: newModal, orig_modal: originalProduct.modals });
   };
 
   const handleLogisticValue = (val, index) => {
     let newLogistic = product.logistic_costs;
     newLogistic[index] = val;
-    setProduct({...product, logistic_costs: newLogistic});
+    setProduct({...product, logistic_costs: newLogistic, orig_logistic: originalProduct.logistic_costs });
   };
 
   const handlePriceValue = (val) => {
-    setProduct({...product, price: val});
+    setProduct({...product, price: val, orig_price: originalProduct.price });
   };
 
   const handleModalNettPer = (val, index) => {
     let newModalNetPerr = product.modal_nett_per;
     newModalNetPerr[index] = val;
-    setProduct({...product, modal_nett_per: newModalNetPerr});
+    setProduct({...product, modal_nett_per: newModalNetPerr, orig_modal_nett: originalProduct.modal_nett_per });
   };
 
   // Supplier add / remove
@@ -234,18 +254,28 @@ export default function EditProductDialog({ showModal, closeModal }) {
       });
 
       const submitProductData = {
+        auth: auth,
         id: product.id,
         category: product.category_id,
         name: product.name,
+        orig_name: product.orig_name,
         size: product.size,
         price: product.price,
+        orig_price: product.orig_price,
         stock: product.stock,
+        orig_stock: product.orig_stock,
         suppliers: product.suppliers.join("|"),
+        orig_suppliers: product.orig_suppliers,
         modals: product.modals.join("|"),
+        orig_modal: product.orig_modal,
         modal_nett_per: product.modal_nett_per.join("|"),
+        orig_modal_nett_per: product.orig_modal_nett_per,
         modal_nett: modal_nett.join("|"),
+        orig_modal_nett: originalProduct.modal_nett,
         logistic_costs: product.logistic_costs.join("|"),
-        margins: margins.join("|")
+        orig_logistic: product.orig_logistic,
+        margins: margins.join("|"),
+        orig_margin: originalProduct.margins
       };
 
       let formData = new FormData();
