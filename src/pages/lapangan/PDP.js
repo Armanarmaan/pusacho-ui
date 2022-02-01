@@ -204,7 +204,7 @@ function PDP() {
                             </div>
                         </div>
                         <div className="imgproduk">
-                            <img src={`http://localhost:3007${produk.images}`} alt="exampleproduct" className="img" />
+                            <img src={`${env_api}${produk.images}`} alt="exampleproduct" className="img" />
                         </div>
                         <div className="infostock">
                             <div className="totalstock">

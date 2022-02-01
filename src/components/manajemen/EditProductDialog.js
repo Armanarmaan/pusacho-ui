@@ -382,7 +382,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
                     <input className="d-none" id="upload-image" type="file" onChange={(val) => uploadImage(val)}/>
                     <label className="input-img-border" htmlFor="upload-image">
                       <img className="img-actual d-none" alt="Uploaded image"/>
-                      <img className="img-placeholder" src={`http://localhost:3007${product.images}`} alt="Upload Img Placeholder"/>
+                      <img className="img-placeholder" src={`${env_api}${product.images}`} alt="Upload Img Placeholder"/>
                     </label>
                   </div>
                   <div className="image-color-amount-inner-wrapper">
