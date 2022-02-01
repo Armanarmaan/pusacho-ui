@@ -15,6 +15,8 @@ function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions,
   currentPage, totalDatas, handleChangePage, showDateLaporanOne, 
   selectedCategory, removeSelectedCategory, resetCategoryFilter }) {
 
+  const env_api = process.env.REACT_APP_API_ENDPOINT;
+
   const icon_arrow_back_mobile = require('../../../assets/icons/arrow-back-mobile.svg').default;
   const icon_arrow_download = require('../../../assets/icons/icon-arrow-download.svg').default;
   const icon_filters = require('../../../assets/icons/icon-filters.svg').default;
@@ -40,7 +42,7 @@ function DialogActivity({ showDialog, handleCloseDialog, datas, categoryOptions,
           <div className="item-row" key={item2.id}>
             <div className="item-details">
               <div className="img-wrapper">
-                <img src={`http://localhost:3007${item2.images}`} alt="pic" />
+                <img src={`${env_api}${item2.images}`} alt="pic" />
               </div>
               <div className="desc">
                 <p className="actor">{item2.actor_name}</p>

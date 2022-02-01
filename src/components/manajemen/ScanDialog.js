@@ -170,7 +170,7 @@ export default function ScanDialog({ showScan, closeScan }) {
 
               <div className="img-and-update-stock-wrapper">
                 <div className="img-wrapper">
-                  <img className="img-actual" src={`http://localhost:3007${product.images}`} alt={product.name} />
+                  <img className="img-actual" src={`${env_api}${product.images}`} alt={product.name} />
                 </div>
                 <div className="update-stock-wrapper">
                   <p className="stock-title">{product.name} - {product.size}</p>
@@ -272,7 +272,7 @@ export default function ScanDialog({ showScan, closeScan }) {
                   <p className="card-subtitle">Silahkan update stok barang ini, atau ubah detail produk</p>
 
                   <div className="card-img-wrapper">
-                    <img className="img-actual" src={`http://localhost:3007${product.images}`} alt="Manik Example" />
+                    <img className="img-actual" src={`${env_api}${product.images}`} alt="Manik Example" />
                   </div>
 
                   <ul className="card-details">

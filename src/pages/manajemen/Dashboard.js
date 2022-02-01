@@ -67,7 +67,11 @@ function Dashboard() {
           'auth_token': token,
           'required_role': required_role
         }
-      }).then(response => response.json())
+      }).then(response => response.json());
+      if(datas.status === 400){
+        localStorage.clear();
+        window.location.href = '/';
+      }
       
       if(datas.data !== []){
         if(activeTab === 0){
@@ -177,7 +181,7 @@ function Dashboard() {
           <div className="item-row" key={item2.id}>
             <div className="item-details">
               <div className="img-wrapper">
-                <img src={`http://localhost:3007${item2.images}`} alt="pic" />
+                <img src={`${env_api}${item2.images}`} alt="pic" />
               </div>
               <div className="desc">
                 <p className="actor">{item2.actor_name}</p>

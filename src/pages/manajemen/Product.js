@@ -91,6 +91,7 @@ export default class Product extends React.Component {
     const checkboxBtn = require('../../assets/icons/CheckBtn.svg').default;
     const Garis = require('../../assets/icons/Garis.svg').default;
     const gClose = require('../../assets/icons/gray-close-icon.svg').default;
+    const env_api = process.env.REACT_APP_API_ENDPOINT;
 
     // Functions
     const formatToCurrency = (num) => {
@@ -339,10 +340,10 @@ export default class Product extends React.Component {
     // Renders
     return (
       <div className="container-manajemen-produk">
-        <Navbar />
+        <Navbar pageName="Daftar Produk"/>
 
         <div className="container-manajemen-produk-content">
-          <Header />
+          <Header pageName="Daftar Produk"/>
 
           <div className="product-list-outer-wrapper">
 
@@ -443,7 +444,7 @@ export default class Product extends React.Component {
                           <td className="product-description-item item-details">
                             <div className="img-and-name-wrapper">
                               <div className="img-wrapper">
-                                <img className="img-file" src={`http://localhost:3007${item.images}`} alt={item.name} />
+                                <img className="img-file" src={`${env_api}${item.images}`} alt={item.name} />
                               </div>
                               <div className="name-wrapper">
                                 <p className="name-title">{item.name}</p>
@@ -665,7 +666,7 @@ export default class Product extends React.Component {
                             <div className="product-description-item item-details">
                               <div className="img-and-name-wrapper">
                                 <div className="img-wrapper">
-                                  <img className="img-file" src={`http://localhost:3007${item.images}`} alt={item.name} />
+                                  <img className="img-file" src={`${env_api}${item.images}`} alt={item.name} />
                                 </div>
                                 <div className="name-wrapper">
                                   <p className="name-title">{item.name}</p>

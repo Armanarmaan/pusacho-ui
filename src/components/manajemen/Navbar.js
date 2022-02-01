@@ -14,7 +14,7 @@ function Navbar({pageName}) {
   const icon_products_mobile = require('../../assets/icons/produk_icon_mobile.svg').default;
   const icon_products_mobile_active = require('../../assets/icons/produk_icon_mobile_active.svg').default;
   const user_role = localStorage.getItem("role");
-  
+
   const [collapsed, setCollapsed] = useState(false);
   
   const collapseNavbar = () => {
@@ -44,27 +44,38 @@ function Navbar({pageName}) {
         </div>
         <div className="nav-items">
           <p className="sub-title">Menu</p>
+          {user_role !== '2' ? 
           <Link to="/manajemen">
-            <div className={`nav-item ${pageName === "Dashboard" ? "active" : ""} ${user_role === '2' ? "d-none" : ""}`}>
+            <div className={`nav-item ${pageName === "Dashboard" ? "active" : ""}`}>
               <img src={icon_dashboard} alt="dashboard" className="icon" />
               <p className="nav-label">Dashboard</p>
             </div>
           </Link>
+          :
+          null
+          }
           <Link to="/manajemen/produk">
             <div className={`nav-item ${pageName === "Daftar Produk" ? "active" : ""}`}>
               <img src={icon_products} alt="produk" className="icon" />
               <p className="nav-label">Produk</p>
             </div>
           </Link>
+          {user_role !== '2' ? 
           <p className={`sub-title ${user_role === '2' ? "d-none" : ""}`}>General</p>
+          : null}
+          {user_role !== '2' ? 
           <div className={`nav-item ${user_role === '2' ? "d-none" : ""}`}>
             <img src={icon_settings} alt="pengaturan" className="icon" />
             <p className="nav-label">Pengaturan</p>
           </div>
+          :
+          null
+          }
         </div>
       </div>
       <div className="mobile-view">
         <div className="nav-items-mobile">
+          {user_role !== '2' ? 
           <Link to="/manajemen">
             <div className={`nav-item-mobile ${pageName === "Dashboard" ? "active" : ""} ${user_role === '2' ? "d-none" : ""}`}>
               {pageName === "Dashboard" ? 
@@ -75,6 +86,7 @@ function Navbar({pageName}) {
               <p className="nav-label">Dashboard</p>
             </div>
           </Link>
+          : null}
           <Link to="/manajemen/produk">
             <div className={`nav-item-mobile ${pageName === "Daftar Produk" ? "active" : ""}`}>
               {pageName === "Daftar Produk" ? 
@@ -85,11 +97,14 @@ function Navbar({pageName}) {
               <p className="nav-label">Produk</p>
             </div>
           </Link>
-          {/* <p className={`sub-title ${user_role === '2' ? "d-none" : ""}`}>General</p>
-          <div className={`nav-item ${user_role === '2' ? "d-none" : ""}`}>
-            <img src={icon_settings} alt="pengaturan" className="icon" />
-            <p className="nav-label">Pengaturan</p>
-          </div> */}
+          {user_role === '2' ? 
+          <Link to="/lapangan">
+            <div className={`nav-item-mobile`}>
+              <img src={icon_products_mobile} alt="produk" className="icon" />
+              <p className="nav-label">Lapangan</p>
+            </div>
+          </Link>
+          : null }
         </div>
       </div>
     </div>
