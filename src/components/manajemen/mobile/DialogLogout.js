@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from "@mui/styles";
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
+import { Link } from 'react-router-dom';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -11,6 +12,7 @@ function DialogLogout({ showDialog, handleCloseDialog }) {
 
   const icon_logout = require('../../../assets/icons/icon-logout-mnjmn.svg').default;
   const line = require('../../../assets/icons/Garis.svg').default;
+  const gEdit = require('../../../assets/icons/gray-edit-icon.svg').default;
   
   const classes = useStyles();
   const submitLogout = () => {
@@ -29,10 +31,16 @@ function DialogLogout({ showDialog, handleCloseDialog }) {
           <div className="header-filter-mobile">
             <img src={line} alt="line-dialog" />
           </div>
-          <div className="filter-container"onClick={submitLogout}>
+          <div className="filter-container" onClick={submitLogout}>
             <img src={icon_logout} alt="logout" />
             <p>Keluar</p>
           </div>
+          <Link to="/manajemen/pengaturan">
+            <div className="filter-container" >
+              <img src={gEdit} alt="edit" className="setting"/>
+              <p>Pengaturan</p>
+            </div>
+          </Link>
         </div>
       </Dialog>
   );

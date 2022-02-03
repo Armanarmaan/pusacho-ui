@@ -213,6 +213,12 @@ function Dashboard() {
         keyword: keyword
       })
     }
+    else{
+      setParamsDashB({
+        ...paramsDashB,
+        keyword: ""
+      })
+    }
   }
   const handleCategoryChange = (event) => {
     let arrCategories = [];

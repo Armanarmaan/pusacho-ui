@@ -179,12 +179,12 @@ export default class Product extends React.Component {
         window.location.reload();
       });
     };
-    const deleteMultipleProduct = () => {
-      const listOfIds = checkedProducts.map(item => item.id);
-      await fetch(`${env_api}/manajemen/products`, { method: "DELETE", body: listOfIds }).then(() => {
-        window.location.reload();
-      });
-    };
+    // const deleteMultipleProduct = () => {
+    //   const listOfIds = checkedProducts.map(item => item.id);
+    //   await fetch(`${env_api}/manajemen/products`, { method: "DELETE", body: listOfIds }).then(() => {
+    //     window.location.reload();
+    //   });
+    // };
     
     const showCheckBox = () => {
       if ($(".product-list-table-head-mobile").hasClass("d-none") && $(".checkbox-item").hasClass("d-none")) {

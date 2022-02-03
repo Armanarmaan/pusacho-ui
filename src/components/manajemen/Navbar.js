@@ -64,10 +64,12 @@ function Navbar({pageName}) {
           <p className={`sub-title ${user_role === '2' ? "d-none" : ""}`}>General</p>
           : null}
           {user_role !== '2' ? 
-          <div className={`nav-item ${user_role === '2' ? "d-none" : ""}`}>
-            <img src={icon_settings} alt="pengaturan" className="icon" />
-            <p className="nav-label">Pengaturan</p>
-          </div>
+          <Link to="/manajemen/pengaturan">
+            <div className={`nav-item ${pageName === "Pengaturan" ? "active" : ""}`}>
+              <img src={icon_settings} alt="pengaturan" className="icon" />
+              <p className="nav-label">Pengaturan</p>
+            </div>
+          </Link>
           :
           null
           }
@@ -77,8 +79,11 @@ function Navbar({pageName}) {
         <div className="nav-items-mobile">
           {user_role !== '2' ? 
           <Link to="/manajemen">
-            <div className={`nav-item-mobile ${pageName === "Dashboard" ? "active" : ""} ${user_role === '2' ? "d-none" : ""}`}>
+            <div className={`nav-item-mobile ${pageName === "Dashboard" ? "active" : pageName === "Pengaturan" ? "active" : ""} ${user_role === '2' ? "d-none" : ""}`}>
               {pageName === "Dashboard" ? 
+              <img src={icon_dashboard_mobile_active} alt="dashboard" className="icon" />
+              :
+              pageName === "Pengaturan" ? 
               <img src={icon_dashboard_mobile_active} alt="dashboard" className="icon" />
               :
               <img src={icon_dashboard_mobile} alt="dashboard" className="icon" />
