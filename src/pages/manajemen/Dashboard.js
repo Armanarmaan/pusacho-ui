@@ -169,7 +169,6 @@ function Dashboard() {
       <td>{moment(item.created_at).format('D MMMM YYYY, HH:mm')}</td>
       <td>{currencyFormat(item.price)}</td>
       <td><div className={`status-wrapper ${item.activity_id === 1 ? 'masuk' : 'keluar'}`}>{item.activity_id === 1 ? 'MASUK' : 'KELUAR'}</div></td>
-      <td><div className="action-wrapper"><img src={icon_seemore} alt="sm" /></div></td>
     </tr>
   );
 
@@ -509,7 +508,6 @@ function Dashboard() {
                         <td>Tanggal</td>
                         <td>Harga</td>
                         <td>Keterangan</td>
-                        <td></td>
                       </tr>
                     </thead>
                     <tbody>
