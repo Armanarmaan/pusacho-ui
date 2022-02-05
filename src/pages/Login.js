@@ -86,7 +86,7 @@ function Login() {
           window.location.href = "/manajemen";
         }
         else if(respon.role === 1){
-          window.location.href = "/manajemen";
+          window.location.href = "/lapangan";
         }
         else if(respon.role === 2){
           window.location.href = "/manajemen/produk";
