@@ -68,10 +68,16 @@ export default function ScanDialog({ showScan, closeScan }) {
   const [scanStep, setScanStep] = useState(1);
   const nextScanStep = async (event) => {
     event.preventDefault();
-    let fetchedProduct = await fetch(`${env_api}/manajemen/products/${barcode}`)
+    let fetchedProduct = await fetch(`${env_api}/manajemen/products/${barcode}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth_token": localStorage.getItem("auth_token"),
+        "required_role": "0,2"
+      }
+    })
                     .then(response => response.json())
                     .catch(error => console.log(error));
-                    console.log("masuk sini tot?")
     if (fetchedProduct.code === 200) { 
       setProduct(fetchedProduct.data);
       setProductStock(fetchedProduct.data.stock);
