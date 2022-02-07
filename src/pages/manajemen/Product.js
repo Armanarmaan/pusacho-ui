@@ -352,7 +352,14 @@ export default class Product extends React.Component {
 
       const filterQuery = this.state.appliedFilter ? this.state.appliedFilter.map(item => item.value).join(",") : "";
       const query = `?query=${this.state.appliedQuery}&filter=${filterQuery}&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}&offset=${tempOffset}&limit=${this.state.limit}`;
-      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        }
+      })
         .then(response => response.json())
         .catch(error => console.log(error));
 
