@@ -31,7 +31,11 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
   const addCategory = async () => {
     const postCategory = await fetch(`${env_api}/manajemen/categories/add`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "auth_token": localStorage.getItem("auth_token"),
+        "required_role": "0,2"
+      },
       body: JSON.stringify({ category: categoryName })
     })
       .then(() => {

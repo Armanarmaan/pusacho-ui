@@ -82,7 +82,11 @@ export default function ScanDialog({ showScan, closeScan }) {
   const submitProduct = async () => {  
     const postProduct = await fetch(`${env_api}/manajemen/products/update/amount`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "auth_token": localStorage.getItem("auth_token"),
+        "required_role": "0,2"
+      },
       body: JSON.stringify({ id: product.id, amount: productStock })
     })
     .then(() => { 
