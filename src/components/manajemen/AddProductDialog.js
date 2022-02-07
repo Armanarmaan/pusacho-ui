@@ -27,7 +27,13 @@ export default function AddProductDialog({ showModal, closeModal }) {
   const fetchCategory = async () => {
     const env_api = process.env.REACT_APP_API_ENDPOINT;
 
-    const categories = await fetch(`${env_api}/manajemen/categories`)
+    const categories = await fetch(`${env_api}/manajemen/categories`, {
+      headers: { 
+        "Content-Type": "application/json", 
+        "auth_token": localStorage.getItem("auth_token"),
+        "required_role": "0,2"
+      },
+    })
       .then(response => response.json())
       .catch(error => console.log(error));
     setCategories(categories ? categories.data : []);
