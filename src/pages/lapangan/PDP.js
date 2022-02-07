@@ -26,12 +26,8 @@ function PDP() {
         stock: "",
         price: "",
         size:"",
-        images:""
+        images:"",
     });
-    // const [pengurangan, setPengurangan] = useState({
-    //     jumlah: "",
-    //     actorID: ""
-    // });
 
     const currencyFormat = (nominal) => {
         const number = Number(nominal);
@@ -43,17 +39,17 @@ function PDP() {
 
 
     const fetchItems = async () => {
-        // const token = localStorage.getItem('auth_token');
-        // const required_role = '0,';
-        // const params = `activeTab=${activeTab}`
+        const token = localStorage.getItem('auth_token');
+        const required_role = '1,2';
+        
         const id = searchParams.get("id")
         try {
             const datas = await fetch(`${env_api}/lapangan/produk?id=${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 'auth_token': token,
-                    // 'required_role': required_role
+                    'auth_token': token,
+                    'required_role': required_role
                 }
             }).then(response => response.json())
             // console.log(datas);
@@ -71,20 +67,21 @@ function PDP() {
 
     const handleSearch = async (event) => {
         event.preventDefault();
-        // const token = localStorage.getItem('auth_token');
-        // const required_role = '0,';
-        // const params = `activeTab=${activeTab}`
+        const token = localStorage.getItem('auth_token');
+        const required_role = '1,2';
+    
         const id = searchParams.get("id")
+        const actorID = searchParams.get("actorID")
         console.log(produk.stock - keyword >= 0);
         console.log(keyword);
         if (produk.stock - keyword >= 0 && keyword >= 1) {
             try {
-                const datas = await fetch(`${env_api}/lapangan/pengurangan?id=${id}&jumlah=${keyword}&actorID=4`, {
+                const datas = await fetch(`${env_api}/lapangan/pengurangan?id=${id}&jumlah=${keyword}&actorID=${actorID}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        // 'auth_token': token,
-                        // 'required_role': required_role
+                        'auth_token': token,
+                        'required_role': required_role
                     }
                 }).then(response => response.json())
                 console.log(datas);
@@ -102,8 +99,18 @@ function PDP() {
         }
     }
 
+    
+    // ROUTER 
     useEffect(() => {
-        fetchItems();
+        if (!localStorage.getItem("auth_token")) {
+            localStorage.clear();
+            window.location.href = "/";
+        }
+        else {
+            // verifyToken();
+            fetchItems();
+
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
