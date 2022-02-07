@@ -308,7 +308,7 @@ export default class Product extends React.Component {
         headers: {
           "Content-Type": "application/json",
           "auth_token": localStorage.getItem("auth_token"),
-          "required_role": "0,2"
+          "required_role": "0,1,2"
         }
       })
         .then(response => response.json())
