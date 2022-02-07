@@ -218,7 +218,14 @@ export default class Product extends React.Component {
 
       const filterQuery = this.state.appliedFilter ? this.state.appliedFilter.map(item => item.value).join(",") : "";
       const query = `?query=${string}&filter=${filterQuery}&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}`;
-      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        }
+      })
         .then(response => response.json())
         .catch(error => console.log(error));
 
@@ -231,7 +238,14 @@ export default class Product extends React.Component {
 
       const filterQuery = this.state.appliedFilter ? this.state.appliedFilter.map(item => item.value).join(",") : "";
       const query = `?query=${this.state.appliedQuery}&filter=${filterQuery}&sort=${sort.value}`;
-      const sortedProduct = await fetch(`${env_api}/manajemen/products${query}`)
+      const sortedProduct = await fetch(`${env_api}/manajemen/products${query}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        }
+      })
         .then(response => response.json())
         .catch(error => console.log(error));
 
@@ -245,7 +259,14 @@ export default class Product extends React.Component {
         const newAppliedFilter = [...this.state.appliedFilter, filter];
         const filterQuery = newAppliedFilter ? newAppliedFilter.map(item => item.value).join(",") : "";
         const query = `?query=${this.state.appliedQuery}&filter=${filterQuery}&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}`;
-        const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+        const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth_token": localStorage.getItem("auth_token"),
+            "required_role": "0,2"
+          }
+        })
           .then(response => response.json())
           .catch(error => console.log(error));
 
@@ -261,7 +282,14 @@ export default class Product extends React.Component {
 
       const filterQuery = newAppliedFilter ? newAppliedFilter.map(item => item.value).join(",") : "";
       const query = `?query=${this.state.appliedQuery}&filter=${filterQuery}&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}`;
-      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        }
+      })
         .then(response => response.json())
         .catch(error => console.log(error));
 
@@ -273,7 +301,14 @@ export default class Product extends React.Component {
 
       const newAppliedFilter = [];
       const query = `?query=${this.state.appliedQuery}&filter=&sort=${this.state.appliedSort ? this.state.appliedSort.value : ""}`;
-      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`)
+      const filteredProduct = await fetch(`${env_api}/manajemen/products${query}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        }
+      })
         .then(response => response.json())
         .catch(error => console.log(error));
 
