@@ -40,7 +40,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
   // Functions filling values of add product
   const [addProduct, setAddProduct] = useState({
     image: "",
-    id: "",
+    id: `PSCH${Date.now()}`,
     category_id: "",
     category_name: "",
     name: "",
@@ -84,10 +84,6 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
   const handleSizeInput = (val) => {
     setAddProduct({ ...addProduct, size: val });
-  };
-
-  const handleIdInput = (val) => {
-    setAddProduct({ ...addProduct, id: val });
   };
 
   const handleAmountInput = (val) => {
@@ -224,6 +220,11 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
       const submitProduct = await fetch(`${env_api}/manajemen/product`, {
         method: "POST",
+        headers: { 
+          "Content-Type": "application/json", 
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        },
         body: formData
       })
         .then(() => {
@@ -291,7 +292,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
               <div className="input-wrapper no-margin">
                 <p className="input-title">ID Produk</p>
-                <input className="input-field" type="text" value={addProduct.id} onInput={(val) => handleIdInput(val.target.value)} />
+                <input className="input-field" type="text" value={addProduct.id} readOnly />
               </div>
             </div>
 

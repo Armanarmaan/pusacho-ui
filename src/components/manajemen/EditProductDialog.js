@@ -284,6 +284,11 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
 
       const submitProduct =  await fetch(`${env_api}/manajemen/product/update`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        },
         body: formData
       })
       .then(() => {
