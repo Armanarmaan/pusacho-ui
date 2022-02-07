@@ -49,6 +49,10 @@
                     .imgproduk{
                         padding-right: 12px;
                         padding-bottom: 6px;
+                        .img{
+                            height: 40px;
+                            width: 40px;
+                        }
                     }
                     .desc{
                         display: flex;

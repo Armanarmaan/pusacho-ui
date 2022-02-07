@@ -18,23 +18,33 @@ function HomeLapangan() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    
+  
+
+  // ROUTER 
+  useEffect( () => {
+    if(!localStorage.getItem("auth_token")){
+      localStorage.clear();
+      window.location.href = "/";
+    }
+    else{
+      // verifyToken();
+      
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = async (event) => {
     event.preventDefault();
-    // const token = localStorage.getItem('auth_token');
-    // const required_role = '0,';
-    // const params = `activeTab=${activeTab}`
+    const token = localStorage.getItem('auth_token');
+    const required_role = '0,';
+   
     try {
       const datas = await fetch(`${env_api}/lapangan/produk?id=${keyword}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          // 'auth_token': token,
-          // 'required_role': required_role
+          'auth_token': token,
+          'required_role': required_role
         }
       }).then(response => response.json())
       console.log(datas);
