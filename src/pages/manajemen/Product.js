@@ -68,13 +68,27 @@ export default class Product extends React.Component {
       const auth_id = localStorage.getItem("id");
   
       // Fetch Product
-      const product = await fetch(`${env_api}/manajemen/products`)
+      const product = await fetch(`${env_api}/manajemen/products`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        }
+      })
         .then(response => response.json())
         .catch(error => console.log(error));
       this.setState({ ...this.state, products: product ? product.data : [], totalData: product.meta.total, currentPage: 1 });
   
       // Fetch Categories
-      const categories = await fetch(`${env_api}/manajemen/categories`)
+      const categories = await fetch(`${env_api}/manajemen/categories`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        }
+      })
         .then(response => response.json())
         .catch(error => console.log(error));
       this.setState({ ...this.state, categories: categories ? categories.data : [] });
