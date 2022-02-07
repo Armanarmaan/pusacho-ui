@@ -80,9 +80,16 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
     if (typeof window !== undefined) {
       const pid = localStorage.getItem("editId");
       if (pid) {
-        const product = await fetch(`${env_api}/manajemen/products/${pid}`)
-                                      .then(response => response.json())
-                                      .catch(error => console.log(error));
+        const product = await fetch(`${env_api}/manajemen/products/${pid}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth_token": localStorage.getItem("auth_token"),
+            "required_role": "0,2"
+          }
+        })
+          .then(response => response.json())
+          .catch(error => console.log(error));
         if (product) { 
           setProduct(product.data) 
           setOriginalProduct(product.data);
@@ -358,7 +365,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
             </div>
 
             <div className="dialog-button-wrapper">
-              <button className="btn btn-secondary">
+              <button className="btn btn-secondary" onClick={handleCloseModal}>
                 Batal
               </button>
               <button className="btn btn-primary" disabled={isDisabled()} onClick={nextAddStep}>
