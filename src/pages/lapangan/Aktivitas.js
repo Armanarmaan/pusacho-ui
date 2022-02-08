@@ -62,7 +62,7 @@ function Aktivitas() {
                                     <img src={`${env_api}${itemz.images}`} alt="exampleproduct" className="img" />
                                 </div>
                                 <div className="desc">
-                                    <div className="anda">{itemz.actor_name}</div>
+                                    <div className="anda">Anda</div>
                                     <div className="wording">{itemz.wording}</div>
                                     <div className="name">{itemz.name}</div>
                                     <div className="size">{itemz.size}</div>
