@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import Select from 'react-select'
+import React, { useState } from 'react';
 
 import Dialog from '@mui/material/Dialog';
 import { makeStyles } from "@mui/styles";
 
 import $ from "jquery";
-import { circularProgressClasses } from '@mui/material';
 
-export default function AddProductDialog({ showModal, closeModal }) {
+export default function AddCategoryDialog({ showModal, closeModal }) {
   const classes = useStyles();
 
   // Constant data
@@ -15,39 +13,28 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
   // Asset Imports
   const gClose = require('../../assets/icons/gray-close-icon.svg').default;
-  const bBlue = require('../../assets/icons/back-blue-arrow.svg').default;
-  const uploadImgPlaceholder = require('../../assets/icons/upload-img-placeholder.svg').default;
-  const rTrashCan = require('../../assets/icons/red-trashcan.svg').default;
   const Garis = require('../../assets/icons/Garis.svg').default;
+  const bBlue = require('../../assets/icons/back-blue-arrow.svg').default;
   const BackArrow = require('../../assets/icons/BackArrow.svg').default;
+  const rTrashCan = require('../../assets/icons/red-trashcan.svg').default;
 
-  // Fetch Data for page
-  const [categories, setCategories] = useState([]);
+  const uploadImgPlaceholder = require('../../assets/icons/upload-img-placeholder.svg').default;
 
-  const fetchCategory = async () => {
-    const env_api = process.env.REACT_APP_API_ENDPOINT;
-
-    const categories = await fetch(`${env_api}/manajemen/categories`, {
-      headers: { 
-        "Content-Type": "application/json", 
-        "auth_token": localStorage.getItem("auth_token"),
-        "required_role": "0,2"
-      },
-    })
-      .then(response => response.json())
-      .catch(error => console.log(error));
-    setCategories(categories ? categories.data : []);
+  // Category Name
+  const [categoryName, setCategoryName] = useState("");
+  const handleCategory = (val) => {
+    setCategoryName(val);
   };
 
-  useEffect(() => {
-    fetchCategory();
-  }, [showModal]);
+  const isDisabled = () => {
+    if (addStep == 1) return !(categoryName !== "");
+  };
 
-  // Functions filling values of add product
+  // Product Datas
+  const [categories, setCategories] = useState([]);
   const [addProduct, setAddProduct] = useState({
     image: "",
     id: `PSCH${Date.now()}`,
-    category_id: "",
     category_name: "",
     name: "",
     size: "",
@@ -61,6 +48,48 @@ export default function AddProductDialog({ showModal, closeModal }) {
     margins: [""]
   });
 
+  // Supplier add / remove
+  const [supplierCount, setSupplierCount] = useState(1);
+  const addSupplierAmount = () => {
+    const amount = supplierCount;
+    setSupplierCount(amount + 1);
+    setAddProduct({
+      ...addProduct,
+      suppliers: [...addProduct.suppliers, ""],
+      modals: [...addProduct.modals, ""],
+      modal_nett_per: [...addProduct.modal_nett_per, ""],
+      logistic_costs: [...addProduct.logistic_costs, ""],
+    });
+  };
+
+  const [chosenSupplier, setChosenSupplier] = useState([]);
+  const handleChosenSupplier = (val) => {
+    let chosenArray = chosenSupplier;
+
+    if (!chosenArray.includes(val)) chosenArray = [...chosenArray, val];
+    else chosenArray = chosenArray.filter(item => item !== val);
+
+    setChosenSupplier(chosenArray);
+  };
+
+  const deleteChosenSupplier = () => {
+    const deleteList = chosenSupplier;
+    let newProduct = addProduct;
+
+    // Delete Item
+    deleteList.forEach(item => {
+      $(`.supplier-wrapper-${item}`).remove();
+      newProduct.suppliers.splice(item, 1)
+      newProduct.modals.splice(item, 1)
+      newProduct.modal_nett_per.splice(item, 1)
+      newProduct.logistic_costs.splice(item, 1)
+    });
+
+    setAddProduct(newProduct);
+    setChosenSupplier([]);
+  };
+
+  // Function
   const uploadImage = () => {
     const fileInput = $("#upload-image")[0];
     const fileReader = new FileReader();
@@ -124,69 +153,15 @@ export default function AddProductDialog({ showModal, closeModal }) {
     setAddProduct({ ...addProduct, modal_nett_per: newModalNetPerr });
   };
 
-  // Supplier add / remove
-  const [supplierCount, setSupplierCount] = useState(1);
-  const addSupplierAmount = () => {
-    const amount = supplierCount;
-    setSupplierCount(amount + 1);
-    setAddProduct({
-      ...addProduct,
-      suppliers: [...addProduct.suppliers, ""],
-      modals: [...addProduct.modals, ""],
-      modal_nett_per: [...addProduct.modal_nett_per, ""],
-      logistic_costs: [...addProduct.logistic_costs, ""],
-    });
-  };
-
-  const [chosenSupplier, setChosenSupplier] = useState([]);
-  const handleChosenSupplier = (val) => {
-    let chosenArray = chosenSupplier;
-
-    if (!chosenArray.includes(val)) chosenArray = [...chosenArray, val];
-    else chosenArray = chosenArray.filter(item => item !== val);
-
-    setChosenSupplier(chosenArray);
-  };
-
-  const deleteChosenSupplier = () => {
-    const deleteList = chosenSupplier;
-    let newProduct = addProduct;
-
-    // Delete Item
-    deleteList.forEach(item => {
-      $(`.supplier-wrapper-${item}`).remove();
-      newProduct.suppliers.splice(item, 1)
-      newProduct.modals.splice(item, 1)
-      newProduct.modal_nett_per.splice(item, 1)
-      newProduct.logistic_costs.splice(item, 1)
-    });
-
-    setAddProduct(newProduct);
-    setChosenSupplier([]);
-  };
-
-  // Steps
+  // Add Step
   const [addStep, setAddStep] = useState(1);
-
-  const isDisabled = () => {
-    if (addStep === 1) {
-      return !(addProduct.category !== "") ||
-        !(addProduct.name !== "") ||
-        !(addProduct.size !== "") ||
-        !(addProduct.id !== "")
-    } else {
-      return !(addProduct.suppliers.length > 0) ||
-        !(addProduct.modals.length > 0) ||
-        !(addProduct.modal_nett.length > 0) ||
-        !(addProduct.price > 0) ||
-        !(addProduct.margins.length > 0)
-    }
-  }
-
-  const nextAddStep = async () => {
-    if (addStep === 1) {
+  const handleNextStep = async () => {
+    if (addStep == 1) {
+      setAddProduct({ ...addProduct, category_name: categoryName });
       setAddStep(2);
-    } else {
+    }
+    else if (addStep == 2) setAddStep(3);
+    else {
       const modal_nett = [];
       const margins = [];
 
@@ -207,7 +182,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
       const submitProductData = {
         id: addProduct.id,
-        category: addProduct.category_id,
+        category_name: addProduct.category_name,
         name: addProduct.name,
         size: addProduct.size,
         price: addProduct.price,
@@ -224,7 +199,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
       formData.append("data", JSON.stringify(submitProductData));
       formData.append("image", addProduct.image, addProduct.id);
 
-      const submitProduct = await fetch(`${env_api}/manajemen/product`, {
+      const submitProduct = await fetch(`${env_api}/category/product/add`, {
         method: "POST",
         headers: { 
           "auth_token": localStorage.getItem("auth_token"),
@@ -235,7 +210,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
         .then(() => {
           closeModal();
           setAddStep(1);
-          setAddProduct({ id: "", category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
+          setAddProduct({ id: "", category_name: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
           setSupplierCount(1);
           setChosenSupplier([]);
           window.location.reload();
@@ -243,31 +218,32 @@ export default function AddProductDialog({ showModal, closeModal }) {
     }
   };
 
-  const backAddStep = () => {
-    if (addStep === 2) setAddStep(1);
+  const backAddStep = async () => {
   };
 
-  // Close Modal
+  // Back Step
   const handleCloseModal = (event) => {
+    event.preventDefault();
+    setCategoryName("");
     closeModal();
   };
-
 
   return (
     <Dialog
       open={showModal}
       fullWidth={true}
-      classes={{ container: classes.root, paper: classes.paper }}
+      classes={{ container: classes.root, paper: addStep != 3 ? classes.paper : classes.paper2 }}
       onClose={handleCloseModal}
     >
-      <div className="add-product-wrapper">
-        {addStep === 1 ?
-          <div className="add-product-first-step">
-            <div className="garis">
-              <img src={Garis} alt="garis" className="img" />
-            </div>
+      <div className="add-cat-prod-wrapper">
+        <div className="garis">
+          <img src={Garis} alt="garis" className="img" />
+        </div>
+
+        { addStep == 1 ?
+          <div className="add-cat-prod-step-1">
             <div className="dialog-header">
-              <h1 className="dialog-title">Tambah Produk</h1>
+              <h1 className="dialog-title">Tambah Kategori</h1>
               <button className="btn btn-close" onClick={handleCloseModal}>
                 <img src={gClose} alt="Close Icon" />
               </button>
@@ -275,54 +251,88 @@ export default function AddProductDialog({ showModal, closeModal }) {
 
             <div className="dialog-body">
               <p className="dialog-subtitle">
-                Tambah jenis produk baru terlebih dahulu, lalu Anda bisa menambahkan varian warna, modal, modal nett, harga jual dan supplier.
+                Tambah jenis kategori agar mempermudah Anda melihat stok barang
               </p>
 
-              <div className="input-wrapper no-margin">
-                <p className="input-title">Kategori</p>
-                <Select placeholder="" options={categories} classNamePrefix="category-select-add" value={{ value: addProduct.category_id, label: addProduct.category_name }} onChange={(val) => handleCategoryInput(val)} />
-              </div>
-              <p className="dialog-second-subtitle">
-                Pilih kategori sesuai dengan produk yang ingin ditambahkan
-              </p>
-
-              <div className="input-wrapper">
-                <p className="input-title">Nama Produk</p>
-                <input className="input-field" type="text" value={addProduct.name} onInput={(val) => handleNameInput(val.target.value)} />
-              </div>
-
-              <div className="input-wrapper">
-                <p className="input-title">Masukkan Ukuran</p>
-                <input className="input-field" type="text" value={addProduct.size} onInput={(val) => handleSizeInput(val.target.value)} />
-              </div>
-
-              <div className="input-wrapper no-margin">
-                <p className="input-title">ID Produk</p>
-                <input className="input-field" type="text" value={addProduct.id} readOnly />
+              <div className="input-category-wrapper">
+                <p className="input-category-title">Nama Kategori</p>
+                <input className="input-category-field" type="text" value={categoryName} onInput={(val) => handleCategory(val.target.value)} />
               </div>
             </div>
 
             <div className="dialog-button-wrapper">
-              <button className="btn btn-secondary">
+              <button className="btn btn-secondary" onClick={() => handleCloseModal()}>
                 Batal
               </button>
-              <button className="btn btn-primary" disabled={isDisabled()} onClick={nextAddStep}>
+              <button className="btn btn-primary" disabled={isDisabled()} onClick={handleNextStep}>
                 Selanjutnya
               </button>
             </div>
             <div className="dialog-button-wrapper-mobile">
-              <button className="btn btn-primary" disabled={isDisabled()} onClick={nextAddStep}>
+              <button className="btn btn-primary" disabled={isDisabled()} onClick={handleNextStep}>
                 Selanjutnya
               </button>
             </div>
           </div>
           :
-          <Dialog
-            open={showModal}
-            fullWidth={true}
-            classes={{ container: classes.root, paper: classes.paper20 }}
-            onClose={handleCloseModal}
-          >
+          addStep == 2 ?
+            <div className="add-cat-prod-step-2">
+              <div className="add-product-first-step">
+                <div className="garis">
+                  <img src={Garis} alt="garis" className="img" />
+                </div>
+                <div className="dialog-header">
+                  <h1 className="dialog-title">Tambah Produk</h1>
+                  <button className="btn btn-close" onClick={handleCloseModal}>
+                    <img src={gClose} alt="Close Icon" />
+                  </button>
+                </div>
+
+                <div className="dialog-body">
+                  <p className="dialog-subtitle">
+                    Tambah jenis produk baru terlebih dahulu, lalu Anda bisa menambahkan varian warna, modal, modal nett, harga jual dan supplier.
+                  </p>
+
+                  <div className="input-wrapper no-margin">
+                    <p className="input-title">Kategori</p>
+                    <input className="input-field" value={categoryName} readOnly />
+                  </div>
+                  <p className="dialog-second-subtitle">
+                    Pilih kategori sesuai dengan produk yang ingin ditambahkan
+                  </p>
+
+                  <div className="input-wrapper">
+                    <p className="input-title">Nama Produk</p>
+                    <input className="input-field" type="text" value={addProduct.name} onInput={(val) => handleNameInput(val.target.value)} />
+                  </div>
+
+                  <div className="input-wrapper">
+                    <p className="input-title">Masukkan Ukuran</p>
+                    <input className="input-field" type="text" value={addProduct.size} onInput={(val) => handleSizeInput(val.target.value)} />
+                  </div>
+
+                  <div className="input-wrapper no-margin">
+                    <p className="input-title">ID Produk</p>
+                    <input className="input-field" type="text" value={addProduct.id} readOnly />
+                  </div>
+                </div>
+
+                <div className="dialog-button-wrapper">
+                  <button className="btn btn-secondary">
+                    Batal
+                  </button>
+                  <button className="btn btn-primary" disabled={isDisabled()} onClick={handleNextStep}>
+                    Selanjutnya
+                  </button>
+                </div>
+                <div className="dialog-button-wrapper-mobile">
+                  <button className="btn btn-primary" disabled={isDisabled()} onClick={handleNextStep}>
+                    Selanjutnya
+                  </button>
+                </div>
+              </div>
+            </div>
+          :
             <div className="add-product-second-step">
 
               <div className="dialog-header">
@@ -429,20 +439,19 @@ export default function AddProductDialog({ showModal, closeModal }) {
                 <button className="btn btn-secondary">
                   Tambahkan Varian Nanti
                 </button>
-                <button className="btn btn-primary" disabled={isDisabled()} onClick={nextAddStep}>
+                <button className="btn btn-primary" disabled={isDisabled()} onClick={handleNextStep}>
                   Simpan
                 </button>
               </div>
               <div className="dialog-button-wrapper-mobile">
-                <button className="btn btn-primary" disabled={isDisabled()} onClick={nextAddStep}>
+                <button className="btn btn-primary" disabled={isDisabled()} onClick={handleNextStep}>
                   Simpan
                 </button>
               </div>
             </div>
-          </Dialog>
         }
+        
       </div>
-
     </Dialog>
   )
 };
@@ -454,19 +463,19 @@ const useStyles = makeStyles(() => ({
     }
   },
   paper: {
-    minWidth: "1112px",
+    minWidth: "694px",
     "@media (max-width: 771px)": {
       width: "100%",
       margin: 0,
       maxWidth: "unset",
     }
   },
-  paper20: {
+  paper2: {
     minWidth: "1112px",
     "@media (max-width: 771px)": {
       width: "100%",
       margin: 0,
       maxWidth: "unset",
     }
-  },
+  }
 }));

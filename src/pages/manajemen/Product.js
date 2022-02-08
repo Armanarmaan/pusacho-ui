@@ -19,10 +19,12 @@ import Header from '../../components/manajemen/Header';
 import ScanDialog from '../../components/manajemen/ScanDialog';
 import AddCategoryDialog from '../../components/manajemen/AddCategoryDialog';
 import AddProductDialog from '../../components/manajemen/AddProductDialog';
+import AddCatProdDialog from '../../components/manajemen/AddCatProdDialog.js';
 import EditProductDialog from '../../components/manajemen/EditProductDialog';
 import moment from 'moment';
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { width } from '@mui/system';
+import { FormControlUnstyledContext } from '@mui/material';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default class Product extends React.Component {
@@ -47,6 +49,7 @@ export default class Product extends React.Component {
       showScan: false,
       showAddCategory: false,
       showAddProduct: false,
+      showAddCatProd: false,
       showEditProduct: false,
       emptyCategory: "",
       editProductId: "",
@@ -152,14 +155,12 @@ export default class Product extends React.Component {
     };
     const markProduct = (product) => {
       let checkedProducts = this.state.checkedProducts;
-      let IDs = [];
-      checkedProducts.forEach((itemz) => {
-        IDs.push(itemz.id);
-      })
 
+      let IDs = [];
+      checkedProducts.forEach((itemz) => { IDs.push(itemz.id); })
       if (IDs.includes(product.id)) checkedProducts = checkedProducts.filter(item => item.id !== product.id);
-      
       else checkedProducts.push(product);
+
       this.setState({ ...this.state, checkedProducts: checkedProducts });
     };
     const showAddOptions = () => {
@@ -171,6 +172,7 @@ export default class Product extends React.Component {
     const choseAddOptions = (opt) => {
       if (opt === "addCategory") this.setState({ ...this.state, showAddCategory: true });
       if (opt === "addProduct") this.setState({ ...this.state, showAddProduct: true });
+      if (opt === "addBoth") this.setState({ ...this.state, showAddCatProd: true });
       $(".add-button-options").addClass("d-none");
     };
     const hideAddOptions = () => {
@@ -189,16 +191,33 @@ export default class Product extends React.Component {
     };
     const deleteProduct = async (id) => {
       const listOfIds = [id];
-      await fetch(`${env_api}/manajemen/products`, { method: "DELETE", body: listOfIds }).then(() => {
+      await fetch(`${env_api}/manajemen/delete/product`, { 
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        },
+        body: JSON.stringify({ listOfIds: listOfIds })
+      }).then(() => {
         window.location.reload();
       });
     };
-    // const deleteMultipleProduct = () => {
-    //   const listOfIds = checkedProducts.map(item => item.id);
-    //   await fetch(`${env_api}/manajemen/products`, { method: "DELETE", body: listOfIds }).then(() => {
-    //     window.location.reload();
-    //   });
-    // };
+    const deleteMultipleProduct = async () => {
+      const checkedProducts = this.state.checkedProducts;
+      const listOfIds = checkedProducts.map(item => item.id);
+      await fetch(`${env_api}/manajemen/delete/product`, { 
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        },
+        body: JSON.stringify({ listOfIds: listOfIds })
+      }).then(() => {
+        window.location.reload();
+      });
+    };
     
     const showCheckBox = () => {
       if ($(".product-list-table-head-mobile").hasClass("d-none") && $(".checkbox-item").hasClass("d-none")) {
@@ -331,6 +350,10 @@ export default class Product extends React.Component {
       this.setState({ ...this.state, showAddProduct: false });
     };
 
+    const handleCloseAddCatProd = () => {
+      this.setState({ ...this.state, showAddProduct: false });
+    };
+
     const handleCloseEditProduct = () => {
       if (typeof window !== "undefined") localStorage.removeItem("editId");
       this.setState({ ...this.state, showEditProduct: false });
@@ -445,8 +468,8 @@ export default class Product extends React.Component {
                         <li className="button-options" onClick={() => choseAddOptions("addProduct")}>
                           <p className="option-text">Tambah Produk</p>
                         </li>
-                        <li className="button-options">
-                          <p className="option-text" onClick={() => choseAddOptions("addBoth")}>Tambah Sekaligus</p>
+                        <li className="button-options" onClick={() => choseAddOptions("addBoth")}>
+                          <p className="option-text">Tambah Sekaligus</p>
                         </li>
                       </ul>
                     </div>
@@ -482,7 +505,7 @@ export default class Product extends React.Component {
                           <div className="button-inner-wrappers">
                             <p className="amount-indicators">{this.state.checkedProducts.length} Produk dipilih</p>
                             <button className="btn btn-outer-primary" onClick={() => handlePrintBarcode(false, null)}>Cetak Barcode Sekaligus</button>
-                            <button className="btn btn-outer-secondary">
+                            <button className="btn btn-outer-secondary" onClick={() => deleteMultipleProduct()}>
                               <img src={rTrashCan} className="trash-icon" alt="Red Trashcan" />
                               Hapus
                             </button>
@@ -506,7 +529,7 @@ export default class Product extends React.Component {
                       <tbody className={`product-description product-description-${index}`} key={index}>
                         <tr className="product-description-highlights">
                           <td className="product-description-item">
-                            <input type="checkbox" className={`checkbox-item checkbox-${item.id}`} onClick={() => markProduct(item.id)} />
+                            <input type="checkbox" className={`checkbox-item checkbox-${item.id}`} onClick={() => markProduct(item)} />
                           </td>
                           <td className="product-description-item item-details">
                             <div className="img-and-name-wrapper">
@@ -589,20 +612,20 @@ export default class Product extends React.Component {
                                         <div className="input-prepend">
                                           <p className="prepend-text">Rp</p>
                                         </div>
-                                        <input type="text" value={item.price} readOnly />
+                                        <input type="text" value={item} readOnly />
                                       </div>
                                     ))}
                                   </td>
                                   <td className="product-modal-nett">
-                                    {item.modal_nett.map((item, index) => (
+                                    {item.modal_nett_per.map((mper, index) => (
                                       <div className="product-modal-nett-inner" key={index}>
                                         <div className="input-precentage">
-                                          <input type="text" />
+                                          <input type="text" value={mper} readOnly/>
                                           <div className="input-append">
                                             <p className="append-text">%</p>
                                           </div>
                                         </div>
-                                        <p className="price">{formatToCurrency(item.price)}</p>
+                                        <p className="price">{formatToCurrency(item.modal_nett[index])}</p>
                                       </div>
                                     ))}
                                   </td>
@@ -612,7 +635,7 @@ export default class Product extends React.Component {
                                         <div className="input-prepend">
                                           <p className="prepend-text">Rp</p>
                                         </div>
-                                        <input type="text" value={item.price} readOnly />
+                                        <input type="text" value={item} readOnly />
                                       </div>
                                     ))}
                                   </td>
@@ -700,6 +723,7 @@ export default class Product extends React.Component {
 
                   <table className="product-list-table">
                     <thead className="product-list-table-head-mobile d-none">
+                      { console.log(this.state.checkedProducts) }
                       {this.state.checkedProducts && this.state.checkedProducts.length > 0 ?
                         <tr>
                           <th className="head-checkbox"><input type="checkbox" className="checkbox-head" onClick={() => markAllProduct()} /></th>
@@ -811,10 +835,12 @@ export default class Product extends React.Component {
 
         </div>
 
-        <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan} auth={this.state.authId}/>
+        <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan} editFunction={editProduct} auth={this.state.authId}/>
         <AddCategoryDialog showModal={this.state.showAddCategory} closeModal={handleCloseAddCategory} />
         <AddProductDialog showModal={this.state.showAddProduct} closeModal={handleCloseAddProduct} />
         <EditProductDialog showModal={this.state.showEditProduct} closeModal={handleCloseEditProduct} auth={this.state.authId}/>
+        <AddCatProdDialog showModal={this.state.showAddCatProd} closeModal={handleCloseAddCatProd} auth={this.state.authId}/>
+        
       </div>
     )
   }

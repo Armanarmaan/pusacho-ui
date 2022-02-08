@@ -5,7 +5,7 @@ import { makeStyles } from "@mui/styles";
 
 import $ from "jquery";
 
-export default function ScanDialog({ showScan, closeScan }) {
+export default function ScanDialog({ showScan, closeScan, editFunction }) {
   const classes = useStyles();
 
   // Asset Imports
@@ -62,28 +62,36 @@ export default function ScanDialog({ showScan, closeScan }) {
   const handleProductStock = (type) => {
     if (type === "-") setProductStock(productStock - 1);
     if (type === "+") setProductStock(productStock + 1);
-  }
+  };
+
+  // Edit Product
+  const editFromScan = (id) => {
+    if (typeof window !== undefined) localStorage.setItem("editId", id);
+    editFunction(id);
+  };
 
   // Steps
   const [scanStep, setScanStep] = useState(1);
   const nextScanStep = async (event) => {
     event.preventDefault();
-    let fetchedProduct = await fetch(`${env_api}/manajemen/products/${barcode}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "auth_token": localStorage.getItem("auth_token"),
-        "required_role": "0,2"
-      }
-    })
-                    .then(response => response.json())
-                    .catch(error => console.log(error));
-    if (fetchedProduct.code === 200) { 
-      setProduct(fetchedProduct.data);
-      setProductStock(fetchedProduct.data.stock);
-      setScanStep(2); 
-    } 
+    if (barcode.length > 0) {
+      let fetchedProduct = await fetch(`${env_api}/manajemen/products/${barcode}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth_token": localStorage.getItem("auth_token"),
+          "required_role": "0,2"
+        }
+      })
+        .then(response => response.json())
+        .catch(error => console.log(error));
 
+      if (fetchedProduct) { 
+        setProduct(fetchedProduct.data);
+        setProductStock(fetchedProduct.data.stock);
+        setScanStep(2); 
+      }
+    } 
   };
   const submitProduct = async () => {  
     const postProduct = await fetch(`${env_api}/manajemen/products/update/amount`, {
@@ -120,7 +128,6 @@ export default function ScanDialog({ showScan, closeScan }) {
 
   // Close Modal
   const handleCloseScan = (event) => {
-    event.preventDefault();
     setProduct();
     setProductStock(0);
     setScanStep(1);
@@ -136,7 +143,6 @@ export default function ScanDialog({ showScan, closeScan }) {
       <div className="dialog-scan-wrapper">
         {scanStep === 1 ?
           <div className="scan-first-step">
-            <form onSubmit={nextScanStep}>
               <div className="dialog-header">
                 <h1 className="dialog-title">Scan Barcode</h1>
                 <button className="btn btn-close" onClick={handleCloseScan}>
@@ -148,16 +154,17 @@ export default function ScanDialog({ showScan, closeScan }) {
                 <p className="dialog-subtitle">
                   Scan barcode yang ada di produk Anda untuk melihat data produk, atau memasukkan kode barcode di kolom bawah ini.
                 </p>
-
+          
                 <img className="dialog-icon" src={scanBarcode} alt="Scan Barcode Illustration" />
-                <input className="dialog-input-code" type="text" placeholder="Masukkan kode barcode" onInput={(val) => handleBarcode(val.target.value)}/>
+                <form className="dialog-input-form" onSubmit={nextScanStep}>
+                  <input className="dialog-input-code" type="text" placeholder="Masukkan kode barcode" onInput={(val) => handleBarcode(val.target.value)}/>
+                </form>
 
               </div>
 
               <div className="dialog-button-wrapper">
-                <button className="btn btn-primary" disabled={isScanButtonDisabled()}>Selanjutnya</button>
+                <button className="btn btn-primary" disabled={isScanButtonDisabled()} onClick={nextScanStep}>Selanjutnya</button>
               </div>
-            </form>
           </div>
           :
           <div className="scan-second-step">
@@ -314,7 +321,7 @@ export default function ScanDialog({ showScan, closeScan }) {
 
                 </div>
 
-                <div className="body-edit-wrapper">
+                <div className="body-edit-wrapper" onClick={() => editFromScan(product.id)}>
                   <img className="edit-icon" src={editIcon} alt="Edit Pencil" />
                   <p className="edit-text">Ubah detil produk</p>
                 </div>
