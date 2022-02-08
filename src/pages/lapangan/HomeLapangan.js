@@ -36,7 +36,7 @@ function HomeLapangan() {
   const handleSearch = async (event) => {
     event.preventDefault();
     const token = localStorage.getItem('auth_token');
-    const required_role = '0,';
+    const required_role = '1,2';
    
     try {
       const datas = await fetch(`${env_api}/lapangan/produk?id=${keyword}`, {

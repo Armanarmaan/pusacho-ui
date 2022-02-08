@@ -71,7 +71,7 @@ function PDP() {
         const required_role = '1,2';
     
         const id = searchParams.get("id")
-        const actorID = searchParams.get("actorID")
+        const actorID = localStorage.getItem("id");
         console.log(produk.stock - keyword >= 0);
         console.log(keyword);
         if (produk.stock - keyword >= 0 && keyword >= 1) {

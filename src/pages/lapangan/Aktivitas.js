@@ -32,7 +32,7 @@ function Aktivitas() {
         const token = localStorage.getItem('auth_token');
         const required_role = '1,2';
 
-        const id = searchParams.get("id")
+        const id = localStorage.getItem("id");
         try {
             const datas = await fetch(`${env_api}/lapangan/aktivitas?id=${id}`, {
                 method: 'GET',
@@ -62,7 +62,7 @@ function Aktivitas() {
                                     <img src={`${env_api}${itemz.images}`} alt="exampleproduct" className="img" />
                                 </div>
                                 <div className="desc">
-                                    <div className="anda">Anda</div>
+                                    <div className="anda">{itemz.actor_name}</div>
                                     <div className="wording">{itemz.wording}</div>
                                     <div className="name">{itemz.name}</div>
                                     <div className="size">{itemz.size}</div>
