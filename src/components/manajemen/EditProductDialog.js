@@ -271,22 +271,22 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         id: product.id,
         category: product.category_id,
         name: product.name,
-        orig_name: product.orig_name,
+        orig_name: originalProduct.name,
         size: product.size,
         price: product.price,
-        orig_price: product.orig_price,
+        orig_price: originalProduct.price,
         stock: product.stock,
-        orig_stock: product.orig_stock,
+        orig_stock: originalProduct.stock,
         suppliers: product.suppliers.join("|"),
-        orig_suppliers: product.orig_suppliers,
+        orig_suppliers: originalProduct.suppliers,
         modals: product.modals.join("|"),
-        orig_modal: product.orig_modal,
+        orig_modal: originalProduct.modals,
         modal_nett_per: product.modal_nett_per.join("|"),
-        orig_modal_nett_per: product.orig_modal_nett_per,
+        orig_modal_nett_per: originalProduct.modal_nett_per,
         modal_nett: modal_nett.join("|"),
         orig_modal_nett: originalProduct.modal_nett,
         logistic_costs: product.logistic_costs.join("|"),
-        orig_logistic: product.orig_logistic,
+        orig_logistic: originalProduct.logistic_costs,
         margins: margins.join("|"),
         orig_margin: originalProduct.margins
       };
@@ -298,7 +298,6 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
       const submitProduct =  await fetch(`${env_api}/manajemen/product/update`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           "auth_token": localStorage.getItem("auth_token"),
           "required_role": "0,2"
         },
