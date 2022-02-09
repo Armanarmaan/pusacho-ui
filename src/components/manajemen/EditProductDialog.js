@@ -254,7 +254,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
       // Modal Nett Calc.
       product.modal_nett_per.forEach((precentage, index) => {
         let newModal = product.modals[index];
-        const precentageList = precentage.split("|");
+        const precentageList = precentage.split("+");
         precentageList.map(percent => {
           newModal = newModal - (newModal * (percent/100)) 
         })
@@ -304,17 +304,24 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         body: formData
       })
       .then(() => {
+        if ($(window).width() > 770) $(".ScanDialog").removeClass("d-none");
         closeModal();
       }).catch(error => console.log(error));
     }
   };
 
   const backAddStep = () => {
-    if (addStep === 2) setAddStep(1);
+    if (addStep === 2) setAddStep(1)
+    else {
+      if ($(window).width() > 770) $(".ScanDialog").removeClass("d-none");
+      setAddStep(1);
+      closeModal();
+    }
   };
 
    // Close Modal
    const handleCloseModal = (event) => {
+    if ($(window).width() > 770) $(".ScanDialog").removeClass("d-none");
     closeModal();
   };
 
@@ -323,6 +330,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
       open={showModal}
       fullWidth={true}
       classes={{ container: classes.root, paper: addStep === 1 ? classes.paper : classes.paper2 }}
+      className={"EditDialog"}
     >
       <div className="edit-product-wrapper">
         { addStep === 1 ? 
@@ -482,7 +490,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
             </div>
 
             <div className="dialog-button-wrapper">
-              <button className="btn btn-secondary">
+              <button className="btn btn-secondary" onClick={backAddStep}>
                 Batalkan
               </button>
               <button className="btn btn-primary" disabled={isDisabled()} onClick={nextAddStep}>

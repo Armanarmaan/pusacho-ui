@@ -193,7 +193,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
       // Modal Nett Calc.
       addProduct.modal_nett_per.forEach((precentage, index) => {
         let newModal = addProduct.modals[index];
-        const precentageList = precentage.split("|");
+        const precentageList = precentage.split("+");
         precentageList.map(percent => {
           newModal = newModal - (newModal * (percent / 100))
         })
@@ -244,11 +244,18 @@ export default function AddProductDialog({ showModal, closeModal }) {
   };
 
   const backAddStep = () => {
-    if (addStep === 2) setAddStep(1);
+    if (addStep === 2) setAddStep(1)
+    else {
+      setAddStep(1);
+      setAddProduct({ id: "", category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
+      setSupplierCount(1);
+      setChosenSupplier([]);
+      closeModal();
+    }
   };
 
   // Close Modal
-  const handleCloseModal = (event) => {
+  const handleCloseModal = () => {
     closeModal();
   };
 
@@ -303,7 +310,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
             </div>
 
             <div className="dialog-button-wrapper">
-              <button className="btn btn-secondary">
+              <button className="btn btn-secondary" onClick={backAddStep}>
                 Batal
               </button>
               <button className="btn btn-primary" disabled={isDisabled()} onClick={nextAddStep}>
@@ -426,7 +433,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
               </div>
 
               <div className="dialog-button-wrapper">
-                <button className="btn btn-secondary">
+                <button className="btn btn-secondary" onClick={backAddStep}>
                   Tambahkan Varian Nanti
                 </button>
                 <button className="btn btn-primary" disabled={isDisabled()} onClick={nextAddStep}>

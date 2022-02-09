@@ -168,7 +168,7 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
       // Modal Nett Calc.
       addProduct.modal_nett_per.forEach((precentage, index) => {
         let newModal = addProduct.modals[index];
-        const precentageList = precentage.split("|");
+        const precentageList = precentage.split("+");
         precentageList.map(percent => {
           newModal = newModal - (newModal * (percent / 100))
         })
@@ -199,7 +199,7 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
       formData.append("data", JSON.stringify(submitProductData));
       formData.append("image", addProduct.image, addProduct.id);
 
-      const submitProduct = await fetch(`${env_api}/category/product/add`, {
+      const submitProduct = await fetch(`${env_api}/manajemen/category/product/add`, {
         method: "POST",
         headers: { 
           "auth_token": localStorage.getItem("auth_token"),

@@ -252,6 +252,7 @@
                     padding: 20px 25px;
                     border-radius: 10px;
                     box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+                    z-index: 1;
                     .action-item-wrapper {
                       list-style-type: none;
                       margin: 0;
@@ -387,11 +388,12 @@
                               width: 100%;
                               border: none;
                               background: none;
-                              padding: 11px 16px;
+                              padding: 5px 8px;
                               border-radius: 0px;
                               border-top-left-radius: 8px;
                               border-bottom-left-radius: 8px;
                               outline: none;
+                              text-align: center;
                             }
                             .input-append {
                               height: 100%;
@@ -1972,10 +1974,10 @@
             border: none;
             margin-right: 20px;
             .back-desktop {
-              display: none;
+              display: block;
             }
             .back-mobile {
-              display: block;
+              display: none;
             }
           }
           .dialog-title {

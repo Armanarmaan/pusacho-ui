@@ -5,7 +5,7 @@ import { makeStyles } from "@mui/styles";
 
 import $ from "jquery";
 
-export default function ScanDialog({ showScan, closeScan, editFunction }) {
+export default function ScanDialog({ showScan, closeScan, editFunction, auth }) {
   const classes = useStyles();
 
   // Asset Imports
@@ -58,7 +58,8 @@ export default function ScanDialog({ showScan, closeScan, editFunction }) {
   });
 
   // Product Amount
-  const [productStock, setProductStock] = useState(200);
+  const [originalStock, setOriginalStock] = useState(0);
+  const [productStock, setProductStock] = useState(0);
   const handleProductStock = (type) => {
     if (type === "-") setProductStock(productStock - 1);
     if (type === "+") setProductStock(productStock + 1);
@@ -67,6 +68,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction }) {
   // Edit Product
   const editFromScan = (id) => {
     if (typeof window !== undefined) localStorage.setItem("editId", id);
+    if ($(window).width() > 770) $(".ScanDialog").addClass("d-none");
     editFunction(id);
   };
 
@@ -88,6 +90,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction }) {
 
       if (fetchedProduct) { 
         setProduct(fetchedProduct.data);
+        setOriginalStock(fetchedProduct.data.stock);
         setProductStock(fetchedProduct.data.stock);
         setScanStep(2); 
       }
@@ -101,7 +104,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction }) {
         "auth_token": localStorage.getItem("auth_token"),
         "required_role": "0,2"
       },
-      body: JSON.stringify({ id: product.id, amount: productStock })
+      body: JSON.stringify({ auth: auth, id: product.id, amount: productStock, originalAmount: originalStock })
     })
     .then(() => { 
       closeScan();
@@ -139,6 +142,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction }) {
       open={showScan}
       fullWidth={true}
       classes={{ container: classes.root, paper:  scanStep === 1? classes.paper : classes.paper2 }}
+      className="ScanDialog"
     >
       <div className="dialog-scan-wrapper">
         {scanStep === 1 ?
@@ -434,8 +438,8 @@ export default function ScanDialog({ showScan, closeScan, editFunction }) {
             </div>
 
             <div className="dialog-button-wrapper">
-              <p className="change-detail">
-                <img className="change-icon" src={editIcon} alt="" onClick={editFromScan}/>
+              <p className="change-detail" onClick={() => editFromScan(product.id)}>
+                <img className="change-icon" src={editIcon} alt="" />
                 Ubah Detail Produk
               </p>
               <button className="btn btn-secondary" onClick={() => backScanStep()}>Batal</button>
