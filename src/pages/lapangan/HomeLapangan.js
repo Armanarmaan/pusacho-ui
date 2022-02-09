@@ -18,17 +18,17 @@ function HomeLapangan() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
-  
+
 
   // ROUTER 
-  useEffect( () => {
-    if(!localStorage.getItem("auth_token")){
+  useEffect(() => {
+    if (!localStorage.getItem("auth_token")) {
       localStorage.clear();
       window.location.href = "/";
     }
-    else{
+    else {
       // verifyToken();
-      
+
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -37,7 +37,7 @@ function HomeLapangan() {
     event.preventDefault();
     const token = localStorage.getItem('auth_token');
     const required_role = '1,2';
-   
+
     try {
       const datas = await fetch(`${env_api}/lapangan/produk?id=${keyword}`, {
         method: 'GET',
@@ -48,9 +48,9 @@ function HomeLapangan() {
         }
       }).then(response => response.json())
       console.log(datas);
-      if(datas.data.length > 0 ){
+      if (datas.data.length > 0) {
         navigate(`/lapangan/pdp?id=${keyword}`);;
-      }else{
+      } else {
         console.log("data tidak ditemukan")
       }
 
@@ -86,66 +86,72 @@ function HomeLapangan() {
     document.getElementById("barcode").focus();
   }
 
+  const hidenavbar = () => {
+    $(".container-navbar").hide();
+  }
+
+  const shownavbar = () => {
+    $(".container-navbar").show();
+  }
+
+
   return (
     <div className="container-homelapangan">
-      <div className="body">
-      <div className="section-1">
-        <div className="headerlapangan">
-          <div>
-            <p className="header">Lapangan</p>
+        <div className="section-1">
+          <div className="headerlapangan">
+            <div>
+              <p className="header">Lapangan</p>
+            </div>
+            <div className="button" onClick={handleShow}>
+              <img src={ButtonMeatballs} alt="buttonmeatballs" className="img" />
+            </div>
           </div>
-          <div className="button" onClick={handleShow}>
-            <img src={ButtonMeatballs} alt="buttonmeatballs" className="img" />
-          </div>
-        </div>
-        <div className="scan">
-          <div className="container-scan">
-            <div className="scanbrg">
-              <div>
-                <p className="scanbarang">Scan Barang</p>
-                <p className="detailbarang">Lihat atau ubah detail barang</p>
+          <div className="scan">
+            <div className="container-scan">
+              <div className="scanbrg">
+                <div>
+                  <p className="scanbarang">Scan Barang</p>
+                  <p className="detailbarang">Lihat atau ubah detail barang</p>
+                </div>
+                <img src={Scanner} alt="scanner" className="img" />
               </div>
-              <img src={Scanner} alt="scanner" className="img" />
+              <div className="scannerbtn" onClick={scanBarcode}>
+                <img src={ScanBarang} alt="scanbarang" className="img" />
+                <p>Scan Barang</p>
+              </div>
             </div>
-            <div className="scannerbtn" onClick={scanBarcode}>
-              <img src={ScanBarang} alt="scanbarang" className="img" />
-              <p>Scan Barang</p>
-            </div>
-          </div>
-          <div className="grayline"></div>
-          <div className="cotainer-kodebarang">
-            <div className="textkodebrg">
-              <p className="masukkankodebrg">Masukkan Kode Barang</p>
-              <p className="lihatubahkode">Lihat atau ubah detail barang</p>
-            </div>
-            <div className="inputkode">
-              <form onSubmit={handleSearch}>
-                <p className="placeholder" id="kodeproduk"></p>
-                <input type="text" id="barcode" placeholder="Input kode pada barang" onChange={changeKeyword} autofocus/>
-              </form>
+            <div className="grayline"></div>
+            <div className="cotainer-kodebarang">
+              <div className="textkodebrg">
+                <p className="masukkankodebrg">Masukkan Kode Barang</p>
+                <p className="lihatubahkode">Lihat atau ubah detail barang</p>
+              </div>
+              <div className="inputkode">
+                <form onSubmit={handleSearch}>
+                  <p className="placeholder" id="kodeproduk"></p>
+                  <input type="text" id="barcode" placeholder="Input kode pada barang" onFocus={hidenavbar} onBlur={shownavbar} onChange={changeKeyword} autofocus />
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      
-      <Modal id="Modal" show={show} onHide={handleClose} animation={false} dialogClassName="slide-up">
-        <Modal.Body>
-          <div className="garis">
-            <img src={Garis} alt="garis" className="img" />
-          </div>
-          <div className="menu">
-            <div className="text">
-              <p>Menu Lainnya</p>
+        <Navbar pageName="Lapangan" />
+        <Modal id="Modal" show={show} onHide={handleClose} animation={false} dialogClassName="slide-up">
+          <Modal.Body>
+            <div className="garis">
+              <img src={Garis} alt="garis" className="img" />
             </div>
-            <div className="btnlogout" onClick={submitLogout}>
-              <img src={LogoutBtn} alt="logoutbtn" className="img" />
-              <p>Keluar</p>
+            <div className="menu">
+              <div className="text">
+                <p>Menu Lainnya</p>
+              </div>
+              <div className="btnlogout" onClick={submitLogout}>
+                <img src={LogoutBtn} alt="logoutbtn" className="img" />
+                <p>Keluar</p>
+              </div>
             </div>
-          </div>
-        </Modal.Body>
-      </Modal>
-      </div>
-      <Navbar pageName="Lapangan"/>
+          </Modal.Body>
+        </Modal>
     </div>
   );
 }

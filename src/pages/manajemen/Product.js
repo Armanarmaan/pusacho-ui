@@ -4,6 +4,7 @@ import Select from 'react-select'
 import $ from "jquery";
 import Slide from '@mui/material/Slide';
 import { makeStyles } from "@mui/styles";
+import Dialog from '@mui/material/Dialog';
 import Pagination from '@mui/material/Pagination';
 import JsBarcode from "jsbarcode";
 import pdfMake from "pdfmake";
@@ -69,7 +70,7 @@ export default class Product extends React.Component {
     } else {
       const env_api = process.env.REACT_APP_API_ENDPOINT;
       const auth_id = localStorage.getItem("id");
-  
+
       // Fetch Product
       const product = await fetch(`${env_api}/manajemen/products`, {
         method: "GET",
@@ -82,7 +83,7 @@ export default class Product extends React.Component {
         .then(response => response.json())
         .catch(error => console.log(error));
       this.setState({ ...this.state, products: product ? product.data : [], totalData: product.meta.total, currentPage: 1 });
-  
+
       // Fetch Categories
       const categories = await fetch(`${env_api}/manajemen/categories`, {
         method: "GET",
@@ -191,7 +192,7 @@ export default class Product extends React.Component {
     };
     const deleteProduct = async (id) => {
       const listOfIds = [id];
-      await fetch(`${env_api}/manajemen/delete/product`, { 
+      await fetch(`${env_api}/manajemen/delete/product`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -206,8 +207,8 @@ export default class Product extends React.Component {
     const deleteMultipleProduct = async () => {
       const checkedProducts = this.state.checkedProducts;
       const listOfIds = checkedProducts.map(item => item.id);
-      await fetch(`${env_api}/manajemen/delete/product`, { 
-        method: "POST", 
+      await fetch(`${env_api}/manajemen/delete/product`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "auth_token": localStorage.getItem("auth_token"),
@@ -218,7 +219,7 @@ export default class Product extends React.Component {
         window.location.reload();
       });
     };
-    
+
     const showCheckBox = () => {
       if ($(".product-list-table-head-mobile").hasClass("d-none") && $(".checkbox-item").hasClass("d-none")) {
         $(".product-list-table-head-mobile").removeClass("d-none");
@@ -389,16 +390,16 @@ export default class Product extends React.Component {
       this.setState({ ...this.state, offset: tempOffset, products: filteredProduct.data, totalData: filteredProduct.meta.total, currentPage: value });
 
     };
-    
+
 
     const handlePrintBarcode = (single, singleItem) => {
-      let productsList = single ? [ singleItem ] : this.state.checkedProducts;
+      let productsList = single ? [singleItem] : this.state.checkedProducts;
       let docContent = [];
       productsList.forEach(item => {
         const svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         JsBarcode(svg1, item.id);
         let page = [];
-        page.push({svg: `${svg1.outerHTML}`, width: 100, alignment: 'center'});
+        page.push({ svg: `${svg1.outerHTML}`, width: 100, alignment: 'center' });
         page.push({
           text: item.name,
           fontSize: 6
@@ -421,10 +422,10 @@ export default class Product extends React.Component {
         });
         docContent.push(page);
       })
-      
+
       let docDefinition = {
         pageSize: 'A10',
-        pageMargins: [4,8,4,0],
+        pageMargins: [4, 8, 4, 0],
         pageOrientation: 'landscape',
         content: docContent,
         styles: {
@@ -437,10 +438,10 @@ export default class Product extends React.Component {
     // Renders
     return (
       <div className="container-manajemen-produk">
-        <Navbar pageName="Daftar Produk"/>
+        <Navbar pageName="Daftar Produk" />
 
         <div className="container-manajemen-produk-content">
-          <Header pageName="Daftar Produk"/>
+          <Header pageName="Daftar Produk" />
 
           <div className="product-list-outer-wrapper">
 
@@ -627,7 +628,7 @@ export default class Product extends React.Component {
                                     {item.modal_nett_per.map((mper, index) => (
                                       <div className="product-modal-nett-inner" key={index}>
                                         <div className="input-precentage">
-                                          <input type="text" value={mper} readOnly/>
+                                          <input type="text" value={mper} readOnly />
                                           <div className="input-append">
                                             <p className="append-text">%</p>
                                           </div>
@@ -730,7 +731,7 @@ export default class Product extends React.Component {
 
                   <table className="product-list-table">
                     <thead className="product-list-table-head-mobile d-none">
-                      { console.log(this.state.checkedProducts) }
+                      {console.log(this.state.checkedProducts)}
                       {this.state.checkedProducts && this.state.checkedProducts.length > 0 ?
                         <tr>
                           <th className="head-checkbox"><input type="checkbox" className="checkbox-head" onClick={() => markAllProduct()} /></th>
@@ -803,7 +804,7 @@ export default class Product extends React.Component {
           </div>
 
           <div className="btnModal">
-            <div className="add" onClick={() => showAddOptions()}>
+            <div className="add" onClick={() => handleOpenAddMenu()}>
               <img src={addIcon} alt="add" className="img" />
             </div>
             <div className="scan" onClick={() => handleOpenScan()}>
@@ -812,7 +813,7 @@ export default class Product extends React.Component {
             <div className="checkbox" onClick={() => showCheckBox()}>
               <img src={checkboxBtn} alt="checkbox" className="img" />
             </div>
-            <div className="add-button-options d-none">
+            {/* <div className="add-button-options d-none">
               <div className="upperbody" onClick={() => closeAddOptions()}></div>
               <div className="container">
                 <div className="body">
@@ -837,17 +838,50 @@ export default class Product extends React.Component {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
+            <Dialog
+              open={this.state.showAddMenu}
+              fullWidth={true}
+              onClose={handleCloseAddMenu}
+              id="modal"
+            >
+             <div className="add-button-options" open={this.state.showAddMenu}>
+              <div className="upperbody" onClick={() => closeAddOptions()}></div>
+              <div className="container">
+                <div className="body">
+                  <div className="garis">
+                    <img src={Garis} alt="garis" className="img" />
+                  </div>
+                  <div className="menu">
+                    <div className="text">
+                      <p>Tambah</p>
+                    </div>
+                    <div className="addOption">
+                      <div className="tambahKategori" onClick={() => choseAddOptions("addCategory")}>
+                        <p>Tambah Kategori</p>
+                      </div>
+                      <div className="tambahProduk" onClick={() => choseAddOptions("addProduct")}>
+                        <p>Tambah Produk</p>
+                      </div>
+                      <div className="tambahSekaligus" onClick={() => choseAddOptions("addBoth")}>
+                        <p>Tambah Sekaligus</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> 
+            </Dialog>
           </div>
 
         </div>
 
-        <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan} editFunction={editProduct} auth={this.state.authId}/>
+        <ScanDialog showScan={this.state.showScan} closeScan={handleCloseScan} editFunction={editProduct} auth={this.state.authId} />
         <AddCategoryDialog showModal={this.state.showAddCategory} closeModal={handleCloseAddCategory} />
         <AddProductDialog showModal={this.state.showAddProduct} closeModal={handleCloseAddProduct} />
-        <EditProductDialog showModal={this.state.showEditProduct} closeModal={handleCloseEditProduct} auth={this.state.authId}/>
-        <AddCatProdDialog showModal={this.state.showAddCatProd} closeModal={handleCloseAddCatProd} auth={this.state.authId}/>
-        
+        <EditProductDialog showModal={this.state.showEditProduct} closeModal={handleCloseEditProduct} auth={this.state.authId} />
+        <AddCatProdDialog showModal={this.state.showAddCatProd} closeModal={handleCloseAddCatProd} auth={this.state.authId} />
+
       </div>
     )
   }
