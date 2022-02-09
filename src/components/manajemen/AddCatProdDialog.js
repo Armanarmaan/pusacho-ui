@@ -223,7 +223,6 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
 
   // Back Step
   const handleCloseModal = (event) => {
-    event.preventDefault();
     setCategoryName("");
     closeModal();
   };

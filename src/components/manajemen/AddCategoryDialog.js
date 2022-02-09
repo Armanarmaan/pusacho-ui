@@ -23,7 +23,6 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
 
   // Functions
   const handleCloseModal = (event) => {
-    event.preventDefault();
     setCategoryName("");
     closeModal();
   };
