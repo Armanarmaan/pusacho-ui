@@ -435,7 +435,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction }) {
 
             <div className="dialog-button-wrapper">
               <p className="change-detail">
-                <img className="change-icon" src={editIcon} alt="" />
+                <img className="change-icon" src={editIcon} alt="" onClick={editFromScan}/>
                 Ubah Detail Produk
               </p>
               <button className="btn btn-secondary" onClick={() => backScanStep()}>Batal</button>
