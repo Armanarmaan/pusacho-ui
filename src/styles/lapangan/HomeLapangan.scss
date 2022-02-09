@@ -4,140 +4,144 @@
         p{
             margin-bottom: 0;
         }
-        .section-1{
-            padding-left: 18px;
-            padding-right: 14px;
-            height: 231px;
-            background-color: #081A51;
-            display: block;
-            justify-content: space-between;
-            .header{
-                font-family: 'DM Sans';
-                font-weight: 700;
-                color: #FFFFFF;
-                font-size: 24px;
-            }
-            .headerlapangan{
-                display: flex;
+        .body{
+            height: 100vh;
+            .section-1{
+                padding-left: 18px;
+                padding-right: 14px;
+                height: 231px;
+                background-color: #081A51;
+                display: block;
                 justify-content: space-between;
-                padding-left: 6px;
-                padding-right: 2px;
-                margin-bottom: 30px;
-                padding-top: 60px;
-                .button{
-                    cursor: pointer;
+                .header{
+                    font-family: 'DM Sans';
+                    font-weight: 700;
+                    color: #FFFFFF;
+                    font-size: 24px;
                 }
-            }
-            
-            .scan{
-                width: 100%;
-                background-color: white;
-                border-radius: 10px ;
-                border-radius: 10px 10px 0px 0px;
-                box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.16);
-                .container-scan{
-                    padding-left: 16px;
-                    padding-top: 16px;
-                    padding-bottom: 20.5px;
-                    padding-right: 16px;
-                    .scanbrg{
-                        display: flex;
-                        justify-content: space-between;
-                        padding-bottom: 11.3px;
-                        .scanbarang{
-                            font-family: 'DM Sans';
-                            font-weight: 700;
-                            color: #31353B;
-                            font-size: 18px;
-                            margin-bottom: 16px;
-                        }
-                        .detailbarang{
-                            font-family: 'DM Sans';
-                            color: #31353B;
-                            font-size: 16px;
-                        }
-                    }
-                    .scannerbtn{
-                        width: 100%;
-                        height: 41.5px;
-                        display: flex;
-                        background-color: #017EFA;
-                        justify-content: center;
-                        border-radius: 6px;
-                        align-items: center;
+                .headerlapangan{
+                    display: flex;
+                    justify-content: space-between;
+                    padding-left: 6px;
+                    padding-right: 2px;
+                    margin-bottom: 30px;
+                    padding-top: 60px;
+                    .button{
                         cursor: pointer;
-                        p{
-                            font-family: 'DM Sans';
-                            font-weight: 700;
-                            color: #FFFFFF;
-                            font-size: 14px;
-                        }
                     }
                 }
-                .grayline{
+                
+                .scan{
                     width: 100%;
-                    height: 8px;
-                    background-color:#F3F4F6;
-                }
-                .cotainer-kodebarang{
-                    display: block;
-                    padding-left: 16px;
-                    padding-top: 24px;
-                    padding-bottom: 20px;
-                    padding-right: 16px;
-                    .textkodebrg{
-                        .masukkankodebrg{
-                            font-family: 'DM Sans';
-                            font-weight: 700;
-                            color: #31353B;
-                            font-size: 18px;
-                            margin-bottom: 16px;
-                        }
-                        .lihatubahkode{
-                            font-family: 'DM Sans';
-                            color: #31353B;
-                            font-size: 16px;
-                            margin-bottom: 16px;
-                        }
-                    }  
-                    .inputkode{
-                        position: relative;
-                        background-color: #F5F5F5;
-                        border-radius: 6px;
-                        height: 52px;
-                        margin-bottom: 24px;
+                    background-color: white;
+                    border-radius: 10px ;
+                    border-radius: 10px 10px 0px 0px;
+                    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.16);
+                    .container-scan{
                         padding-left: 16px;
+                        padding-top: 16px;
+                        padding-bottom: 20.5px;
                         padding-right: 16px;
-                        .placeholder{
-                          position: absolute;
-                          top: 16px;
-                          font-family: 'DM Sans';
-                          font-size: 14px;
-                          color: #393939;
+                        .scanbrg{
+                            display: flex;
+                            justify-content: space-between;
+                            padding-bottom: 11.3px;
+                            .scanbarang{
+                                font-family: 'DM Sans';
+                                font-weight: 700;
+                                color: #31353B;
+                                font-size: 18px;
+                                margin-bottom: 16px;
+                            }
+                            .detailbarang{
+                                font-family: 'DM Sans';
+                                color: #31353B;
+                                font-size: 16px;
+                            }
                         }
-                        input{
-                          width: 100%;
-                          height: 100%;
-                          padding: 0px;
-                          border: none;
-                          background-color: transparent;
-                          font-size: 14px;
-                          color: black;
-                          position: relative;
-                          z-index: 10;
-                          padding-top: 14px;
-                        }
-                        input:focus-visible{
-                          outline: none;
+                        .scannerbtn{
+                            width: 100%;
+                            height: 41.5px;
+                            display: flex;
+                            background-color: #017EFA;
+                            justify-content: center;
+                            border-radius: 6px;
+                            align-items: center;
+                            cursor: pointer;
+                            p{
+                                font-family: 'DM Sans';
+                                font-weight: 700;
+                                color: #FFFFFF;
+                                font-size: 14px;
+                            }
                         }
                     }
-                }               
+                    .grayline{
+                        width: 100%;
+                        height: 8px;
+                        background-color:#F3F4F6;
+                    }
+                    .cotainer-kodebarang{
+                        display: block;
+                        padding-left: 16px;
+                        padding-top: 24px;
+                        padding-bottom: 20px;
+                        padding-right: 16px;
+                        .textkodebrg{
+                            .masukkankodebrg{
+                                font-family: 'DM Sans';
+                                font-weight: 700;
+                                color: #31353B;
+                                font-size: 18px;
+                                margin-bottom: 16px;
+                            }
+                            .lihatubahkode{
+                                font-family: 'DM Sans';
+                                color: #31353B;
+                                font-size: 16px;
+                                margin-bottom: 16px;
+                            }
+                        }  
+                        .inputkode{
+                            position: relative;
+                            background-color: #F5F5F5;
+                            border-radius: 6px;
+                            height: 52px;
+                            margin-bottom: 24px;
+                            padding-left: 16px;
+                            padding-right: 16px;
+                            .placeholder{
+                              position: absolute;
+                              top: 16px;
+                              font-family: 'DM Sans';
+                              font-size: 14px;
+                              color: #393939;
+                            }
+                            input{
+                              width: 100%;
+                              height: 100%;
+                              padding: 0px;
+                              border: none;
+                              background-color: transparent;
+                              font-size: 14px;
+                              color: black;
+                              position: relative;
+                              z-index: 10;
+                              padding-top: 14px;
+                            }
+                            input:focus-visible{
+                              outline: none;
+                            }
+                        }
+                    }               
+                }
             }
-        }
 
-        .container-navbar{
-            position: absolute;
         }
+        .container-navbar{
+            position: sticky;
+        }
+        
 }
 
 #Modal{

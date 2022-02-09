@@ -82,8 +82,13 @@ function HomeLapangan() {
     window.location.href = '/';
   }
 
+  const scanBarcode = () => {
+    document.getElementById("barcode").focus();
+  }
+
   return (
     <div className="container-homelapangan">
+      <div className="body">
       <div className="section-1">
         <div className="headerlapangan">
           <div>
@@ -102,7 +107,7 @@ function HomeLapangan() {
               </div>
               <img src={Scanner} alt="scanner" className="img" />
             </div>
-            <div className="scannerbtn">
+            <div className="scannerbtn" onClick={scanBarcode}>
               <img src={ScanBarang} alt="scanbarang" className="img" />
               <p>Scan Barang</p>
             </div>
@@ -116,13 +121,13 @@ function HomeLapangan() {
             <div className="inputkode">
               <form onSubmit={handleSearch}>
                 <p className="placeholder" id="kodeproduk"></p>
-                <input type="text" placeholder="Input kode pada barang" onChange={changeKeyword} />
+                <input type="text" id="barcode" placeholder="Input kode pada barang" onChange={changeKeyword} autofocus/>
               </form>
             </div>
           </div>
         </div>
       </div>
-      <Navbar pageName="Lapangan"/>
+      
       <Modal id="Modal" show={show} onHide={handleClose} animation={false} dialogClassName="slide-up">
         <Modal.Body>
           <div className="garis">
@@ -139,6 +144,8 @@ function HomeLapangan() {
           </div>
         </Modal.Body>
       </Modal>
+      </div>
+      <Navbar pageName="Lapangan"/>
     </div>
   );
 }

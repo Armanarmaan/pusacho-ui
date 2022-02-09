@@ -1,5 +1,5 @@
 import '../../styles/lapangan/PDP.scss';
-import $ from "jquery";
+import $, { event } from "jquery";
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -264,7 +264,7 @@ function PDP() {
                         </div>
                         <div className="containerbtn">
                             <div className="inputjumlah">
-                                <form>
+                                <form onSubmit={event => { event.preventDefault(); }}>
                                     <p className="placeholder" id="jumlah"></p>
                                     <input type="number" placeholder="Masukkan jumlah" onChange={changeKeyword} required/>
                                     <div className="btnkurangistock" type="submit" onClick={handleSearch}>
