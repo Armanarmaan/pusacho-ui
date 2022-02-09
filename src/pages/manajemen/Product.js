@@ -368,6 +368,16 @@ export default class Product extends React.Component {
       this.setState({ ...this.state, showAddMenu: false })
     };
 
+    const hidenavbar = () => {
+      $(".container-navbar-manajemen").hide();
+      $(".btnModal").hide();
+    }
+  
+    const shownavbar = () => {
+      $(".container-navbar-manajemen").show();
+      $(".btnModal").show();
+    }
+
     //Pagination
     const handleChangePage = async (_, value) => {
       const env_api = process.env.REACT_APP_API_ENDPOINT;
@@ -698,7 +708,7 @@ export default class Product extends React.Component {
               <div className="header-mobileview">
                 <div className="header-mobile">
                   <div className="search-product-wrapper">
-                    <input className="form-control input-search" name="search" type="search" placeholder="Cari Produk" onInput={(val) => searchProduct(val.target.value)} />
+                    <input className="form-control input-search" name="search" type="search" placeholder="Cari Produk" onFocus={hidenavbar} onBlur={shownavbar} onInput={(val) => searchProduct(val.target.value)} />
                     <div className="input-group-append">
                       <img src={magnifierIcon} alt="maginifier-icon" />
                     </div>

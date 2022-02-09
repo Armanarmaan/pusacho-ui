@@ -2701,7 +2701,7 @@
             .input-search {
               font-size: 16px;
               font-weight: 400;
-              margin-right: 35vw;
+              width: 100%;
               border: none;
               background: #F5F5F5;
               ::placeholder {
@@ -3041,6 +3041,7 @@
 
       // ResizeModalScanAddProdukAddCategory
         .css-hz1bth-MuiDialog-container {
+          //category
         .makeStyles-paper-5{
           min-width: unset;
           border-top-left-radius: 20px;
@@ -3065,6 +3066,7 @@
           }
         }
 
+          //produk
           .makeStyles-paper-7{
             min-width: unset;
             border-top-left-radius: 20px;
@@ -3127,6 +3129,81 @@
               }
             }
           }
+
+          //sekaligus
+          .makeStyles-paper-13{
+            min-width: unset;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            .add-cat-prod-wrapper{
+              padding: 8px 24px 24px 24px;
+              .garis{
+                display: block;
+                text-align: center;
+              }
+              .dialog-header{
+                .btn-close{
+                  display: none;
+                }
+              }
+              .dialog-button-wrapper{
+                display: none;
+              }
+              .dialog-button-wrapper-mobile{
+                display: block;
+              }
+            }
+              .add-cat-prod-step-2{
+                .add-product-first-step{
+                  .garis{
+                    display: none;
+                  }
+              }
+            }
+          }
+
+
+          .makeStyles-paper2-14{
+            min-width: unset;
+            max-height: unset;
+            height: 100vh;
+            .add-cat-prod-wrapper{
+              padding: unset;
+              .add-product-second-step{
+                padding: unset;
+                .dialog-header{
+                  display: none;
+                }
+                .dialog-header-mobile{
+                  display: block;
+                  background: #081A51;
+                  height: 107px;
+                  padding-top: 60px;
+                  padding-left: 24px;
+                  .btn-close{
+                    display: none;
+                  }
+                  .dialog-title{
+                    color: #FFFFFF;
+                  }
+                }
+                .dialog-body{
+                  padding: 0px 24px 24px 24px;
+                }
+                .supplier-wrapper{
+                  display: block;
+                }
+                .dialog-button-wrapper{
+                  display: none;
+                }
+                .dialog-button-wrapper-mobile{
+                  display: block;
+                  padding: 0px 24px 24px 24px;
+                }
+              }
+            }
+          }
+  
       }
 
   }

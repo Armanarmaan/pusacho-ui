@@ -18,17 +18,17 @@ function HomeLapangan() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
-  
+
 
   // ROUTER 
-  useEffect( () => {
-    if(!localStorage.getItem("auth_token")){
+  useEffect(() => {
+    if (!localStorage.getItem("auth_token")) {
       localStorage.clear();
       window.location.href = "/";
     }
-    else{
+    else {
       // verifyToken();
-      
+
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -37,7 +37,7 @@ function HomeLapangan() {
     event.preventDefault();
     const token = localStorage.getItem('auth_token');
     const required_role = '1,2';
-   
+
     try {
       const datas = await fetch(`${env_api}/lapangan/produk?id=${keyword}`, {
         method: 'GET',
@@ -48,9 +48,9 @@ function HomeLapangan() {
         }
       }).then(response => response.json())
       console.log(datas);
-      if(datas.data.length > 0 ){
+      if (datas.data.length > 0) {
         navigate(`/lapangan/pdp?id=${keyword}`);;
-      }else{
+      } else {
         console.log("data tidak ditemukan")
       }
 
@@ -86,9 +86,16 @@ function HomeLapangan() {
     document.getElementById("barcode").focus();
   }
 
+  const hidenavbar = () => {
+    $(".container-navbar").hide();
+  }
+
+  const shownavbar = () => {
+    $(".container-navbar").show();
+  }
+
   return (
     <div className="container-homelapangan">
-      <div className="body">
       <div className="section-1">
         <div className="headerlapangan">
           <div>
@@ -121,13 +128,13 @@ function HomeLapangan() {
             <div className="inputkode">
               <form onSubmit={handleSearch}>
                 <p className="placeholder" id="kodeproduk"></p>
-                <input type="text" id="barcode" placeholder="Input kode pada barang" onChange={changeKeyword} autofocus/>
+                <input type="text" id="barcode" placeholder="Input kode pada barang" onFocus={hidenavbar} onBlur={shownavbar} onChange={changeKeyword} autofocus />
               </form>
             </div>
           </div>
         </div>
       </div>
-      
+      <Navbar pageName="Lapangan" />
       <Modal id="Modal" show={show} onHide={handleClose} animation={false} dialogClassName="slide-up">
         <Modal.Body>
           <div className="garis">
@@ -144,8 +151,6 @@ function HomeLapangan() {
           </div>
         </Modal.Body>
       </Modal>
-      </div>
-      <Navbar pageName="Lapangan"/>
     </div>
   );
 }
