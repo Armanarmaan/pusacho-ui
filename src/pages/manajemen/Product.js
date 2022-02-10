@@ -748,7 +748,7 @@ export default class Product extends React.Component {
                             <div className="button-inner-wrappers">
                               <p className="amount-indicators">{this.state.checkedProducts.length} Produk dipilih</p>
                               <button className="btn btn-outer-primary" onClick={() => handlePrintBarcode(false, null)}>Cetak Barcode</button>
-                              <button className="btn btn-outer-secondary">
+                              <button className="btn btn-outer-secondary" onClick={() => deleteMultipleProduct()}>
                                 <img src={rTrashCan} className="trash-icon" alt="Red Trashcan" />
                                 Hapus
                               </button>
