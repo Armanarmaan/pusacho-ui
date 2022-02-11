@@ -13,6 +13,7 @@ function HomeLapangan() {
   const ScanBarang = require('../../assets/icons/ScanBarang.svg').default;
   const LogoutBtn = require('../../assets/icons/LogoutBtn.svg').default;
   const Garis = require('../../assets/icons/Garis.svg').default;
+  const ProdukGray = require('../../assets/icons/ProdukGray.svg').default;
 
   const [keyword, setKeyword] = useState(null);
   const [show, setShow] = useState(false);
@@ -94,6 +95,10 @@ function HomeLapangan() {
     $(".container-navbar").show();
   }
 
+  const manajemen = () => {
+    navigate("/manajemen/produk");
+  }
+
   return (
     <div className="container-homelapangan">
       <div className="section-1">
@@ -147,6 +152,10 @@ function HomeLapangan() {
             <div className="btnlogout" onClick={submitLogout}>
               <img src={LogoutBtn} alt="logoutbtn" className="img" />
               <p>Keluar</p>
+            </div>
+            <div className="btnlogout" onClick={manajemen}>
+              <img src={ProdukGray} alt="logoutbtn" className="img" />
+              <p>Produk</p>
             </div>
           </div>
         </Modal.Body>
