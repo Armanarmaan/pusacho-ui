@@ -247,7 +247,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
     if (addStep === 2) setAddStep(1)
     else {
       setAddStep(1);
-      setAddProduct({ id: "", category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
+      setAddProduct({ ...addProduct, category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
       setSupplierCount(1);
       setChosenSupplier([]);
       closeModal();
