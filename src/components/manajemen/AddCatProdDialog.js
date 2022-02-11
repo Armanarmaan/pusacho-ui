@@ -317,7 +317,7 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
                 </div>
 
                 <div className="dialog-button-wrapper">
-                  <button className="btn btn-secondary">
+                  <button className="btn btn-secondary" onClick={() => handleCloseModal()}>
                     Batal
                   </button>
                   <button className="btn btn-primary" disabled={isDisabled()} onClick={handleNextStep}>

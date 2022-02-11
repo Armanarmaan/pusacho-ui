@@ -351,7 +351,7 @@ export default class Product extends React.Component {
     };
 
     const handleCloseAddCatProd = () => {
-      this.setState({ ...this.state, showAddProduct: false });
+      this.setState({ ...this.state, showAddCatProd: false });
     };
 
     const handleCloseEditProduct = () => {
