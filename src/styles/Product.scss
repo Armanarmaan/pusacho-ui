@@ -2827,6 +2827,7 @@
                     bottom: 105px;
                     right: 200px;
                     height: 40px;
+                    z-index: 9;
                   }
                   .btn-outer-secondary {
                     display: flex;
@@ -2842,6 +2843,7 @@
                     position: fixed;
                     bottom: 105px;
                     right: 100px;
+                    z-index: 9;
                     .trash-icon {
                       margin-right: 6px;
                     }
