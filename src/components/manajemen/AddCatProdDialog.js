@@ -219,6 +219,12 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
   };
 
   const backAddStep = async () => {
+    if (addStep === 3) setAddStep(2)
+    else if (addStep === 2) setAddStep(1)
+    else {
+      setCategoryName("");
+      closeModal();
+    }
   };
 
   // Back Step
