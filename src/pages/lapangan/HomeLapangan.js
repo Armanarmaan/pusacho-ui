@@ -94,6 +94,10 @@ function HomeLapangan() {
     $(".container-navbar").show();
   }
 
+  const manajemen = () => {
+    navigate("/manajemen/produk");
+  }
+
   return (
     <div className="container-homelapangan">
       <div className="section-1">
@@ -147,6 +151,9 @@ function HomeLapangan() {
             <div className="btnlogout" onClick={submitLogout}>
               <img src={LogoutBtn} alt="logoutbtn" className="img" />
               <p>Keluar</p>
+            </div>
+            <div className="btnlogout" onClick={manajemen}>
+              <p>Manajemen</p>
             </div>
           </div>
         </Modal.Body>
