@@ -13,6 +13,7 @@ function HomeLapangan() {
   const ScanBarang = require('../../assets/icons/ScanBarang.svg').default;
   const LogoutBtn = require('../../assets/icons/LogoutBtn.svg').default;
   const Garis = require('../../assets/icons/Garis.svg').default;
+  const ProdukGray = require('../../assets/icons/ProdukGray.svg').default;
 
   const [keyword, setKeyword] = useState(null);
   const [show, setShow] = useState(false);
@@ -153,7 +154,8 @@ function HomeLapangan() {
               <p>Keluar</p>
             </div>
             <div className="btnlogout" onClick={manajemen}>
-              <p>Manajemen</p>
+              <img src={ProdukGray} alt="logoutbtn" className="img" />
+              <p>Produk</p>
             </div>
           </div>
         </Modal.Body>
