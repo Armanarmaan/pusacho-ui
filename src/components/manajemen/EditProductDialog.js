@@ -482,9 +482,13 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
                     <img src={rTrashCan} className="delete-icon" alt="RedTrashCan" />
                     <p className="delete-supplier-text">Hapus Supplier</p>
                   </div>
-                  <p className="add-supplier-text" onClick={() => addSupplierAmount()}>
-                    + Tambah Supplier
-                  </p>
+                  { supplierCount == 3 ? 
+                      <></>
+                    :
+                      <p className="add-supplier-text" onClick={() => addSupplierAmount()}>
+                        + Tambah Supplier
+                      </p>
+                    }
                 </div>
               </div>
             </div>

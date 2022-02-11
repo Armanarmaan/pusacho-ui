@@ -27,7 +27,20 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
   };
 
   const isDisabled = () => {
-    if (addStep == 1) return !(categoryName !== "");
+    if (addStep == 1) return !(categoryName !== "")
+    else if (addStep == 2)  {
+      return !(addProduct.category !== "") ||
+        !(addProduct.size !== "") ||
+        !(addProduct.id !== "")
+    }
+    else {
+      return !(addProduct.suppliers.length > 0) ||
+        !(addProduct.modals.length > 0) ||
+        !(addProduct.modal_nett.length > 0) ||
+        !(addProduct.price > 0) ||
+        !(addProduct.margins.length > 0) ||
+        !(typeof(addProduct.image) == "object")
+    }
   };
 
   // Product Datas
@@ -433,9 +446,13 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
                       <img src={rTrashCan} className="delete-icon" alt="RedTrashCan" />
                       <p className="delete-supplier-text">Hapus Supplier</p>
                     </div>
-                    <p className="add-supplier-text" onClick={() => addSupplierAmount()}>
-                      + Tambah Supplier
-                    </p>
+                    { supplierCount == 3 ? 
+                      <></>
+                    :
+                      <p className="add-supplier-text" onClick={() => addSupplierAmount()}>
+                        + Tambah Supplier
+                      </p>
+                    }
                   </div>
                 </div>
               </div>

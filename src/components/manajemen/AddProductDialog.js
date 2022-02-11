@@ -179,7 +179,8 @@ export default function AddProductDialog({ showModal, closeModal }) {
         !(addProduct.modals.length > 0) ||
         !(addProduct.modal_nett.length > 0) ||
         !(addProduct.price > 0) ||
-        !(addProduct.margins.length > 0)
+        !(addProduct.margins.length > 0) ||
+        !(typeof(addProduct.image) == "object")
     }
   }
 
@@ -425,9 +426,13 @@ export default function AddProductDialog({ showModal, closeModal }) {
                       <img src={rTrashCan} className="delete-icon" alt="RedTrashCan" />
                       <p className="delete-supplier-text">Hapus Supplier</p>
                     </div>
-                    <p className="add-supplier-text" onClick={() => addSupplierAmount()}>
-                      + Tambah Supplier
-                    </p>
+                    { supplierCount == 3 ? 
+                      <></>
+                    :
+                      <p className="add-supplier-text" onClick={() => addSupplierAmount()}>
+                        + Tambah Supplier
+                      </p>
+                    }
                   </div>
                 </div>
               </div>
