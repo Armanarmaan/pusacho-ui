@@ -148,19 +148,21 @@ export default function AddProductDialog({ showModal, closeModal }) {
     setChosenSupplier(chosenArray);
   };
 
-  const deleteChosenSupplier = () => {
+  const deleteChosenSupplier = async () => {
+    const amount = supplierCount;
     const deleteList = chosenSupplier;
     let newProduct = addProduct;
 
     // Delete Item
-    deleteList.forEach(item => {
-      $(`.supplier-wrapper-${item}`).remove();
+    await Promise.all(deleteList.map(item => {
       newProduct.suppliers.splice(item, 1)
       newProduct.modals.splice(item, 1)
       newProduct.modal_nett_per.splice(item, 1)
       newProduct.logistic_costs.splice(item, 1)
-    });
+    }));
 
+    $(".input-checkbox-suppliers").prop("checked", false);
+    setSupplierCount(amount - deleteList.length);
     setAddProduct(newProduct);
     setChosenSupplier([]);
   };
@@ -380,10 +382,10 @@ export default function AddProductDialog({ showModal, closeModal }) {
                   {supplierCount && supplierCount > 0 ?
                     [...Array(supplierCount)].map((item, index) =>
                       <div className={`supplier-wrapper supplier-wrapper-${index}`} key={index}>
-                        {supplierCount > 1 && index !== 0 ? <input type="checkbox" className="input-checkbox" onChange={() => handleChosenSupplier(index)} /> : ""}
+                        {supplierCount > 1 && index !== 0 ? <input type="checkbox" className={`input-checkbox input-checkbox-suppliers`} onChange={() => handleChosenSupplier(index)} /> : ""}
                         <div className="input-wrapper">
                           <p className="input-title">Supplier</p>
-                          <input className="input-field" type="text" onInput={(val) => handleSupplierName(val.target.value, index)} />
+                          <input className="input-field" type="text" value={addProduct.suppliers[index]} onInput={(val) => handleSupplierName(val.target.value, index)} />
                         </div>
                         <div className="input-wrapper">
                           <p className="input-title">Modal</p>
@@ -391,12 +393,12 @@ export default function AddProductDialog({ showModal, closeModal }) {
                             <div className="input-prefield-wrapper">
                               <p className="input-prefield-text">Rp</p>
                             </div>
-                            <input className="input-field" type="text" onInput={(val) => handleModalValue(val.target.value, index)} />
+                            <input className="input-field" type="text" value={addProduct.modals[index]} onInput={(val) => handleModalValue(val.target.value, index)} />
                           </div>
                         </div>
                         <div className="input-wrapper">
                           <p className="input-title">Modal Nett Per</p>
-                          <input className="input-field" type="text" onInput={(val) => handleModalNettPer(val.target.value, index)} />
+                          <input className="input-field" type="text" value={addProduct.modal_nett_per[index]} onInput={(val) => handleModalNettPer(val.target.value, index)} />
                         </div>
                         <div className="input-wrapper">
                           <p className="input-title">Logistik</p>
@@ -404,7 +406,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
                             <div className="input-prefield-wrapper">
                               <p className="input-prefield-text">Rp</p>
                             </div>
-                            <input className="input-field" type="text" onInput={(val) => handleLogisticValue(val.target.value, index)} />
+                            <input className="input-field" type="text" value={addProduct.logistic_costs[index]} onInput={(val) => handleLogisticValue(val.target.value, index)} />
                           </div>
                         </div>
                         <div className="input-wrapper">

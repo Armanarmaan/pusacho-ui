@@ -85,19 +85,21 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
     setChosenSupplier(chosenArray);
   };
 
-  const deleteChosenSupplier = () => {
+  const deleteChosenSupplier = async () => {
+    const amount = supplierCount;
     const deleteList = chosenSupplier;
     let newProduct = addProduct;
 
     // Delete Item
-    deleteList.forEach(item => {
-      $(`.supplier-wrapper-${item}`).remove();
+    await Promise.all(deleteList.map(item => {
       newProduct.suppliers.splice(item, 1)
       newProduct.modals.splice(item, 1)
       newProduct.modal_nett_per.splice(item, 1)
       newProduct.logistic_costs.splice(item, 1)
-    });
+    }));
 
+    $(".input-checkbox-suppliers").prop("checked", false);
+    setSupplierCount(amount - deleteList.length);
     setAddProduct(newProduct);
     setChosenSupplier([]);
   };
@@ -400,7 +402,7 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
                   {supplierCount && supplierCount > 0 ?
                     [...Array(supplierCount)].map((item, index) =>
                       <div className={`supplier-wrapper supplier-wrapper-${index}`} key={index}>
-                        {supplierCount > 1 && index !== 0 ? <input type="checkbox" className="input-checkbox" onChange={() => handleChosenSupplier(index)} /> : ""}
+                        {supplierCount > 1 && index !== 0 ? <input type="checkbox" className={`input-checkbox input-checkbox-suppliers`} onChange={() => handleChosenSupplier(index)} /> : ""}
                         <div className="input-wrapper">
                           <p className="input-title">Supplier</p>
                           <input className="input-field" type="text" onInput={(val) => handleSupplierName(val.target.value, index)} />

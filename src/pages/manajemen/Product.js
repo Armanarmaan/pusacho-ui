@@ -81,7 +81,7 @@ export default class Product extends React.Component {
       })
         .then(response => response.json())
         .catch(error => console.log(error));
-      this.setState({ ...this.state, products: product ? product.data : [], totalData: product.meta.total, currentPage: 1 });
+      this.setState({ ...this.state, products: product ? product.data : [], totalData: product ? product.meta.total: 0, currentPage: 1 });
   
       // Fetch Categories
       const categories = await fetch(`${env_api}/manajemen/categories`, {
