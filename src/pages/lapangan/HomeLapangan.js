@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/lapangan/Navbar';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function HomeLapangan() {
   const env_api = process.env.REACT_APP_API_ENDPOINT;
@@ -18,6 +18,7 @@ function HomeLapangan() {
   const [keyword, setKeyword] = useState(null);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
+  const user_role = localStorage.getItem("role");
 
 
 
@@ -95,10 +96,6 @@ function HomeLapangan() {
     $(".container-navbar").show();
   }
 
-  const manajemen = () => {
-    navigate("/manajemen/produk");
-  }
-
   return (
     <div className="container-homelapangan">
       <div className="section-1">
@@ -153,10 +150,14 @@ function HomeLapangan() {
               <img src={LogoutBtn} alt="logoutbtn" className="img" />
               <p>Keluar</p>
             </div>
-            <div className="btnlogout" onClick={manajemen}>
-              <img src={ProdukGray} alt="logoutbtn" className="img" />
-              <p>Produk</p>
-            </div>
+            {user_role === '2' ? 
+            <Link to="/manajemen/produk">
+              <div className="btnlogout">
+                <img src={ProdukGray} alt="logoutbtn" className="img" />
+                <p>Produk</p>
+              </div>
+            </Link>
+            : null }
           </div>
         </Modal.Body>
       </Modal>
