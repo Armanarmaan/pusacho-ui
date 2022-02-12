@@ -40,24 +40,6 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
     logistic_costs: [""],
     margins: [""]
   });
-  
-  const [originalProduct, setOriginalProduct] = useState({
-    auth: auth,
-    images: "",
-    id: "",
-    category_id: "",
-    category_name: "",
-    name: "",
-    size: "",
-    price: 0,
-    stock: 0,
-    suppliers: [""],
-    modals: [""],
-    modal_nett: [""],
-    modal_nett_per: [""],
-    logistic_costs: [""],
-    margins: [""]
-  });
 
   const fetchCategory = async () => {
     const env_api = process.env.REACT_APP_API_ENDPOINT;
@@ -92,7 +74,6 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
           .catch(error => console.log(error));
         if (product) { 
           setProduct(product.data) 
-          setOriginalProduct(product.data);
           setSupplierCount(product.data.suppliers.length);
         }
       }
@@ -128,43 +109,43 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
    };
 
    const handleNameInput = (val) => {
-     setProduct({ ...product, name: val, orig_name: originalProduct.name });
+     setProduct({ ...product, name: val });
    };
 
    const handleSizeInput = (val) => {
-    setProduct({ ...product, size: val, orig_size: originalProduct.size });
+    setProduct({ ...product, size: val });
   };
 
   const handleAmountInput = (val) => {
-    setProduct({ ...product, stock: val, orig_stock: originalProduct.stock });
+    setProduct({ ...product, stock: val });
   };
 
   const handleSupplierName = (val, index) => {
     let newSupplier = product.suppliers;
     newSupplier[index] = val;
-    setProduct({...product, suppliers: newSupplier, orig_suppliers: originalProduct.suppliers });
+    setProduct({...product, suppliers: newSupplier });
   };
 
   const handleModalValue = (val, index) => {
     let newModal = product.modals;
     newModal[index] = val;
-    setProduct({...product, modals: newModal, orig_modal: originalProduct.modals });
+    setProduct({...product, modals: newModal });
   };
 
   const handleLogisticValue = (val, index) => {
     let newLogistic = product.logistic_costs;
     newLogistic[index] = val;
-    setProduct({...product, logistic_costs: newLogistic, orig_logistic: originalProduct.logistic_costs });
+    setProduct({...product, logistic_costs: newLogistic });
   };
 
   const handlePriceValue = (val) => {
-    setProduct({...product, price: val, orig_price: originalProduct.price });
+    setProduct({...product, price: val });
   };
 
   const handleModalNettPer = (val, index) => {
     let newModalNetPerr = product.modal_nett_per;
     newModalNetPerr[index] = val;
-    setProduct({...product, modal_nett_per: newModalNetPerr, orig_modal_nett: originalProduct.modal_nett_per });
+    setProduct({...product, modal_nett_per: newModalNetPerr });
   };
 
   // Supplier add / remove
@@ -296,24 +277,15 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         id: product.id,
         category: product.category_id,
         name: product.name,
-        orig_name: originalProduct.name,
         size: product.size,
         price: product.price,
-        orig_price: originalProduct.price,
         stock: product.stock,
-        orig_stock: originalProduct.stock,
         suppliers: product.suppliers.join("|"),
-        orig_suppliers: originalProduct.suppliers,
         modals: product.modals.join("|"),
-        orig_modal: originalProduct.modals,
         modal_nett_per: product.modal_nett_per.join("|"),
-        orig_modal_nett_per: originalProduct.modal_nett_per,
         modal_nett: modal_nett.join("|"),
-        orig_modal_nett: originalProduct.modal_nett,
         logistic_costs: product.logistic_costs.join("|"),
-        orig_logistic: originalProduct.logistic_costs,
         margins: margins.join("|"),
-        orig_margin: originalProduct.margins
       };
 
       let formData = new FormData();
