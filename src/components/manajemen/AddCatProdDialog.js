@@ -34,12 +34,35 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
         !(addProduct.id !== "")
     }
     else {
-      return !(addProduct.suppliers.length > 0) ||
-        !(addProduct.modals.length > 0) ||
-        !(addProduct.modal_nett.length > 0) ||
+      if (supplierCount === 1) {
+        return !(addProduct.suppliers.length > 0 && addProduct.suppliers[0] != "") ||
+        !(addProduct.modals.length > 0 && addProduct.modals[0] != "") ||
+        !(addProduct.modal_nett_per.length > 0 && addProduct.modal_nett_per[0] != "") ||
+        !(addProduct.logistic_costs.length > 0 && addProduct.logistic_costs[0] != "") ||
+        !(addProduct.stock > 0) ||
         !(addProduct.price > 0) ||
-        !(addProduct.margins.length > 0) ||
         !(typeof(addProduct.image) == "object")
+      } 
+      
+      else if (supplierCount === 2) {
+        return !(addProduct.suppliers.length > 0 && addProduct.suppliers[0] != "" && addProduct.suppliers[1] != "") ||
+        !(addProduct.modals.length > 0 && addProduct.modals[0] != "" && addProduct.modals[1] != "") ||
+        !(addProduct.modal_nett_per.length > 0 && addProduct.modal_nett_per[0] != "" && addProduct.modal_nett_per[1] != "") ||
+        !(addProduct.logistic_costs.length > 0 && addProduct.logistic_costs[0] != "" && addProduct.logistic_costs[1] != "") ||
+        !(addProduct.stock > 0) ||
+        !(addProduct.price > 0) ||
+        !(typeof(addProduct.image) == "object")
+      }
+
+      else {
+        return !(addProduct.suppliers.length > 0 && addProduct.suppliers[0] != "" && addProduct.suppliers[1] != "" && addProduct.suppliers[2] != "") ||
+        !(addProduct.modals.length > 0 && addProduct.modals[0] != "" && addProduct.modals[1] != "" && addProduct.modals[2] != "") ||
+        !(addProduct.modal_nett_per.length > 0 && addProduct.modal_nett_per[0] != "" && addProduct.modal_nett_per[1] != "" && addProduct.modal_nett_per[2] != "") ||
+        !(addProduct.logistic_costs.length > 0 && addProduct.logistic_costs[0] != "" && addProduct.logistic_costs[1] != "" && addProduct.logistic_costs[2] != "") ||
+        !(addProduct.stock > 0) ||
+        !(addProduct.price > 0) ||
+        !(typeof(addProduct.image) == "object")
+      }
     }
   };
 
