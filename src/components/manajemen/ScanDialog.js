@@ -179,7 +179,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction, auth }) 
               </button>
             </div>
 
-            <div className="dialog-header-mobile">
+            <div className="dialog-header-mobile" onClick={backScanStep}>
               <img className="dialog-icon" src={bWhite} alt="Back White" />
               <p className="dialog-title">Produk</p>
             </div>

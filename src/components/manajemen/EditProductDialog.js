@@ -184,8 +184,8 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
   const [chosenSupplier, setChosenSupplier] = useState([]);
   const handleChosenSupplier = (val) => {
     let chosenArray = chosenSupplier;
-    
-    if (!chosenArray.includes(val + 1)) chosenArray = [...chosenArray, val];
+
+    if (!chosenArray.includes(val)) chosenArray = [...chosenArray, val];
     else chosenArray = chosenArray.filter(item => item !== val);
 
     setChosenSupplier(chosenArray);
@@ -448,6 +448,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
                 {supplierCount && supplierCount > 0 ?
                   [...Array(supplierCount)].map((item, index) =>
                     <div className={`supplier-wrapper supplier-wrapper-${index}`} key={index}>
+                      {/* { console.log(chosenSupplier) } */}
                       { supplierCount > 1 && index !== 0 ? <input type="checkbox" className={`input-checkbox input-checkbox-suppliers`} onChange={() => handleChosenSupplier(index)}/> : "" }
                       <div className="input-wrapper">
                         <p className="input-title">Supplier</p>
