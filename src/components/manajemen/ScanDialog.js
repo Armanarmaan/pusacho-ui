@@ -19,6 +19,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction, auth }) 
 
   // Constant data
   const env_api = process.env.REACT_APP_API_ENDPOINT;
+  const role_user = localStorage.getItem("role");
 
   // Functions
   const formatToCurrency = (num) => {
@@ -215,7 +216,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction, auth }) 
 
                 <ul className="produk-modal-header">
                   <li className="produk-modal-header-item detil active" onClick={() => changeActiveTab("detil")}>Detil Produk</li>
-                  <li className="produk-modal-header-item supplier" onClick={() => changeActiveTab("supplier")}>Modal</li>
+                  <li className={`produk-modal-header-item supplier ${role_user === '2' ? 'd-none' : ''}`} onClick={() => changeActiveTab("supplier")}>Modal</li>
                   <div className="active-indicator detil"></div>
                 </ul>
 
@@ -280,7 +281,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction, auth }) 
                   <li className="type-item detail" onClick={() => changeActiveTabMobile("product")}>
                     <p className="type-title">Detail Produk</p>
                   </li>
-                  <li className="type-item supplier" onClick={() => changeActiveTabMobile("supplier")}>
+                  <li className={`type-item supplier ${role_user === '2' ? 'invisible' : ''}`} onClick={() => changeActiveTabMobile("supplier")}>
                     <p className="type-title">Data Supplier</p>
                   </li>
                   <li className="type-active-indicator detail"></li>
@@ -325,7 +326,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction, auth }) 
 
                 </div>
 
-                <div className="body-edit-wrapper" onClick={() => editFromScan(product.id)}>
+                <div className={`body-edit-wrapper ${role_user === '2' ? 'invisible' : ''}`} onClick={() => editFromScan(product.id)}>
                   <img className="edit-icon" src={editIcon} alt="Edit Pencil" />
                   <p className="edit-text">Ubah detil produk</p>
                 </div>
@@ -438,7 +439,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction, auth }) 
             </div>
 
             <div className="dialog-button-wrapper">
-              <p className="change-detail" onClick={() => editFromScan(product.id)}>
+              <p className={`change-detail ${role_user === '2' ? 'd-none' : ''}`} onClick={() => editFromScan(product.id)}>
                 <img className="change-icon" src={editIcon} alt="" />
                 Ubah Detail Produk
               </p>

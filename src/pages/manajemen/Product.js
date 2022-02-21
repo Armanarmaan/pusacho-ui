@@ -117,6 +117,7 @@ export default class Product extends React.Component {
     const Garis = require('../../assets/icons/Garis.svg').default;
     const gClose = require('../../assets/icons/gray-close-icon.svg').default;
     const env_api = process.env.REACT_APP_API_ENDPOINT;
+    const role_user = localStorage.getItem("role");
 
     // Functions
     const formatToCurrency = (num) => {
@@ -473,7 +474,7 @@ export default class Product extends React.Component {
                       <img className="button-icon" src={scanIcon} alt="Scan Icon" />
                       <p className="button-text">Scan Produk</p>
                     </button>
-                    <div className="add-button-wrapper">
+                    <div className={`add-button-wrapper ${role_user === '2' ? 'd-none' : ''}`}>
                       <button className="button-primary button-add" onClick={() => showAddOptions()}>
                         <img className="button-icon" src={addIcon} alt="Add Icon" />
                         <p className="button-text">Tambah</p>
@@ -522,7 +523,7 @@ export default class Product extends React.Component {
                           <div className="button-inner-wrappers">
                             <p className="amount-indicators">{this.state.checkedProducts.length} Produk dipilih</p>
                             <button className="btn btn-outer-primary" onClick={() => handlePrintBarcode(false, null)}>Cetak Barcode Sekaligus</button>
-                            <button className="btn btn-outer-secondary" onClick={() => deleteMultipleProduct()}>
+                            <button className={`btn btn-outer-secondary ${role_user === '2' ? 'invisible' : ''}`} onClick={() => deleteMultipleProduct()}>
                               <img src={rTrashCan} className="trash-icon" alt="Red Trashcan" />
                               Hapus
                             </button>
@@ -570,7 +571,7 @@ export default class Product extends React.Component {
                           <td className="product-description-item">
                             <p className="table-title">{item.stock}</p>
                           </td>
-                          <td className="product-description-item" colSpan={2} onClick={() => showSubMenu(index)}>
+                          <td className={`product-description-item ${role_user === '2' ? 'd-none' : ''}`} colSpan={2} onClick={() => showSubMenu(index)}>
                             <img className="three-dots" src={dotsIcon} alt="maginifier-icon" />
                             <div className={`product-three-dots-options product-three-dots-${index} d-none`} onMouseLeave={() => hideSubMenu()}>
                               <ul className="action-item-wrapper">
@@ -679,7 +680,7 @@ export default class Product extends React.Component {
 
                           </td>
                         </tr>
-                        <tr className="product-see-more-row">
+                        <tr className={`product-see-more-row ${role_user === '2' ? 'd-none' : ''}`}>
                           <td className="see-more-wrapper" colSpan={6} onClick={() => seeDetails(index)}>
                             <div className="see-all-wrapper">
                               <p className="see-all">lihat selengkapnya</p>
@@ -748,7 +749,7 @@ export default class Product extends React.Component {
                             <div className="button-inner-wrappers">
                               <p className="amount-indicators">{this.state.checkedProducts.length} Produk dipilih</p>
                               <button className="btn btn-outer-primary" onClick={() => handlePrintBarcode(false, null)}>Cetak Barcode</button>
-                              <button className="btn btn-outer-secondary" onClick={() => deleteMultipleProduct()}>
+                              <button className={`btn btn-outer-secondary ${role_user === '2' ? 'invisible' : ''}`} onClick={() => deleteMultipleProduct()}>
                                 <img src={rTrashCan} className="trash-icon" alt="Red Trashcan" />
                                 Hapus
                               </button>
@@ -813,7 +814,7 @@ export default class Product extends React.Component {
           </div>
 
           <div className="btnModal">
-            <div className="add" onClick={() => showAddOptions()}>
+            <div className={`add ${role_user === '2' ? 'invisible' : ''}`} onClick={() => showAddOptions()}>
               <img src={addIcon} alt="add" className="img" />
             </div>
             <div className="scan" onClick={() => handleOpenScan()}>
