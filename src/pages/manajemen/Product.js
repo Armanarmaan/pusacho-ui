@@ -406,31 +406,78 @@ export default class Product extends React.Component {
       let productsList = single ? [ singleItem ] : this.state.checkedProducts;
       let docContent = [];
       productsList.forEach(item => {
-        const svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        JsBarcode(svg1, item.id);
-        let page = [];
-        page.push({svg: `${svg1.outerHTML}`, width: 100, alignment: 'center'});
-        page.push({
-          text: item.name,
-          fontSize: 6
-        });
-        page.push({
-          columns: [
-            {
-              text: item.size,
+        if(item.stock > 0){
+          let i = 0;
+          while(i < item.stock){
+            const svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            JsBarcode(svg1, `${item.id}`, { width: 1,height: 33, displayValue: "false" });
+            let page = [];
+            page.push({svg: `${svg1.outerHTML}`, width: 100, alignment: 'center'});
+            page.push({
+              text: item.id,
               fontSize: 6,
-              width: '80%',
-            },
-            {
-              width: '20%',
-              text: formatToCurrency(item.price),
-              fontSize: 6,
-            },
-          ],
-          // optional space between columns
-          columnGap: 0
-        });
-        docContent.push(page);
+              alignment: 'center',
+              margin: [ 0, 0, 0, 2]
+            });
+    
+            page.push({
+              text: item.name,
+              fontSize: 6
+            });
+            page.push({
+              columns: [
+                {
+                  text: item.size,
+                  fontSize: 6,
+                  width: '100%',
+                },
+                // {
+                //   width: '40%',
+                //   text: formatToCurrency(item.price),
+                //   fontSize: 6,
+                // },
+              ],
+              // optional space between columns
+              columnGap: 0
+            });
+            docContent.push(page);
+            i++;
+          }
+        } else {
+          const svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          JsBarcode(svg1, `${item.id}`, { width: 1,height: 33, displayValue: "false" });
+          let page = [];
+          page.push({svg: `${svg1.outerHTML}`, width: 100, alignment: 'center'});
+          page.push({
+            text: item.id,
+            fontSize: 6,
+            alignment: 'center',
+            margin: [ 0, 0, 0, 2]
+          });
+  
+          page.push({
+            text: item.name,
+            fontSize: 6
+          });
+          page.push({
+            columns: [
+              {
+                text: item.size,
+                fontSize: 6,
+                width: '100%',
+              },
+              // {
+              //   width: '40%',
+              //   text: formatToCurrency(item.price),
+              //   fontSize: 6,
+              // },
+            ],
+            // optional space between columns
+            columnGap: 0
+          });
+          docContent.push(page);
+        }
+ 
       })
       
       let docDefinition = {

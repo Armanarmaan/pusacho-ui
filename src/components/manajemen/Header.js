@@ -15,7 +15,7 @@ function Header({pageName}) {
   const hideSet = () => {
     setTimeout(function(){ 
       setDropdownClosed(true);
-    }, 100);
+    }, 500);
   }
   const submitLogout = () => {
     localStorage.clear();

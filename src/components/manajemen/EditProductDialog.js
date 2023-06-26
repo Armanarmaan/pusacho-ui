@@ -211,6 +211,9 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
   // Steps
   const [addStep, setAddStep] = useState(1);
 
+  // isSubmitting
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const isDisabled = () => {
     if (addStep === 1) {
       return !(product.category !== "") ||
@@ -238,6 +241,10 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         !(typeof(product.images) == "object" || typeof(product.images) == "string")
       }
 
+      else if(isSubmitting) {
+        return true;
+      }
+      
       else {
         return !(product.suppliers.length > 0 && product.suppliers[0] != "" && product.suppliers[1] != "" && product.suppliers[2] != "") ||
         !(product.modals.length > 0 && product.modals[0] != "" && product.modals[1] != "" && product.modals[2] != "") ||
@@ -254,6 +261,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
     if (addStep === 1) {
       setAddStep(2);
     } else {
+      setIsSubmitting(true);
       const modal_nett = [];
       const margins = [];
 
@@ -268,7 +276,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
       });
       // Margin Calc.
       modal_nett.forEach((modal, index) => {
-        let newMargin = ((product.price - modal) / modal) * 100;
+        let newMargin = ((product.price - modal) / product.price) * 100;
         margins.push(newMargin.toFixed(0));
       });
 
@@ -301,11 +309,15 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         body: formData
       })
       .then(() => {
+        setIsSubmitting(false);
         if ($(window).width() > 770) $(".ScanDialog").removeClass("d-none");
         closeModal();
-      }).catch(error => console.log(error));
-    }
-  };
+      }).catch(error => {
+        setIsSubmitting(false);
+        console.log(error)
+      });
+    };
+  };  
 
   const backAddStep = () => {
     if (addStep === 2) setAddStep(1)

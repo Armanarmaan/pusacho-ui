@@ -43,10 +43,11 @@ export default function AddProductDialog({ showModal, closeModal }) {
     fetchCategory();
   }, [showModal]);
 
+  const idProduk = `${Date.now()}`.slice(0, 10);
   // Functions filling values of add product
   const [addProduct, setAddProduct] = useState({
     image: "",
-    id: `PSCH${Date.now()}`,
+    id: idProduk,
     category_id: "",
     category_name: "",
     name: "",
@@ -170,6 +171,9 @@ export default function AddProductDialog({ showModal, closeModal }) {
   // Steps
   const [addStep, setAddStep] = useState(1);
 
+  // isSubmitting
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const isDisabled = () => {
     if (addStep === 1) {
       return !(addProduct.category !== "") ||
@@ -197,6 +201,10 @@ export default function AddProductDialog({ showModal, closeModal }) {
         !(typeof(addProduct.image) == "object")
       }
 
+      else if(isSubmitting) {
+        return true;
+      }
+      
       else {
         return !(addProduct.suppliers.length > 0 && addProduct.suppliers[0] != "" && addProduct.suppliers[1] != "" && addProduct.suppliers[2] != "") ||
         !(addProduct.modals.length > 0 && addProduct.modals[0] != "" && addProduct.modals[1] != "" && addProduct.modals[2] != "") ||
@@ -213,6 +221,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
     if (addStep === 1) {
       setAddStep(2);
     } else {
+      setIsSubmitting(true);
       const modal_nett = [];
       const margins = [];
 
@@ -227,7 +236,7 @@ export default function AddProductDialog({ showModal, closeModal }) {
       });
       // Margin Calc.
       modal_nett.forEach((modal, index) => {
-        let newMargin = ((addProduct.price - modal) / modal) * 100;
+        let newMargin = ((addProduct.price - modal) / addProduct.price) * 100;
         margins.push(newMargin.toFixed(0));
       });
 
@@ -259,13 +268,17 @@ export default function AddProductDialog({ showModal, closeModal }) {
         body: formData
       })
         .then(() => {
+          setIsSubmitting(false);
           closeModal();
           setAddStep(1);
           setAddProduct({ id: "", category: "", name: "", size: "", price: [], stock: 0, suppliers: [], modals: [], modal_nett: [], logistic_costs: [], margins: [] });
           setSupplierCount(1);
           setChosenSupplier([]);
           window.location.reload();
-        }).catch(error => console.log(error));
+        }).catch(error => {
+          setIsSubmitting(false);
+          console.log(error)
+        });
     }
   };
 
