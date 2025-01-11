@@ -1,4 +1,7 @@
 .container-manajemen-pengaturan{
+  p {
+    margin-bottom: 0;
+  }
   background-color: #F4F7FC;
   min-height: 100%;
   padding: 17px 32px;
@@ -11,7 +14,7 @@
     border-radius: 8px;
     width: 100%;
     padding: 50px 0;
-    .row{
+    .row-content{
       padding-left: 24px;
       padding-bottom: 24px;
       display: flex;
@@ -303,7 +306,7 @@
     .manajemen-pengaturan{
       box-shadow: unset;
       padding-top: 16px;
-      .row{
+      .row-content{
         padding-left: 16px;
         padding-right: 16px;
         flex-direction: column;

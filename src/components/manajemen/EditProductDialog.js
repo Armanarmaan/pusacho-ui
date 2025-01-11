@@ -211,6 +211,9 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
   // Steps
   const [addStep, setAddStep] = useState(1);
 
+  // isSubmitting
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const isDisabled = () => {
     if (addStep === 1) {
       return !(product.category !== "") ||
@@ -238,6 +241,10 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         !(typeof(product.images) == "object" || typeof(product.images) == "string")
       }
 
+      else if(isSubmitting) {
+        return true;
+      }
+
       else {
         return !(product.suppliers.length > 0 && product.suppliers[0] != "" && product.suppliers[1] != "" && product.suppliers[2] != "") ||
         !(product.modals.length > 0 && product.modals[0] != "" && product.modals[1] != "" && product.modals[2] != "") ||
@@ -254,6 +261,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
     if (addStep === 1) {
       setAddStep(2);
     } else {
+      setIsSubmitting(true);
       const modal_nett = [];
       const margins = [];
 
@@ -262,13 +270,13 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         let newModal = product.modals[index];
         const precentageList = precentage.split("+");
         precentageList.map(percent => {
-          newModal = newModal - (newModal * (percent/100)) 
+          newModal = newModal - (newModal * (parseFloat(percent)/100)) 
         })
         modal_nett.push(newModal);
       });
       // Margin Calc.
       modal_nett.forEach((modal, index) => {
-        let newMargin = ((product.price - modal) / modal) * 100;
+        let newMargin = ((product.price - (modal + parseFloat(product.logistic_costs[index]))) / product.price) * 100;
         margins.push(newMargin.toFixed(0));
       });
 
@@ -301,9 +309,13 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         body: formData
       })
       .then(() => {
+        setIsSubmitting(false);
         if ($(window).width() > 770) $(".ScanDialog").removeClass("d-none");
         closeModal();
-      }).catch(error => console.log(error));
+      }).catch(error => {
+        setIsSubmitting(false);
+        console.log(error)
+      });
     }
   };
 

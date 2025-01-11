@@ -68,9 +68,10 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
 
   // Product Datas
   const [categories, setCategories] = useState([]);
+  const idProduk = `${Date.now()}`.slice(0, 10);
   const [addProduct, setAddProduct] = useState({
     image: "",
-    id: `PSCH${Date.now()}`,
+    id: idProduk,
     category_name: "",
     name: "",
     size: "",
@@ -214,7 +215,7 @@ export default function AddCategoryDialog({ showModal, closeModal }) {
       });
       // Margin Calc.
       modal_nett.forEach((modal, index) => {
-        let newMargin = ((addProduct.price - modal) / modal) * 100;
+        let newMargin = ((addProduct.price - (modal + parseFloat(addProduct.logistic_costs[index]))) / addProduct.price) * 100;
         margins.push(newMargin.toFixed(0));
       });
 

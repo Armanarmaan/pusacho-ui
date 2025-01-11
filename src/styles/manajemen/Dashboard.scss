@@ -1,4 +1,7 @@
 .container-manajemen{
+  p {
+    margin-bottom: 0;
+  }
   display: flex;
   height: 100vh;
   overflow: hidden;
@@ -71,7 +74,7 @@
           display: flex;
           flex-direction: column;
           gap: 32px;
-          .row{
+          .row-content{
             display: flex;
             justify-content: space-between;
             align-items: center;

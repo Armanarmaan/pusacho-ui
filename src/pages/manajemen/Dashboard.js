@@ -427,7 +427,7 @@ function Dashboard() {
 
               <div className={`tab-content ${activeTab === 0 ? 'active' : null}`}>
                 <div className="head-content">
-                  <div className="row">
+                  <div className="row-content">
                     <div className="in-out-content">
                       <div className="in-out">
                         <div className="img-wrapper"><img src={icon_stockin} alt="stkin"/></div>
@@ -455,7 +455,7 @@ function Dashboard() {
                       />
                     </div>
                   </div>
-                  <div className="row">
+                  <div className="row-content">
                     <form onSubmit={handleSearch}>
                       <div className="search">
                         <input type="text" placeholder="Cari produk" onChange={changeKeyword}/>
@@ -480,7 +480,7 @@ function Dashboard() {
                       />
                     </div>
                   </div>
-                  <div className="row">
+                  <div className="row-content">
                     <div className="product-applied-filters">
                       <ul className="applied-filter-list">
                         {selectedCategory && selectedCategory.length > 0 ?
@@ -525,7 +525,7 @@ function Dashboard() {
 
               <div className={`tab-content ${activeTab === 1 ? 'active' : null}`}>
                 <div className="head-content activity">
-                  <div className="row">
+                  <div className="row-content">
                     <div className="dropdowns">
                       <Select placeholder="Kategori" options={categoryOptions} classNamePrefix="product-select" 
                         isMulti={true} onChange={handleCategoryChange} controlShouldRenderValue={false}
@@ -554,7 +554,7 @@ function Dashboard() {
                       />
                     </div>
                   </div>
-                  <div className="row">
+                  <div className="row-content">
                     <div className="product-applied-filters">
                       <ul className="applied-filter-list">
                         {selectedCategory && selectedCategory.length > 0 ?

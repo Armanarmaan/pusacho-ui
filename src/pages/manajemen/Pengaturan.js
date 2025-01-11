@@ -231,7 +231,7 @@ function Pengaturan() {
             <p>Manajemen User</p>
           </div>
           <div className="manajemen-pengaturan">
-            <div className="row">
+            <div className="row-content">
               <div className="filters">
                 <form onSubmit={handleSearch}>
                   <div className="search">
