@@ -307,6 +307,7 @@ function Dashboard() {
   }
 
   const handleDownloadLaporan = async (event) => {
+    $(".btn-download").addClass("downloading");
     if(event.startDate && event.endDate){
       const token = localStorage.getItem('auth_token');
       const required_role = '0,';
@@ -335,6 +336,7 @@ function Dashboard() {
         downloadLink.click();
         window.URL.revokeObjectURL(url);
         downloadLink.remove();
+        $(".btn-download").removeClass("downloading");
       }
       else{
         let fileName = `Laporan Aktivitas (${moment(event.startDate).format("DD MMMM YYYY")} - ${moment(event.endDate).format("DD MMMM YYYY")}).xlsx`;
@@ -359,6 +361,7 @@ function Dashboard() {
         downloadLink.click();
         window.URL.revokeObjectURL(url);
         downloadLink.remove();
+        $(".btn-download").removeClass("downloading");
       }
     }
   }
@@ -447,7 +450,8 @@ function Dashboard() {
                     <div className="btn-download">
                       <div className="wrapper" onClick={showDateLaporanOne}>
                         <img src={icon_arrow_download} alt="dwnld"/>
-                        <p>Download Laporan</p>
+                        <p className="label-download-enabled">Download Laporan</p>
+                        <p className="label-download-disabled">Downloading...</p>
                       </div>
                       <DateRangePickerComponent id="daterangepicker-laporan-one" 
                       change={handleDownloadLaporan}

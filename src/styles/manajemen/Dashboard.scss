@@ -137,6 +137,24 @@
                   width: 17px;
                   height: 40px;
                 }
+                .label-download-disabled{
+                  display: none;
+                }
+                .label-download-enabled{
+                  display: block;
+                }
+              }
+            }
+            .btn-download.downloading{
+              pointer-events: none;
+              .wrapper{
+                background-color: #7E8287;
+                .label-download-disabled{
+                  display: block;
+                }
+                .label-download-enabled{
+                  display: none;
+                }
               }
             }
             .search{
