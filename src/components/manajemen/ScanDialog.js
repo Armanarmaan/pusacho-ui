@@ -123,7 +123,7 @@ export default function ScanDialog({ showScan, closeScan, editFunction, auth }) 
   };
   const isScanButtonDisabled = () => {
     if (scanStep === 1) return barcode.length > 0 ? false : true;
-    else if (scanStep === 2) return productStock > 0 ? false: true;
+    else if (scanStep === 2) return productStock >= 0 ? false: true;
   };
 
   // Input 

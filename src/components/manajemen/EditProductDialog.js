@@ -226,7 +226,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         !(product.modals.length > 0 && product.modals[0] != "") ||
         !(product.modal_nett_per.length > 0 && product.modal_nett_per[0] != "") ||
         !(product.logistic_costs.length > 0 && product.logistic_costs[0] != "") ||
-        !(product.stock > 0) ||
+        !(product.stock >= 0) ||
         !(product.price > 0) ||
         !(typeof(product.images) == "object" || typeof(product.images) == "string")
       } 
@@ -236,7 +236,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         !(product.modals.length > 0 && product.modals[0] != "" && product.modals[1] != "") ||
         !(product.modal_nett_per.length > 0 && product.modal_nett_per[0] != "" && product.modal_nett_per[1] != "") ||
         !(product.logistic_costs.length > 0 && product.logistic_costs[0] != "" && product.logistic_costs[1] != "") ||
-        !(product.stock > 0) ||
+        !(product.stock >= 0) ||
         !(product.price > 0) ||
         !(typeof(product.images) == "object" || typeof(product.images) == "string")
       }
@@ -250,7 +250,7 @@ export default function EditProductDialog({ showModal, closeModal, auth }) {
         !(product.modals.length > 0 && product.modals[0] != "" && product.modals[1] != "" && product.modals[2] != "") ||
         !(product.modal_nett_per.length > 0 && product.modal_nett_per[0] != "" && product.modal_nett_per[1] != "" && product.modal_nett_per[2] != "") ||
         !(product.logistic_costs.length > 0 && product.logistic_costs[0] != "" && product.logistic_costs[1] != "" && product.logistic_costs[2] != "") ||
-        !(product.stock > 0) ||
+        !(product.stock >= 0) ||
         !(product.price > 0) ||
         !(typeof(product.images) == "object" || typeof(product.images) == "string")
       }

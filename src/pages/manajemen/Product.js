@@ -23,7 +23,7 @@ import AddCatProdDialog from '../../components/manajemen/AddCatProdDialog.js';
 import EditProductDialog from '../../components/manajemen/EditProductDialog';
 import moment from 'moment';
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { width } from '@mui/system';
+import { margin, width } from '@mui/system';
 import { FormControlUnstyledContext } from '@mui/material';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -432,15 +432,15 @@ export default class Product extends React.Component {
         //   }
         // } else {
           const svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-          JsBarcode(svg1, `${item.id}`, { width: 1, height: 50, displayValue: "false" });
+          JsBarcode(svg1, `${item.id}`, { fontSize: 8, width: 2, height: 75 });
           let page = [];
-          page.push({svg: `${svg1.outerHTML}`, width: 100, alignment: 'center'});
-          page.push({
-            text: item.id,
-            fontSize: 6,
-            alignment: 'center',
-            margin: [ 0, 0, 0, 2 ]
-          });
+          page.push({svg: `${svg1.outerHTML}`, width: 100, alignment: 'center', margin: 0});
+          // page.push({
+          //   text: item.id,
+          //   fontSize: 6,
+          //   alignment: 'center',
+          //   margin: [ 0, 0, 0, 2 ]
+          // });
           page.push({
             text: item.name,
             fontSize: 6
@@ -449,7 +449,7 @@ export default class Product extends React.Component {
             columns: [
               {
                 text: item.size,
-                fontSize: 6,
+                fontSize: 5,
                 width: '100%',
               },
             ],
@@ -461,7 +461,7 @@ export default class Product extends React.Component {
       
       let docDefinition = {
         pageSize: 'A10',
-        pageMargins: [4,8,4,0],
+        pageMargins: [2,2,2,0],
         pageOrientation: 'landscape',
         content: docContent,
         styles: {
