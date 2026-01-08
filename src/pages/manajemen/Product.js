@@ -432,7 +432,7 @@ export default class Product extends React.Component {
         //   }
         // } else {
           const svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-          JsBarcode(svg1, `${item.id}`, { fontSize: 8, width: 2, height: 75 });
+          JsBarcode(svg1, `${item.id}`, { fontSize: 8, width: 2, height: 75, margin: 0 });
           let page = [];
           page.push({svg: `${svg1.outerHTML}`, width: 100, alignment: 'center', margin: 0});
           // page.push({
